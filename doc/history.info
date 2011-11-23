@@ -1,5 +1,10 @@
-This is Info file history.info, produced by Makeinfo-1.55 from the
-input file /usr/homes/chet/src/bash/readline-2.1/doc/hist.texinfo.
+This is Info file history.info, produced by Makeinfo version 1.67 from
+the input file /usr/homes/chet/src/bash/readline-2.2/doc/hist.texinfo.
+
+INFO-DIR-SECTION Libraries
+START-INFO-DIR-ENTRY
+* History: (history).       The GNU history library API
+END-INFO-DIR-ENTRY
 
    This document describes the GNU History library, a programming tool
 that provides a consistent user interface for recalling lines of
@@ -23,7 +28,7 @@ versions, except that this permission notice may be stated in a
 translation approved by the Foundation.
 
 
-File: history.info,  Node: Top,  Next: Using History Interactively,  Prev: (DIR),  Up: (DIR)
+File: history.info,  Node: Top,  Next: Using History Interactively,  Up: (dir)
 
 GNU History Library
 *******************
@@ -58,8 +63,8 @@ own programs, *note Programming with GNU History::..
 
 File: history.info,  Node: History Interaction,  Up: Using History Interactively
 
-Interactive History Expansion
-=============================
+History Expansion
+=================
 
    The History library provides a history expansion feature that is
 similar to the history expansion provided by `csh'.  This section
@@ -71,16 +76,15 @@ to a previous command into the current input line, or fix errors in
 previous commands quickly.
 
    History expansion takes place in two parts.  The first is to
-determine which line from the previous history should be used during
+determine which line from the history list should be used during
 substitution.  The second is to select portions of that line for
-inclusion into the current one.  The line selected from the previous
-history is called the "event", and the portions of that line that are
-acted upon are called "words".  Various "modifiers" are available to
-manipulate the selected words.  The line is broken into words in the
-same fashion that Bash does, so that several English (or Unix) words
-surrounded by quotes are considered as one word.  History expansions
-are introduced by the appearance of the history expansion character,
-which is `!' by default.
+inclusion into the current one.  The line selected from the history is
+called the "event", and the portions of that line that are acted upon
+are called "words".  Various "modifiers" are available to manipulate
+the selected words.  The line is broken into words in the same fashion
+that Bash does, so that several words surrounded by quotes are
+considered one word.  History expansions are introduced by the
+appearance of the history expansion character, which is `!' by default.
 
 * Menu:
 
@@ -99,7 +103,7 @@ history list.
 
 `!'
      Start a history substitution, except when followed by a space, tab,
-     the end of the line, = or (.
+     the end of the line, `=' or `('.
 
 `!N'
      Refer to command line N.
@@ -132,7 +136,7 @@ Word Designators
 ----------------
 
    Word designators are used to select desired words from the event.  A
-`:' separates the event specification from the word designator.  It can
+`:' separates the event specification from the word designator.  It may
 be omitted if the word designator begins with a `^', `$', `*', `-', or
 `%'.  Words are numbered from the beginning of the line, with the first
 word being denoted by 0 (zero).  Words are inserted into the current
@@ -702,11 +706,11 @@ Concept Index
 
 * Menu:
 
-* anchored search:                      Searching the History List.
-* event designators:                    Event Designators.
-* history events:                       Event Designators.
-* history expansion:                    History Interaction.
-* History Searching:                    Searching the History List.
+* anchored search:                       Searching the History List.
+* event designators:                     Event Designators.
+* history events:                        Event Designators.
+* history expansion:                     History Interaction.
+* History Searching:                     Searching the History List.
 
 
 File: history.info,  Node: Function and Variable Index,  Prev: Concept Index,  Up: Top
@@ -716,70 +720,70 @@ Function and Variable Index
 
 * Menu:
 
-* add_history:                          History List Management.
-* append_history:                       Managing the History File.
-* clear_history:                        History List Management.
-* current_history:                      Information About the History List.
-* get_history_event:                    History Expansion.
-* history_arg_extract:                  History Expansion.
-* history_base:                         History Variables.
-* history_comment_char:                 History Variables.
-* history_expand:                       History Expansion.
-* history_expansion_char:               History Variables.
-* history_get:                          Information About the History List.
-* history_get_history_state:            Initializing History and State Management.
-* history_inhibit_expansion_function:   History Variables.
-* history_is_stifled:                   History List Management.
-* history_length:                       History Variables.
-* history_list:                         Information About the History List.
-* history_no_expand_chars:              History Variables.
-* history_quotes_inhibit_expansion:     History Variables.
-* history_search:                       Searching the History List.
-* history_search_delimiter_chars:       History Variables.
-* history_search_pos:                   Searching the History List.
-* history_search_prefix:                Searching the History List.
-* history_set_history_state:            Initializing History and State Management.
-* history_set_pos:                      Moving Around the History List.
-* history_subst_char:                   History Variables.
-* history_tokenize:                     History Expansion.
-* history_total_bytes:                  Information About the History List.
-* history_truncate_file:                Managing the History File.
-* max_input_history:                    History Variables.
-* next_history:                         Moving Around the History List.
-* previous_history:                     Moving Around the History List.
-* read_history:                         Managing the History File.
-* read_history_range:                   Managing the History File.
-* remove_history:                       History List Management.
-* replace_history_entry:                History List Management.
-* stifle_history:                       History List Management.
-* unstifle_history:                     History List Management.
-* using_history:                        Initializing History and State Management.
-* where_history:                        Information About the History List.
-* write_history:                        Managing the History File.
+* add_history:                           History List Management.
+* append_history:                        Managing the History File.
+* clear_history:                         History List Management.
+* current_history:                       Information About the History List.
+* get_history_event:                     History Expansion.
+* history_arg_extract:                   History Expansion.
+* history_base:                          History Variables.
+* history_comment_char:                  History Variables.
+* history_expand:                        History Expansion.
+* history_expansion_char:                History Variables.
+* history_get:                           Information About the History List.
+* history_get_history_state:             Initializing History and State Management.
+* history_inhibit_expansion_function:    History Variables.
+* history_is_stifled:                    History List Management.
+* history_length:                        History Variables.
+* history_list:                          Information About the History List.
+* history_no_expand_chars:               History Variables.
+* history_quotes_inhibit_expansion:      History Variables.
+* history_search:                        Searching the History List.
+* history_search_delimiter_chars:        History Variables.
+* history_search_pos:                    Searching the History List.
+* history_search_prefix:                 Searching the History List.
+* history_set_history_state:             Initializing History and State Management.
+* history_set_pos:                       Moving Around the History List.
+* history_subst_char:                    History Variables.
+* history_tokenize:                      History Expansion.
+* history_total_bytes:                   Information About the History List.
+* history_truncate_file:                 Managing the History File.
+* max_input_history:                     History Variables.
+* next_history:                          Moving Around the History List.
+* previous_history:                      Moving Around the History List.
+* read_history:                          Managing the History File.
+* read_history_range:                    Managing the History File.
+* remove_history:                        History List Management.
+* replace_history_entry:                 History List Management.
+* stifle_history:                        History List Management.
+* unstifle_history:                      History List Management.
+* using_history:                         Initializing History and State Management.
+* where_history:                         Information About the History List.
+* write_history:                         Managing the History File.
 
 
 
 Tag Table:
-Node: Top1035
-Node: Using History Interactively1629
-Node: History Interaction2137
-Node: Event Designators3614
-Node: Word Designators4537
-Node: Modifiers5786
-Node: Programming with GNU History6924
-Node: Introduction to History7650
-Node: History Storage8971
-Node: History Functions10064
-Node: Initializing History and State Management11035
-Node: History List Management11827
-Node: Information About the History List13348
-Node: Moving Around the History List14654
-Node: Searching the History List15539
-Node: Managing the History File17371
-Node: History Expansion18877
-Node: History Variables20721
-Node: History Programming Example23039
-Node: Concept Index25643
-Node: Function and Variable Index26124
+Node: Top1167
+Node: Using History Interactively1747
+Node: History Interaction2255
+Node: Event Designators3674
+Node: Word Designators4601
+Node: Modifiers5850
+Node: Programming with GNU History6988
+Node: Introduction to History7714
+Node: History Storage9035
+Node: History Functions10128
+Node: Initializing History and State Management11099
+Node: History List Management11891
+Node: Information About the History List13412
+Node: Moving Around the History List14718
+Node: Searching the History List15603
+Node: Managing the History File17435
+Node: History Expansion18941
+Node: History Variables20785
+Node: History Programming Example23103
+Node: Concept Index25707
+Node: Function and Variable Index26193
 
 End Tag Table

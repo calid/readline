@@ -72,7 +72,11 @@ extern int _rl_prefer_visible_bell;
 
 /* Variables and functions imported from terminal.c */
 extern void _rl_output_some_chars ();
+#ifdef _MINIX
+extern void _rl_output_character_function ();
+#else
 extern int _rl_output_character_function ();
+#endif
 extern int _rl_backspace ();
 
 extern char *term_clreol, *term_clrpag;
@@ -1482,7 +1486,7 @@ cr ()
 void
 _rl_redisplay_after_sigwinch ()
 {
-  char *t, *oldp;
+  char *t, *oldp, *oldl, *oldlprefix;
 
   /* Clear the current line and put the cursor at column 0.  Make sure
      the right thing happens if we have wrapped to a new screen line. */
@@ -1508,9 +1512,14 @@ _rl_redisplay_after_sigwinch ()
   if (t)
     {
       oldp = rl_display_prompt;
+      oldl = local_prompt;
+      oldlprefix = local_prompt_prefix;
       rl_display_prompt = ++t;
+      local_prompt = local_prompt_prefix = (char *)NULL;
       rl_forced_update_display ();
       rl_display_prompt = oldp;
+      local_prompt = oldl;
+      local_prompt_prefix = oldlprefix;
     }
   else
     rl_forced_update_display ();

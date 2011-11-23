@@ -1,18 +1,25 @@
 <HTML>
 <HEAD>
 <!-- This HTML file has been created by texi2html 1.51
-     from /usr/homes/chet/src/bash/readline-2.1/doc/rlman.texinfo on 3 June 1997 -->
+     from /usr/homes/chet/src/bash/readline-2.2/doc/rlman.texinfo on 2 April 1998 -->
 
 <TITLE>GNU Readline Library</TITLE>
 </HEAD>
 <BODY>
 <H1>GNU Readline Library</H1>
-<H2>Edition 2.1, for <CODE>Readline Library</CODE> Version 2.1.</H2>
-<H2>March 1996</H2>
+<H2>Edition 2.2, for <CODE>Readline Library</CODE> Version 2.1.</H2>
+<H2>September 1997</H2>
 <ADDRESS>Brian Fox, Free Software Foundation</ADDRESS>
 <ADDRESS>Chet Ramey, Case Western Reserve University</ADDRESS>
 <P>
 <P><HR><P>
+
+<P>
+@dircategory Libraries
+@direntry
+* Readline: (readline).       The GNU readline library API
+
+</P>
 
 <P>
 This document describes the GNU Readline Library, a utility which aids
@@ -134,17 +141,19 @@ denote variable settings and key bindings.
 
 <DT>Variable Settings
 <DD>
-You can change the state of a few variables in Readline by
-using the <CODE>set</CODE> command within the init file.  Here is how you
-would specify that you wish to use <CODE>vi</CODE> line editing commands:
+You can modify the run-time behavior of Readline by
+altering the values of variables in Readline
+using the <CODE>set</CODE> command within the init file.  Here is how to
+change from the default Emacs-like key binding to use
+<CODE>vi</CODE> line editing commands:
 
 
 <PRE>
 set editing-mode vi
 </PRE>
 
-Right now, there are only a few variables which can be set;
-so few, in fact, that we just list them here:
+A great deal of run-time behavior is changeable with the following
+variables.
 
 <DL COMPACT>
 
@@ -164,6 +173,12 @@ The string to insert at the beginning of the line when the
 <CODE>insert-comment</CODE> command is executed.  The default value
 is <CODE>"#"</CODE>.
 
+<DT><CODE>completion-ignore-case</CODE>
+<DD>
+If set to <SAMP>`on'</SAMP>, Readline performs filename matching and completion
+in a case-insensitive fashion.
+The default value is <SAMP>`off'</SAMP>.
+
 <DT><CODE>completion-query-items</CODE>
 <DD>
 <A NAME="IDX4"></A>
@@ -178,29 +193,29 @@ them; otherwise, they are simply listed.  The default limit is
 <DD>
 <A NAME="IDX5"></A>
 If set to <SAMP>`on'</SAMP>, Readline will convert characters with the
-eigth bit set to an ASCII key sequence by stripping the eigth
+eighth bit set to an ASCII key sequence by stripping the eighth
 bit and prepending an <KBD>ESC</KBD> character, converting them to a
 meta-prefixed key sequence.  The default value is <SAMP>`on'</SAMP>.
 
 <DT><CODE>disable-completion</CODE>
 <DD>
 <A NAME="IDX6"></A>
-If set to <SAMP>`On'</SAMP>, readline will inhibit word completion.
+If set to <SAMP>`On'</SAMP>, Readline will inhibit word completion.
 Completion  characters will be inserted into the line as if they had
 been mapped to <CODE>self-insert</CODE>.  The default is <SAMP>`off'</SAMP>.
 
 <DT><CODE>editing-mode</CODE>
 <DD>
 <A NAME="IDX7"></A>
-The <CODE>editing-mode</CODE> variable controls which editing mode you are
-using.  By default, Readline starts up in Emacs editing mode, where
-the keystrokes are most similar to Emacs.  This variable can be
+The <CODE>editing-mode</CODE> variable controls which default set of
+key bindings is used.  By default, Readline starts up in Emacs editing
+mode, where the keystrokes are most similar to Emacs.  This variable can be
 set to either <SAMP>`emacs'</SAMP> or <SAMP>`vi'</SAMP>.
 
 <DT><CODE>enable-keypad</CODE>
 <DD>
 <A NAME="IDX8"></A>
-When set to <SAMP>`on'</SAMP>, readline will try to enable the application
+When set to <SAMP>`on'</SAMP>, Readline will try to enable the application
 keypad when it is called.  Some systems need this to enable the
 arrow keys.  The default is <SAMP>`off'</SAMP>.
 
@@ -214,7 +229,7 @@ attempts word completion.  The default is <SAMP>`off'</SAMP>.
 <DD>
 <A NAME="IDX10"></A>
 This variable can be set to either <SAMP>`on'</SAMP> or <SAMP>`off'</SAMP>.  Setting it
-to <SAMP>`on'</SAMP> means that the text of the lines that you edit will scroll
+to <SAMP>`on'</SAMP> means that the text of the lines being edited will scroll
 horizontally on a single screen line when they are longer than the width
 of the screen, instead of wrapping onto a new screen line.  By default,
 this variable is set to <SAMP>`off'</SAMP>.
@@ -244,8 +259,8 @@ appended.  The default is <SAMP>`on'</SAMP>.
 <DT><CODE>mark-modified-lines</CODE>
 <DD>
 <A NAME="IDX12"></A>
-This variable, when set to <SAMP>`on'</SAMP>, says to display an asterisk
-(<SAMP>`*'</SAMP>) at the start of history lines which have been modified.
+This variable, when set to <SAMP>`on'</SAMP>, causes Readline to display an
+asterisk (<SAMP>`*'</SAMP>) at the start of history lines which have been modified.
 This variable is <SAMP>`off'</SAMP> by default.
 
 <DT><CODE>input-meta</CODE>
@@ -264,6 +279,12 @@ synonym for this variable.
 If set to <SAMP>`on'</SAMP>, Readline will display characters with the
 eighth bit set directly rather than as a meta-prefixed escape
 sequence.  The default is <SAMP>`off'</SAMP>.
+
+<DT><CODE>print-completions-horizontally</CODE>
+<DD>
+If set to <SAMP>`on'</SAMP>, Readline will display completions with matches
+sorted horizontally in alphabetical order, rather than down the screen.
+The default is <SAMP>`off'</SAMP>.
 
 <DT><CODE>show-all-if-ambiguous</CODE>
 <DD>
@@ -287,9 +308,9 @@ completions.  The default is <SAMP>`off'</SAMP>.
 <DD>
 The syntax for controlling key bindings in the init file is
 simple.  First you have to know the name of the command that you
-want to change.  The following pages contain tables of the command name,
-the default keybinding, and a short description of what the command
-does.
+want to change.  The following sections contain tables of the command
+name, the default keybinding, if any, and a short description of what
+the command does.
 
 Once you know the name of the command, simply place the name of the key
 you wish to bind the command to, a colon, and then the name of the
@@ -309,8 +330,8 @@ Meta-Rubout: backward-kill-word
 Control-o: "&#62; output"
 </PRE>
 
-In the above example, <SAMP>`C-u'</SAMP> is bound to the function
-<CODE>universal-argument</CODE>, and <SAMP>`C-o'</SAMP> is bound to run the macro
+In the above example, <KBD>C-u</KBD> is bound to the function
+<CODE>universal-argument</CODE>, and <KBD>C-o</KBD> is bound to run the macro
 expressed on the right hand side (that is, to insert the text
 <SAMP>`&#62; output'</SAMP> into the line).
 
@@ -329,12 +350,16 @@ special character names are not recognized.
 "\e[11~": "Function Key 1"
 </PRE>
 
-In the above example, <SAMP>`C-u'</SAMP> is bound to the function
+In the above example, <KBD>C-u</KBD> is bound to the function
 <CODE>universal-argument</CODE> (just as it was in the first example),
-<SAMP>`C-x C-r'</SAMP> is bound to the function <CODE>re-read-init-file</CODE>, and
-<SAMP>`ESC [ 1 1 ~'</SAMP> is bound to insert the text <SAMP>`Function Key 1'</SAMP>.
-The following escape sequences are available when specifying key
-sequences:
+<SAMP>`<KBD>C-x</KBD> <KBD>C-r</KBD>'</SAMP> is bound to the function <CODE>re-read-init-file</CODE>,
+and <SAMP>`<KBD>ESC</KBD> <KBD>[</KBD> <KBD>1</KBD> <KBD>1</KBD> <KBD>~</KBD>'</SAMP> is bound to insert
+the text <SAMP>`Function Key 1'</SAMP>.
+
+</DL>
+
+The following GNU Emacs style escape sequences are available when
+specifying key sequences:
 
 <DL COMPACT>
 
@@ -358,11 +383,51 @@ backslash
 <KBD>'</KBD>
 </DL>
 
-When entering the text of a macro, single or double quotes should
-be used to indicate a macro definition.  Unquoted text
-is assumed to be a function name.  Backslash
-will quote any character in the macro text, including <SAMP>`"'</SAMP>
-and <SAMP>`''</SAMP>.
+In addition to the GNU Emacs style escape sequences, a second
+set of backslash escapes is available:
+
+<DL COMPACT>
+
+<DT><CODE>\a</CODE>
+<DD>
+alert (bell)
+<DT><CODE>\b</CODE>
+<DD>
+backspace
+<DT><CODE>\d</CODE>
+<DD>
+delete
+<DT><CODE>\f</CODE>
+<DD>
+form feed
+<DT><CODE>\n</CODE>
+<DD>
+newline
+<DT><CODE>\r</CODE>
+<DD>
+carriage return
+<DT><CODE>\t</CODE>
+<DD>
+horizontal tab
+<DT><CODE>\v</CODE>
+<DD>
+vertical tab
+<DT><CODE>\<VAR>nnn</VAR></CODE>
+<DD>
+the character whose ASCII code is the octal value <VAR>nnn</VAR>
+(one to three digits)
+<DT><CODE>\x<VAR>nnn</VAR></CODE>
+<DD>
+the character whose ASCII code is the hexadecimal value <VAR>nnn</VAR>
+(one to three digits)
+</DL>
+
+When entering the text of a macro, single or double quotes must
+be used to indicate a macro definition.
+Unquoted text is assumed to be a function name.
+In the macro body, the backslash escapes described above are expanded.
+Backslash will quote any other character in the macro text,
+including <SAMP>`"'</SAMP> and <SAMP>`''</SAMP>.
 For example, the following binding will make <SAMP>`C-x \'</SAMP>
 insert a single <SAMP>`\'</SAMP> into the line:
 
@@ -370,7 +435,6 @@ insert a single <SAMP>`\'</SAMP> into the line:
 "\C-x\\": "\\"
 </PRE>
 
-</DL>
 </DL>
 
 
@@ -381,7 +445,7 @@ insert a single <SAMP>`\'</SAMP> into the line:
 Readline implements a facility similar in spirit to the conditional
 compilation features of the C preprocessor which allows key
 bindings and variable settings to be performed as the result
-of tests.  There are three parser directives used.
+of tests.  There are four parser directives used.
 
 </P>
 <DL COMPACT>
@@ -409,8 +473,8 @@ Readline is starting out in <CODE>emacs</CODE> mode.
 The <CODE>term=</CODE> form may be used to include terminal-specific
 key bindings, perhaps to bind the key sequences output by the
 terminal's function keys.  The word on the right side of the
-<SAMP>`='</SAMP> is tested against the full name of the terminal and the
-portion of the terminal name before the first <SAMP>`-'</SAMP>.  This
+<SAMP>`='</SAMP> is tested against both the full name of the terminal and
+the portion of the terminal name before the first <SAMP>`-'</SAMP>.  This
 allows <CODE>sun</CODE> to match both <CODE>sun</CODE> and <CODE>sun-cmd</CODE>,
 for instance.
 
@@ -434,13 +498,23 @@ $endif
 
 <DT><CODE>$endif</CODE>
 <DD>
-This command, as you saw in the previous example, terminates an
+This command, as seen in the previous example, terminates an
 <CODE>$if</CODE> command.
 
 <DT><CODE>$else</CODE>
 <DD>
 Commands in this branch of the <CODE>$if</CODE> directive are executed if
 the test fails.
+
+<DT><CODE>$include</CODE>
+<DD>
+This directive takes a single filename as an argument and reads commands
+and bindings from that file.
+
+<PRE>
+$include /etc/inputrc
+</PRE>
+
 </DL>
 
 
@@ -460,6 +534,11 @@ binding, variable assignment, and conditional syntax.
 #
 # You can re-read the inputrc file with C-x C-r.
 # Lines beginning with '#' are comments.
+#
+# First, include any systemwide bindings and variable assignments from
+# /etc/Inputrc
+$include /etc/Inputrc
+
 #
 # Set various bindings for emacs mode.
 
@@ -638,7 +717,8 @@ Move to the first line in the history.
 <DT><CODE>end-of-history (M-&#62;)</CODE>
 <DD>
 <A NAME="IDX30"></A>
-Move to the end of the input history, i.e., the line you are entering.
+Move to the end of the input history, i.e., the line currently
+being entered.
 
 <DT><CODE>reverse-search-history (C-r)</CODE>
 <DD>
@@ -671,7 +751,7 @@ for a string supplied by the user.
 <A NAME="IDX35"></A>
 Search forward through the history for the string of characters
 between the start of the current line and the current cursor
-position (the `point').  This is a non-incremental search.  By
+position (the <VAR>point</VAR>).  This is a non-incremental search.  By
 default, this command is unbound.
 
 <DT><CODE>history-search-backward ()</CODE>
@@ -696,6 +776,8 @@ inserts the <VAR>n</VAR>th word from the end of the previous command.
 Insert last argument to the previous command (the last word of the
 previous history entry).  With an
 argument, behave exactly like <CODE>yank-nth-arg</CODE>.
+Successive calls to <CODE>yank-last-arg</CODE> move back through the history
+list, inserting the last argument of each line in turn.
 
 </DL>
 
@@ -710,18 +792,19 @@ argument, behave exactly like <CODE>yank-nth-arg</CODE>.
 <A NAME="IDX39"></A>
 Delete the character under the cursor.  If the cursor is at the
 beginning of the line, there are no characters in the line, and
-the last character typed was not <KBD>C-d</KBD>, then return <CODE>EOF</CODE>.
+the last character typed was not bound to <CODE>delete-char</CODE>, then
+return <CODE>EOF</CODE>.
 
 <DT><CODE>backward-delete-char (Rubout)</CODE>
 <DD>
 <A NAME="IDX40"></A>
-Delete the character behind the cursor.  A numeric arg says to kill
-the characters instead of deleting them.
+Delete the character behind the cursor.  A numeric argument means
+to kill the characters instead of deleting them.
 
 <DT><CODE>quoted-insert (C-q, C-v)</CODE>
 <DD>
 <A NAME="IDX41"></A>
-Add the next character that you type to the line verbatim.  This is
+Add the next character typed to the line verbatim.  This is
 how to insert key sequences like <KBD>C-q</KBD>, for example.
 
 <DT><CODE>tab-insert (M-TAB)</CODE>
@@ -742,7 +825,7 @@ the character at the cursor, moving the
 cursor forward as well.  If the insertion point
 is at the end of the line, then this
 transposes the last two characters of the line.
-Negative argumentss don't work.
+Negative arguments don't work.
 
 <DT><CODE>transpose-words (M-t)</CODE>
 <DD>
@@ -754,19 +837,19 @@ moving the cursor over that word as well.
 <DD>
 <A NAME="IDX46"></A>
 Uppercase the current (or following) word.  With a negative argument,
-do the previous word, but do not move the cursor.
+uppercase the previous word, but do not move the cursor.
 
 <DT><CODE>downcase-word (M-l)</CODE>
 <DD>
 <A NAME="IDX47"></A>
 Lowercase the current (or following) word.  With a negative argument,
-do the previous word, but do not move the cursor.
+lowercase the previous word, but do not move the cursor.
 
 <DT><CODE>capitalize-word (M-c)</CODE>
 <DD>
 <A NAME="IDX48"></A>
 Capitalize the current (or following) word.  With a negative argument,
-do the previous word, but do not move the cursor.
+capitalize the previous word, but do not move the cursor.
 
 </DL>
 
@@ -790,7 +873,7 @@ Kill backward to the beginning of the line.
 <DD>
 <A NAME="IDX51"></A>
 Kill backward from the cursor to the beginning of the current line.
-Save the killed text on the kill-ring.
+The killed text is saved on the kill-ring.
 
 <DT><CODE>kill-whole-line ()</CODE>
 <DD>
@@ -826,25 +909,27 @@ Delete all spaces and tabs around point.  By default, this is unbound.
 <DD>
 <A NAME="IDX57"></A>
 Kill the text between the point and the <EM>mark</EM> (saved
-cursor position.  This text is referred to as the <VAR>region</VAR>.
+cursor position).  This text is referred to as the <VAR>region</VAR>.
 By default, this command is unbound.
 
 <DT><CODE>copy-region-as-kill ()</CODE>
 <DD>
 <A NAME="IDX58"></A>
-Copy the text in the region to the kill buffer, so you can yank it
+Copy the text in the region to the kill buffer, so it can be yanked
 right away.  By default, this command is unbound.
 
 <DT><CODE>copy-backward-word ()</CODE>
 <DD>
 <A NAME="IDX59"></A>
 Copy the word before point to the kill buffer.
+The word boundaries are the same as <CODE>backward-word</CODE>.
 By default, this command is unbound.
 
 <DT><CODE>copy-forward-word ()</CODE>
 <DD>
 <A NAME="IDX60"></A>
 Copy the word following point to the kill buffer.
+The word boundaries are the same as <CODE>forward-word</CODE>.
 By default, this command is unbound.
 
 <DT><CODE>yank (C-y)</CODE>
@@ -900,8 +985,8 @@ By default, this is not bound to a key.
 Attempt to do completion on the text before the cursor.  This is
 application-specific.  Generally, if you are typing a filename
 argument, you can do filename completion; if you are typing a command,
-you can do command completion, if you are typing in a symbol to GDB, you
-can do symbol name completion, if you are typing in a variable to Bash,
+you can do command completion; if you are typing in a symbol to GDB, you
+can do symbol name completion; if you are typing in a variable to Bash,
 you can do variable name completion, and so on.
 
 <DT><CODE>possible-completions (M-?)</CODE>
@@ -915,6 +1000,21 @@ List the possible completions of the text before the cursor.
 Insert all completions of the text before point that would have
 been generated by <CODE>possible-completions</CODE>.
 
+<DT><CODE>menu-complete ()</CODE>
+<DD>
+<A NAME="IDX68"></A>
+Similar to <CODE>complete</CODE>, but replaces the word to be completed
+with a single match from the list of possible completions.
+Repeated execution of <CODE>menu-complete</CODE> steps through the list
+of possible completions, inserting each match in turn.
+At the end of the list of completions, the bell is rung and the
+original text is restored.
+An argument of <VAR>n</VAR> moves <VAR>n</VAR> positions forward in the list
+of matches; a negative argument may be used to move backward
+through the list.
+This command is intended to be bound to <CODE>TAB</CODE>, but is unbound
+by default.
+
 </DL>
 
 
@@ -924,18 +1024,18 @@ been generated by <CODE>possible-completions</CODE>.
 
 <DT><CODE>start-kbd-macro (C-x ()</CODE>
 <DD>
-<A NAME="IDX68"></A>
+<A NAME="IDX69"></A>
 Begin saving the characters typed into the current keyboard macro.
 
 <DT><CODE>end-kbd-macro (C-x ))</CODE>
 <DD>
-<A NAME="IDX69"></A>
+<A NAME="IDX70"></A>
 Stop saving the characters typed into the current keyboard macro
 and save the definition.
 
 <DT><CODE>call-last-kbd-macro (C-x e)</CODE>
 <DD>
-<A NAME="IDX70"></A>
+<A NAME="IDX71"></A>
 Re-execute the last keyboard macro defined, by making the characters
 in the macro appear as if typed at the keyboard.
 
@@ -948,98 +1048,98 @@ in the macro appear as if typed at the keyboard.
 
 <DT><CODE>re-read-init-file (C-x C-r)</CODE>
 <DD>
-<A NAME="IDX71"></A>
+<A NAME="IDX72"></A>
 Read in the contents of the inputrc file, and incorporate
 any bindings or variable assignments found there.
 
 <DT><CODE>abort (C-g)</CODE>
 <DD>
-<A NAME="IDX72"></A>
+<A NAME="IDX73"></A>
 Abort the current editing command and
 ring the terminal's bell (subject to the setting of
 <CODE>bell-style</CODE>).
 
 <DT><CODE>do-uppercase-version (M-a, M-b, M-<VAR>x</VAR>, ...)</CODE>
 <DD>
-<A NAME="IDX73"></A>
+<A NAME="IDX74"></A>
 If the metafied character <VAR>x</VAR> is lowercase, run the command
 that is bound to the corresponding uppercase character.
 
 <DT><CODE>prefix-meta (ESC)</CODE>
 <DD>
-<A NAME="IDX74"></A>
-Make the next character that you type be metafied.  This is for people
+<A NAME="IDX75"></A>
+Make the next character typed be metafied.  This is for keyboards
 without a meta key.  Typing <SAMP>`ESC f'</SAMP> is equivalent to typing
 <SAMP>`M-f'</SAMP>.
 
 <DT><CODE>undo (C-_, C-x C-u)</CODE>
 <DD>
-<A NAME="IDX75"></A>
+<A NAME="IDX76"></A>
 Incremental undo, separately remembered for each line.
 
 <DT><CODE>revert-line (M-r)</CODE>
 <DD>
-<A NAME="IDX76"></A>
-Undo all changes made to this line.  This is like typing the <CODE>undo</CODE>
+<A NAME="IDX77"></A>
+Undo all changes made to this line.  This is like executing the <CODE>undo</CODE>
 command enough times to get back to the beginning.
 
 <DT><CODE>tilde-expand (M-~)</CODE>
 <DD>
-<A NAME="IDX77"></A>
+<A NAME="IDX78"></A>
 Perform tilde expansion on the current word.
 
 <DT><CODE>set-mark (C-@)</CODE>
 <DD>
-<A NAME="IDX78"></A>
+<A NAME="IDX79"></A>
 Set the mark to the current point.  If a
 numeric argument is supplied, the mark is set to that position.
 
 <DT><CODE>exchange-point-and-mark (C-x C-x)</CODE>
 <DD>
-<A NAME="IDX79"></A>
+<A NAME="IDX80"></A>
 Swap the point with the mark.  The current cursor position is set to
 the saved position, and the old cursor position is saved as the mark.
 
 <DT><CODE>character-search (C-])</CODE>
 <DD>
-<A NAME="IDX80"></A>
+<A NAME="IDX81"></A>
 A character is read and point is moved to the next occurrence of that
 character.  A negative count searches for previous occurrences.
 
 <DT><CODE>character-search-backward (M-C-])</CODE>
 <DD>
-<A NAME="IDX81"></A>
+<A NAME="IDX82"></A>
 A character is read and point is moved to the previous occurrence
 of that character.  A negative count searches for subsequent
 occurrences.
 
 <DT><CODE>insert-comment (M-#)</CODE>
 <DD>
-<A NAME="IDX82"></A>
+<A NAME="IDX83"></A>
 The value of the <CODE>comment-begin</CODE>
 variable is inserted at the beginning of the current line,
 and the line is accepted as if a newline had been typed.
 
 <DT><CODE>dump-functions ()</CODE>
 <DD>
-<A NAME="IDX83"></A>
+<A NAME="IDX84"></A>
 Print all of the functions and their key bindings to the
-readline output stream.  If a numeric argument is supplied,
+Readline output stream.  If a numeric argument is supplied,
 the output is formatted in such a way that it can be made part
 of an <VAR>inputrc</VAR> file.  This command is unbound by default.
 
 <DT><CODE>dump-variables ()</CODE>
 <DD>
-<A NAME="IDX84"></A>
+<A NAME="IDX85"></A>
 Print all of the settable variables and their values to the
-readline output stream.  If a numeric argument is supplied,
+Readline output stream.  If a numeric argument is supplied,
 the output is formatted in such a way that it can be made part
 of an <VAR>inputrc</VAR> file.  This command is unbound by default.
 
 <DT><CODE>dump-macros ()</CODE>
 <DD>
-<A NAME="IDX85"></A>
-Print all of the readline key sequences bound to macros and the
+<A NAME="IDX86"></A>
+Print all of the Readline key sequences bound to macros and the
 strings they ouput.  If a numeric argument is supplied,
 the output is formatted in such a way that it can be made part
 of an <VAR>inputrc</VAR> file.  This command is unbound by default.
@@ -1099,8 +1199,8 @@ the simplest way possible, perhaps to replace calls in your code to
 
 </P>
 <P>
-<A NAME="IDX86"></A>
 <A NAME="IDX87"></A>
+<A NAME="IDX88"></A>
 The function <CODE>readline ()</CODE> prints a prompt and then reads and returns
 a single line of text from the user.  The line <CODE>readline</CODE>
 returns is allocated with <CODE>malloc ()</CODE>; you should <CODE>free ()</CODE>
@@ -1326,7 +1426,7 @@ These variables are available to function writers.
 <P>
 <DL>
 <DT><U>Variable:</U> char * <B>rl_line_buffer</B>
-<DD><A NAME="IDX88"></A>
+<DD><A NAME="IDX89"></A>
 This is the line gathered so far.  You are welcome to modify the
 contents of the line, but see section <A HREF="readline.html#SEC28">Allowing Undoing</A>.
 </DL>
@@ -1335,7 +1435,7 @@ contents of the line, but see section <A HREF="readline.html#SEC28">Allowing Und
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>rl_point</B>
-<DD><A NAME="IDX89"></A>
+<DD><A NAME="IDX90"></A>
 The offset of the current cursor position in <CODE>rl_line_buffer</CODE>
 (the <EM>point</EM>).
 </DL>
@@ -1344,7 +1444,7 @@ The offset of the current cursor position in <CODE>rl_line_buffer</CODE>
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>rl_end</B>
-<DD><A NAME="IDX90"></A>
+<DD><A NAME="IDX91"></A>
 The number of characters present in <CODE>rl_line_buffer</CODE>.  When
 <CODE>rl_point</CODE> is at the end of the line, <CODE>rl_point</CODE> and
 <CODE>rl_end</CODE> are equal.
@@ -1354,7 +1454,7 @@ The number of characters present in <CODE>rl_line_buffer</CODE>.  When
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>rl_mark</B>
-<DD><A NAME="IDX91"></A>
+<DD><A NAME="IDX92"></A>
 The mark (saved position) in the current line.  If set, the mark
 and point define a <EM>region</EM>.
 </DL>
@@ -1363,7 +1463,7 @@ and point define a <EM>region</EM>.
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>rl_done</B>
-<DD><A NAME="IDX92"></A>
+<DD><A NAME="IDX93"></A>
 Setting this to a non-zero value causes Readline to return the current
 line immediately.
 </DL>
@@ -1372,7 +1472,7 @@ line immediately.
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>rl_pending_input</B>
-<DD><A NAME="IDX93"></A>
+<DD><A NAME="IDX94"></A>
 Setting this to a value makes it the next keystroke read.  This is a
 way to stuff a single character into the input stream.
 </DL>
@@ -1381,7 +1481,7 @@ way to stuff a single character into the input stream.
 <P>
 <DL>
 <DT><U>Variable:</U> char * <B>rl_prompt</B>
-<DD><A NAME="IDX94"></A>
+<DD><A NAME="IDX95"></A>
 The prompt Readline uses.  This is set from the argument to
 <CODE>readline ()</CODE>, and should not be assigned to directly.
 </DL>
@@ -1390,7 +1490,7 @@ The prompt Readline uses.  This is set from the argument to
 <P>
 <DL>
 <DT><U>Variable:</U> char * <B>rl_library_version</B>
-<DD><A NAME="IDX95"></A>
+<DD><A NAME="IDX96"></A>
 The version number of this revision of the library.
 </DL>
 
@@ -1398,7 +1498,7 @@ The version number of this revision of the library.
 <P>
 <DL>
 <DT><U>Variable:</U> char * <B>rl_terminal_name</B>
-<DD><A NAME="IDX96"></A>
+<DD><A NAME="IDX97"></A>
 The terminal type, used for initialization.
 </DL>
 
@@ -1406,7 +1506,7 @@ The terminal type, used for initialization.
 <P>
 <DL>
 <DT><U>Variable:</U> char * <B>rl_readline_name</B>
-<DD><A NAME="IDX97"></A>
+<DD><A NAME="IDX98"></A>
 This variable is set to a unique name by each application using Readline.
 The value allows conditional parsing of the inputrc file
 (see section <A HREF="readline.html#SEC5">Conditional Init Constructs</A>).
@@ -1416,7 +1516,7 @@ The value allows conditional parsing of the inputrc file
 <P>
 <DL>
 <DT><U>Variable:</U> FILE * <B>rl_instream</B>
-<DD><A NAME="IDX98"></A>
+<DD><A NAME="IDX99"></A>
 The stdio stream from which Readline reads input.
 </DL>
 
@@ -1424,7 +1524,7 @@ The stdio stream from which Readline reads input.
 <P>
 <DL>
 <DT><U>Variable:</U> FILE * <B>rl_outstream</B>
-<DD><A NAME="IDX99"></A>
+<DD><A NAME="IDX100"></A>
 The stdio stream to which Readline performs output.
 </DL>
 
@@ -1432,7 +1532,7 @@ The stdio stream to which Readline performs output.
 <P>
 <DL>
 <DT><U>Variable:</U> Function * <B>rl_startup_hook</B>
-<DD><A NAME="IDX100"></A>
+<DD><A NAME="IDX101"></A>
 If non-zero, this is the address of a function to call just
 before <CODE>readline</CODE> prints the first prompt.
 </DL>
@@ -1441,7 +1541,7 @@ before <CODE>readline</CODE> prints the first prompt.
 <P>
 <DL>
 <DT><U>Variable:</U> Function * <B>rl_event_hook</B>
-<DD><A NAME="IDX101"></A>
+<DD><A NAME="IDX102"></A>
 If non-zero, this is the address of a function to call periodically
 when readline is waiting for terminal input.
 </DL>
@@ -1450,7 +1550,7 @@ when readline is waiting for terminal input.
 <P>
 <DL>
 <DT><U>Variable:</U> Function * <B>rl_getc_function</B>
-<DD><A NAME="IDX102"></A>
+<DD><A NAME="IDX103"></A>
 If non-zero, <CODE>readline</CODE> will call indirectly through this pointer
 to get a character from the input stream.  By default, it is set to
 <CODE>rl_getc</CODE>, the default <CODE>readline</CODE> character input function
@@ -1461,7 +1561,7 @@ to get a character from the input stream.  By default, it is set to
 <P>
 <DL>
 <DT><U>Variable:</U> VFunction * <B>rl_redisplay_function</B>
-<DD><A NAME="IDX103"></A>
+<DD><A NAME="IDX104"></A>
 If non-zero, <CODE>readline</CODE> will call indirectly through this pointer
 to update the display with the current contents of the editing buffer.
 By default, it is set to <CODE>rl_redisplay</CODE>, the default <CODE>readline</CODE>
@@ -1472,7 +1572,7 @@ redisplay function (see section <A HREF="readline.html#SEC29">Redisplay</A>).
 <P>
 <DL>
 <DT><U>Variable:</U> Keymap <B>rl_executing_keymap</B>
-<DD><A NAME="IDX104"></A>
+<DD><A NAME="IDX105"></A>
 This variable is set to the keymap (see section <A HREF="readline.html#SEC25">Selecting a Keymap</A>) in which the
 currently executing readline function was found.
 </DL>
@@ -1481,7 +1581,7 @@ currently executing readline function was found.
 <P>
 <DL>
 <DT><U>Variable:</U> Keymap <B>rl_binding_keymap</B>
-<DD><A NAME="IDX105"></A>
+<DD><A NAME="IDX106"></A>
 This variable is set to the keymap (see section <A HREF="readline.html#SEC25">Selecting a Keymap</A>) in which the
 last key binding occurred.
 </DL>
@@ -1517,7 +1617,7 @@ well.  Readline provides a function for doing that:
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_add_defun</B> <I>(char *name, Function *function, int key)</I>
-<DD><A NAME="IDX106"></A>
+<DD><A NAME="IDX107"></A>
 Add <VAR>name</VAR> to the list of named functions.  Make <VAR>function</VAR> be
 the function that gets called.  If <VAR>key</VAR> is not -1, then bind it to
 <VAR>function</VAR> using <CODE>rl_bind_key ()</CODE>.
@@ -1546,7 +1646,7 @@ Readline which keymap to use.
 <P>
 <DL>
 <DT><U>Function:</U> Keymap <B>rl_make_bare_keymap</B> <I>()</I>
-<DD><A NAME="IDX107"></A>
+<DD><A NAME="IDX108"></A>
 Returns a new, empty keymap.  The space for the keymap is allocated with
 <CODE>malloc ()</CODE>; you should <CODE>free ()</CODE> it when you are done.
 </DL>
@@ -1555,7 +1655,7 @@ Returns a new, empty keymap.  The space for the keymap is allocated with
 <P>
 <DL>
 <DT><U>Function:</U> Keymap <B>rl_copy_keymap</B> <I>(Keymap map)</I>
-<DD><A NAME="IDX108"></A>
+<DD><A NAME="IDX109"></A>
 Return a new keymap which is a copy of <VAR>map</VAR>.
 </DL>
 
@@ -1563,7 +1663,7 @@ Return a new keymap which is a copy of <VAR>map</VAR>.
 <P>
 <DL>
 <DT><U>Function:</U> Keymap <B>rl_make_keymap</B> <I>()</I>
-<DD><A NAME="IDX109"></A>
+<DD><A NAME="IDX110"></A>
 Return a new keymap with the printing characters bound to rl_insert,
 the lowercase Meta characters bound to run their equivalents, and
 the Meta digits bound to produce numeric arguments.
@@ -1573,7 +1673,7 @@ the Meta digits bound to produce numeric arguments.
 <P>
 <DL>
 <DT><U>Function:</U> void <B>rl_discard_keymap</B> <I>(Keymap keymap)</I>
-<DD><A NAME="IDX110"></A>
+<DD><A NAME="IDX111"></A>
 Free the storage associated with <VAR>keymap</VAR>.
 </DL>
 
@@ -1586,7 +1686,7 @@ change which keymap is active.
 <P>
 <DL>
 <DT><U>Function:</U> Keymap <B>rl_get_keymap</B> <I>()</I>
-<DD><A NAME="IDX111"></A>
+<DD><A NAME="IDX112"></A>
 Returns the currently active keymap.
 </DL>
 
@@ -1594,7 +1694,7 @@ Returns the currently active keymap.
 <P>
 <DL>
 <DT><U>Function:</U> void <B>rl_set_keymap</B> <I>(Keymap keymap)</I>
-<DD><A NAME="IDX112"></A>
+<DD><A NAME="IDX113"></A>
 Makes <VAR>keymap</VAR> the currently active keymap.
 </DL>
 
@@ -1602,7 +1702,7 @@ Makes <VAR>keymap</VAR> the currently active keymap.
 <P>
 <DL>
 <DT><U>Function:</U> Keymap <B>rl_get_keymap_by_name</B> <I>(char *name)</I>
-<DD><A NAME="IDX113"></A>
+<DD><A NAME="IDX114"></A>
 Return the keymap matching <VAR>name</VAR>.  <VAR>name</VAR> is one which would
 be supplied in a <CODE>set keymap</CODE> inputrc line (@xref{Readline Init File}).
 </DL>
@@ -1611,7 +1711,7 @@ be supplied in a <CODE>set keymap</CODE> inputrc line (@xref{Readline Init File}
 <P>
 <DL>
 <DT><U>Function:</U> char * <B>rl_get_keymap_name</B> <I>(Keymap keymap)</I>
-<DD><A NAME="IDX114"></A>
+<DD><A NAME="IDX115"></A>
 Return the name matching <VAR>keymap</VAR>.  <VAR>name</VAR> is one which would
 be supplied in a <CODE>set keymap</CODE> inputrc line (@xref{Readline Init File}).
 </DL>
@@ -1637,7 +1737,7 @@ These functions manage key bindings.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_bind_key</B> <I>(int key, Function *function)</I>
-<DD><A NAME="IDX115"></A>
+<DD><A NAME="IDX116"></A>
 Binds <VAR>key</VAR> to <VAR>function</VAR> in the currently active keymap.
 Returns non-zero in the case of an invalid <VAR>key</VAR>.
 </DL>
@@ -1646,7 +1746,7 @@ Returns non-zero in the case of an invalid <VAR>key</VAR>.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_bind_key_in_map</B> <I>(int key, Function *function, Keymap map)</I>
-<DD><A NAME="IDX116"></A>
+<DD><A NAME="IDX117"></A>
 Bind <VAR>key</VAR> to <VAR>function</VAR> in <VAR>map</VAR>.  Returns non-zero in the case
 of an invalid <VAR>key</VAR>.
 </DL>
@@ -1655,7 +1755,7 @@ of an invalid <VAR>key</VAR>.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_unbind_key</B> <I>(int key)</I>
-<DD><A NAME="IDX117"></A>
+<DD><A NAME="IDX118"></A>
 Bind <VAR>key</VAR> to the null function in the currently active keymap.
 Returns non-zero in case of error.
 </DL>
@@ -1664,7 +1764,7 @@ Returns non-zero in case of error.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_unbind_key_in_map</B> <I>(int key, Keymap map)</I>
-<DD><A NAME="IDX118"></A>
+<DD><A NAME="IDX119"></A>
 Bind <VAR>key</VAR> to the null function in <VAR>map</VAR>.
 Returns non-zero in case of error.
 </DL>
@@ -1672,8 +1772,24 @@ Returns non-zero in case of error.
 </P>
 <P>
 <DL>
+<DT><U>Function:</U> int <B>rl_unbind_function_in_map</B> <I>(Function *function, Keymap map)</I>
+<DD><A NAME="IDX120"></A>
+Unbind all keys that execute <VAR>function</VAR> in <VAR>map</VAR>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function:</U> int <B>rl_unbind_command_in_map</B> <I>(char *command, Keymap map)</I>
+<DD><A NAME="IDX121"></A>
+Unbind all keys that are bound to <VAR>command</VAR> in <VAR>map</VAR>.
+</DL>
+
+</P>
+<P>
+<DL>
 <DT><U>Function:</U> int <B>rl_generic_bind</B> <I>(int type, char *keyseq, char *data, Keymap map)</I>
-<DD><A NAME="IDX119"></A>
+<DD><A NAME="IDX122"></A>
 Bind the key sequence represented by the string <VAR>keyseq</VAR> to the arbitrary
 pointer <VAR>data</VAR>.  <VAR>type</VAR> says what kind of data is pointed to by
 <VAR>data</VAR>; this can be a function (<CODE>ISFUNC</CODE>), a macro
@@ -1685,7 +1801,7 @@ necessary.  The initial keymap in which to do bindings is <VAR>map</VAR>.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_parse_and_bind</B> <I>(char *line)</I>
-<DD><A NAME="IDX120"></A>
+<DD><A NAME="IDX123"></A>
 Parse <VAR>line</VAR> as if it had been read from the <CODE>inputrc</CODE> file and
 perform any key bindings and variable assignments found
 (@xref{Readline Init File}).
@@ -1695,7 +1811,7 @@ perform any key bindings and variable assignments found
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_read_init_file</B> <I>(char *filename)</I>
-<DD><A NAME="IDX121"></A>
+<DD><A NAME="IDX124"></A>
 Read keybindings and variable assignments from <VAR>filename</VAR>
 (@xref{Readline Init File}).
 </DL>
@@ -1713,7 +1829,7 @@ and the functions invoked by a particular key sequence.
 <P>
 <DL>
 <DT><U>Function:</U> Function * <B>rl_named_function</B> <I>(char *name)</I>
-<DD><A NAME="IDX122"></A>
+<DD><A NAME="IDX125"></A>
 Return the function with name <VAR>name</VAR>.
 </DL>
 
@@ -1721,7 +1837,7 @@ Return the function with name <VAR>name</VAR>.
 <P>
 <DL>
 <DT><U>Function:</U> Function * <B>rl_function_of_keyseq</B> <I>(char *keyseq, Keymap map, int *type)</I>
-<DD><A NAME="IDX123"></A>
+<DD><A NAME="IDX126"></A>
 Return the function invoked by <VAR>keyseq</VAR> in keymap <VAR>map</VAR>.
 If <VAR>map</VAR> is NULL, the current keymap is used.  If <VAR>type</VAR> is
 not NULL, the type of the object is returned in it (one of <CODE>ISFUNC</CODE>,
@@ -1732,7 +1848,7 @@ not NULL, the type of the object is returned in it (one of <CODE>ISFUNC</CODE>,
 <P>
 <DL>
 <DT><U>Function:</U> char ** <B>rl_invoking_keyseqs</B> <I>(Function *function)</I>
-<DD><A NAME="IDX124"></A>
+<DD><A NAME="IDX127"></A>
 Return an array of strings representing the key sequences used to
 invoke <VAR>function</VAR> in the current keymap.
 </DL>
@@ -1741,7 +1857,7 @@ invoke <VAR>function</VAR> in the current keymap.
 <P>
 <DL>
 <DT><U>Function:</U> char ** <B>rl_invoking_keyseqs_in_map</B> <I>(Function *function, Keymap map)</I>
-<DD><A NAME="IDX125"></A>
+<DD><A NAME="IDX128"></A>
 Return an array of strings representing the key sequences used to
 invoke <VAR>function</VAR> in the keymap <VAR>map</VAR>.
 </DL>
@@ -1750,7 +1866,7 @@ invoke <VAR>function</VAR> in the keymap <VAR>map</VAR>.
 <P>
 <DL>
 <DT><U>Function:</U> void <B>rl_function_dumper</B> <I>(int readable)</I>
-<DD><A NAME="IDX126"></A>
+<DD><A NAME="IDX129"></A>
 Print the readline function names and the key sequences currently
 bound to them to <CODE>rl_outstream</CODE>.  If <VAR>readable</VAR> is non-zero,
 the list is formatted in such a way that it can be made part of an
@@ -1761,7 +1877,7 @@ the list is formatted in such a way that it can be made part of an
 <P>
 <DL>
 <DT><U>Function:</U> void <B>rl_list_funmap_names</B> <I>()</I>
-<DD><A NAME="IDX127"></A>
+<DD><A NAME="IDX130"></A>
 Print the names of all bindable Readline functions to <CODE>rl_outstream</CODE>.
 </DL>
 
@@ -1810,7 +1926,7 @@ tells undo what to undo, not how to undo it.  <CODE>UNDO_BEGIN</CODE> and
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_begin_undo_group</B> <I>()</I>
-<DD><A NAME="IDX128"></A>
+<DD><A NAME="IDX131"></A>
 Begins saving undo information in a group construct.  The undo
 information usually comes from calls to <CODE>rl_insert_text ()</CODE> and
 <CODE>rl_delete_text ()</CODE>, but could be the result of calls to
@@ -1821,7 +1937,7 @@ information usually comes from calls to <CODE>rl_insert_text ()</CODE> and
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_end_undo_group</B> <I>()</I>
-<DD><A NAME="IDX129"></A>
+<DD><A NAME="IDX132"></A>
 Closes the current undo group started with <CODE>rl_begin_undo_group
 ()</CODE>.  There should be one call to <CODE>rl_end_undo_group ()</CODE>
 for each call to <CODE>rl_begin_undo_group ()</CODE>.
@@ -1831,7 +1947,7 @@ for each call to <CODE>rl_begin_undo_group ()</CODE>.
 <P>
 <DL>
 <DT><U>Function:</U> void <B>rl_add_undo</B> <I>(enum undo_code what, int start, int end, char *text)</I>
-<DD><A NAME="IDX130"></A>
+<DD><A NAME="IDX133"></A>
 Remember how to undo an event (according to <VAR>what</VAR>).  The affected
 text runs from <VAR>start</VAR> to <VAR>end</VAR>, and encompasses <VAR>text</VAR>.
 </DL>
@@ -1840,7 +1956,7 @@ text runs from <VAR>start</VAR> to <VAR>end</VAR>, and encompasses <VAR>text</VA
 <P>
 <DL>
 <DT><U>Function:</U> void <B>free_undo_list</B> <I>()</I>
-<DD><A NAME="IDX131"></A>
+<DD><A NAME="IDX134"></A>
 Free the existing undo list.
 </DL>
 
@@ -1848,7 +1964,7 @@ Free the existing undo list.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_do_undo</B> <I>()</I>
-<DD><A NAME="IDX132"></A>
+<DD><A NAME="IDX135"></A>
 Undo the first thing on the undo list.  Returns <CODE>0</CODE> if there was
 nothing to undo, non-zero if something was undone.
 </DL>
@@ -1864,7 +1980,7 @@ the text range that you are going to modify.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_modifying</B> <I>(int start, int end)</I>
-<DD><A NAME="IDX133"></A>
+<DD><A NAME="IDX136"></A>
 Tell Readline to save the text between <VAR>start</VAR> and <VAR>end</VAR> as a
 single undo unit.  It is assumed that you will subsequently modify
 that text.
@@ -1878,7 +1994,7 @@ that text.
 <P>
 <DL>
 <DT><U>Function:</U> void <B>rl_redisplay</B> <I>()</I>
-<DD><A NAME="IDX134"></A>
+<DD><A NAME="IDX137"></A>
 Change what's displayed on the screen to reflect the current contents
 of <CODE>rl_line_buffer</CODE>.
 </DL>
@@ -1887,7 +2003,7 @@ of <CODE>rl_line_buffer</CODE>.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_forced_update_display</B> <I>()</I>
-<DD><A NAME="IDX135"></A>
+<DD><A NAME="IDX138"></A>
 Force the line to be updated and redisplayed, whether or not
 Readline thinks the screen display is correct.
 </DL>
@@ -1896,7 +2012,7 @@ Readline thinks the screen display is correct.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_on_new_line</B> <I>()</I>
-<DD><A NAME="IDX136"></A>
+<DD><A NAME="IDX139"></A>
 Tell the update routines that we have moved onto a new (empty) line,
 usually after ouputting a newline.
 </DL>
@@ -1905,7 +2021,7 @@ usually after ouputting a newline.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_reset_line_state</B> <I>()</I>
-<DD><A NAME="IDX137"></A>
+<DD><A NAME="IDX140"></A>
 Reset the display state to a clean state and redisplay the current line
 starting on a new line.
 </DL>
@@ -1914,7 +2030,7 @@ starting on a new line.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_message</B> <I>(va_alist)</I>
-<DD><A NAME="IDX138"></A>
+<DD><A NAME="IDX141"></A>
 The arguments are a string as would be supplied to <CODE>printf</CODE>.  The
 resulting string is displayed in the <STRONG>echo area</STRONG>.  The echo area
 is also used to display numeric arguments and search strings.
@@ -1924,7 +2040,7 @@ is also used to display numeric arguments and search strings.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_clear_message</B> <I>()</I>
-<DD><A NAME="IDX139"></A>
+<DD><A NAME="IDX142"></A>
 Clear the message in the echo area.
 </DL>
 
@@ -1936,7 +2052,7 @@ Clear the message in the echo area.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_insert_text</B> <I>(char *text)</I>
-<DD><A NAME="IDX140"></A>
+<DD><A NAME="IDX143"></A>
 Insert <VAR>text</VAR> into the line at the current cursor position.
 </DL>
 
@@ -1944,7 +2060,7 @@ Insert <VAR>text</VAR> into the line at the current cursor position.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_delete_text</B> <I>(int start, int end)</I>
-<DD><A NAME="IDX141"></A>
+<DD><A NAME="IDX144"></A>
 Delete the text between <VAR>start</VAR> and <VAR>end</VAR> in the current line.
 </DL>
 
@@ -1952,7 +2068,7 @@ Delete the text between <VAR>start</VAR> and <VAR>end</VAR> in the current line.
 <P>
 <DL>
 <DT><U>Function:</U> char * <B>rl_copy_text</B> <I>(int start, int end)</I>
-<DD><A NAME="IDX142"></A>
+<DD><A NAME="IDX145"></A>
 Return a copy of the text between <VAR>start</VAR> and <VAR>end</VAR> in
 the current line.
 </DL>
@@ -1961,7 +2077,7 @@ the current line.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_kill_text</B> <I>(int start, int end)</I>
-<DD><A NAME="IDX143"></A>
+<DD><A NAME="IDX146"></A>
 Copy the text between <VAR>start</VAR> and <VAR>end</VAR> in the current line
 to the kill ring, appending or prepending to the last kill if the
 last command was a kill command.  The text is deleted.
@@ -1978,7 +2094,7 @@ not a kill, a new kill ring slot is used.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_read_key</B> <I>()</I>
-<DD><A NAME="IDX144"></A>
+<DD><A NAME="IDX147"></A>
 Return the next character available.  This handles input inserted into
 the input stream via <VAR>pending input</VAR> (see section <A HREF="readline.html#SEC22">Readline Variables</A>)
 and <CODE>rl_stuff_char ()</CODE>, macros, and characters read from the keyboard.
@@ -1988,7 +2104,7 @@ and <CODE>rl_stuff_char ()</CODE>, macros, and characters read from the keyboard
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_getc</B> <I>(FILE *)</I>
-<DD><A NAME="IDX145"></A>
+<DD><A NAME="IDX148"></A>
 Return the next character available from the keyboard.
 </DL>
 
@@ -1996,7 +2112,7 @@ Return the next character available from the keyboard.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_stuff_char</B> <I>(int c)</I>
-<DD><A NAME="IDX146"></A>
+<DD><A NAME="IDX149"></A>
 Insert <VAR>c</VAR> into the Readline input stream.  It will be "read"
 before Readline attempts to read characters from the terminal with
 <CODE>rl_read_key ()</CODE>.
@@ -2006,7 +2122,7 @@ before Readline attempts to read characters from the terminal with
 <P>
 <DL>
 <DT><U>Function:</U> rl_extend_line_buffer <B>(int</B> <I>len)</I>
-<DD><A NAME="IDX147"></A>
+<DD><A NAME="IDX150"></A>
 Ensure that <CODE>rl_line_buffer</CODE> has enough space to hold <VAR>len</VAR>
 characters, possibly reallocating it if necessary.
 </DL>
@@ -2015,7 +2131,7 @@ characters, possibly reallocating it if necessary.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_initialize</B> <I>()</I>
-<DD><A NAME="IDX148"></A>
+<DD><A NAME="IDX151"></A>
 Initialize or re-initialize Readline's internal state.
 </DL>
 
@@ -2023,7 +2139,7 @@ Initialize or re-initialize Readline's internal state.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_reset_terminal</B> <I>(char *terminal_name)</I>
-<DD><A NAME="IDX149"></A>
+<DD><A NAME="IDX152"></A>
 Reinitialize Readline's idea of the terminal settings using
 <VAR>terminal_name</VAR> as the terminal type (e.g., <CODE>vt100</CODE>).
 </DL>
@@ -2032,7 +2148,7 @@ Reinitialize Readline's idea of the terminal settings using
 <P>
 <DL>
 <DT><U>Function:</U> int <B>alphabetic</B> <I>(int c)</I>
-<DD><A NAME="IDX150"></A>
+<DD><A NAME="IDX153"></A>
 Return 1 if <VAR>c</VAR> is an alphabetic character.
 </DL>
 
@@ -2040,7 +2156,7 @@ Return 1 if <VAR>c</VAR> is an alphabetic character.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>numeric</B> <I>(int c)</I>
-<DD><A NAME="IDX151"></A>
+<DD><A NAME="IDX154"></A>
 Return 1 if <VAR>c</VAR> is a numeric character.
 </DL>
 
@@ -2048,7 +2164,7 @@ Return 1 if <VAR>c</VAR> is a numeric character.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>ding</B> <I>()</I>
-<DD><A NAME="IDX152"></A>
+<DD><A NAME="IDX155"></A>
 Ring the terminal bell, obeying the setting of <CODE>bell-style</CODE>.
 </DL>
 
@@ -2060,7 +2176,7 @@ The following are implemented as macros, defined in <CODE>chartypes.h</CODE>.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>uppercase_p</B> <I>(int c)</I>
-<DD><A NAME="IDX153"></A>
+<DD><A NAME="IDX156"></A>
 Return 1 if <VAR>c</VAR> is an uppercase alphabetic character.
 </DL>
 
@@ -2068,7 +2184,7 @@ Return 1 if <VAR>c</VAR> is an uppercase alphabetic character.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>lowercase_p</B> <I>(int c)</I>
-<DD><A NAME="IDX154"></A>
+<DD><A NAME="IDX157"></A>
 Return 1 if <VAR>c</VAR> is a lowercase alphabetic character.
 </DL>
 
@@ -2076,7 +2192,7 @@ Return 1 if <VAR>c</VAR> is a lowercase alphabetic character.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>digit_p</B> <I>(int c)</I>
-<DD><A NAME="IDX155"></A>
+<DD><A NAME="IDX158"></A>
 Return 1 if <VAR>c</VAR> is a numeric character.
 </DL>
 
@@ -2084,7 +2200,7 @@ Return 1 if <VAR>c</VAR> is a numeric character.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>to_upper</B> <I>(int c)</I>
-<DD><A NAME="IDX156"></A>
+<DD><A NAME="IDX159"></A>
 If <VAR>c</VAR> is a lowercase alphabetic character, return the corresponding
 uppercase character.
 </DL>
@@ -2093,7 +2209,7 @@ uppercase character.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>to_lower</B> <I>(int c)</I>
-<DD><A NAME="IDX157"></A>
+<DD><A NAME="IDX160"></A>
 If <VAR>c</VAR> is an uppercase alphabetic character, return the corresponding
 lowercase character.
 </DL>
@@ -2102,7 +2218,7 @@ lowercase character.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>digit_value</B> <I>(int c)</I>
-<DD><A NAME="IDX158"></A>
+<DD><A NAME="IDX161"></A>
 If <VAR>c</VAR> is a number, return the value it represents.
 </DL>
 
@@ -2123,7 +2239,7 @@ are functions available to make this easy.
 <P>
 <DL>
 <DT><U>Function:</U> void <B>rl_callback_handler_install</B> <I>(char *prompt, Vfunction *lhandler)</I>
-<DD><A NAME="IDX159"></A>
+<DD><A NAME="IDX162"></A>
 Set up the terminal for readline I/O and display the initial
 expanded value of <VAR>prompt</VAR>.  Save the value of <VAR>lhandler</VAR> to
 use as a callback when a complete line of input has been entered.
@@ -2133,7 +2249,7 @@ use as a callback when a complete line of input has been entered.
 <P>
 <DL>
 <DT><U>Function:</U> void <B>rl_callback_read_char</B> <I>()</I>
-<DD><A NAME="IDX160"></A>
+<DD><A NAME="IDX163"></A>
 Whenever an application determines that keyboard input is available, it
 should call <CODE>rl_callback_read_char()</CODE>, which will read the next
 character from the current input source.  If that character completes the
@@ -2147,7 +2263,7 @@ line.  <CODE>EOF</CODE> is  indicated by calling <VAR>lhandler</VAR> with a
 <P>
 <DL>
 <DT><U>Function:</U> void <B>rl_callback_handler_remove</B> <I>()</I>
-<DD><A NAME="IDX161"></A>
+<DD><A NAME="IDX164"></A>
 Restore the terminal to its initial state and remove the line handler.
 This may be called from within a callback as well as independently.
 </DL>
@@ -2297,7 +2413,7 @@ frees the strings when it has finished with them.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_complete</B> <I>(int ignore, int invoking_key)</I>
-<DD><A NAME="IDX162"></A>
+<DD><A NAME="IDX165"></A>
 Complete the word at or before point.  You have supplied the function
 that does the initial simple matching selection algorithm (see
 <CODE>completion_matches ()</CODE>).  The default is to do filename completion.
@@ -2307,7 +2423,7 @@ that does the initial simple matching selection algorithm (see
 <P>
 <DL>
 <DT><U>Variable:</U> Function * <B>rl_completion_entry_function</B>
-<DD><A NAME="IDX163"></A>
+<DD><A NAME="IDX166"></A>
 This is a pointer to the generator function for <CODE>completion_matches
 ()</CODE>.  If the value of <CODE>rl_completion_entry_function</CODE> is
 <CODE>(Function *)NULL</CODE> then the default filename generator function,
@@ -2327,7 +2443,7 @@ Readline.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_complete_internal</B> <I>(int what_to_do)</I>
-<DD><A NAME="IDX164"></A>
+<DD><A NAME="IDX167"></A>
 Complete the word at or before point.  <VAR>what_to_do</VAR> says what to do
 with the completion.  A value of <SAMP>`?'</SAMP> means list the possible
 completions.  <SAMP>`TAB'</SAMP> means do standard completion.  <SAMP>`*'</SAMP> means
@@ -2340,7 +2456,7 @@ performing partial completion.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_complete</B> <I>(int ignore, int invoking_key)</I>
-<DD><A NAME="IDX165"></A>
+<DD><A NAME="IDX168"></A>
 Complete the word at or before point.  You have supplied the function
 that does the initial simple matching selection algorithm (see
 <CODE>completion_matches ()</CODE> and <CODE>rl_completion_entry_function</CODE>).
@@ -2353,7 +2469,7 @@ argument depending on <VAR>invoking_key</VAR>.
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_possible_completions</B> <I>(int count, int invoking_key))</I>
-<DD><A NAME="IDX166"></A>
+<DD><A NAME="IDX169"></A>
 List the possible completions.  See description of <CODE>rl_complete
 ()</CODE>.  This calls <CODE>rl_complete_internal ()</CODE> with an argument of
 <SAMP>`?'</SAMP>.
@@ -2363,7 +2479,7 @@ List the possible completions.  See description of <CODE>rl_complete
 <P>
 <DL>
 <DT><U>Function:</U> int <B>rl_insert_completions</B> <I>(int count, int invoking_key))</I>
-<DD><A NAME="IDX167"></A>
+<DD><A NAME="IDX170"></A>
 Insert the list of possible completions into the line, deleting the
 partially-completed word.  See description of <CODE>rl_complete ()</CODE>.
 This calls <CODE>rl_complete_internal ()</CODE> with an argument of <SAMP>`*'</SAMP>.
@@ -2373,7 +2489,7 @@ This calls <CODE>rl_complete_internal ()</CODE> with an argument of <SAMP>`*'</S
 <P>
 <DL>
 <DT><U>Function:</U> char ** <B>completion_matches</B> <I>(char *text, CPFunction *entry_func)</I>
-<DD><A NAME="IDX168"></A>
+<DD><A NAME="IDX171"></A>
 Returns an array of <CODE>(char *)</CODE> which is a list of completions for
 <VAR>text</VAR>.  If there are no completions, returns <CODE>(char **)NULL</CODE>.
 The first entry in the returned array is the substitution for <VAR>text</VAR>.
@@ -2393,7 +2509,7 @@ when there are no more matches.
 <P>
 <DL>
 <DT><U>Function:</U> char * <B>filename_completion_function</B> <I>(char *text, int state)</I>
-<DD><A NAME="IDX169"></A>
+<DD><A NAME="IDX172"></A>
 A generator function for filename completion in the general case.  Note
 that completion in Bash is a little different because of all
 the pathnames that must be followed when looking up completions for a
@@ -2405,7 +2521,7 @@ completion functions.
 <P>
 <DL>
 <DT><U>Function:</U> char * <B>username_completion_function</B> <I>(char *text, int state)</I>
-<DD><A NAME="IDX170"></A>
+<DD><A NAME="IDX173"></A>
 A completion generator for usernames.  <VAR>text</VAR> contains a partial
 username preceded by a random character (usually <SAMP>`~'</SAMP>).  As with all
 completion generators, <VAR>state</VAR> is zero on the first call and non-zero
@@ -2420,7 +2536,7 @@ for subsequent calls.
 <P>
 <DL>
 <DT><U>Variable:</U> Function * <B>rl_completion_entry_function</B>
-<DD><A NAME="IDX171"></A>
+<DD><A NAME="IDX174"></A>
 A pointer to the generator function for <CODE>completion_matches ()</CODE>.
 <CODE>NULL</CODE> means to use <CODE>filename_entry_function ()</CODE>, the default
 filename completer.
@@ -2430,7 +2546,7 @@ filename completer.
 <P>
 <DL>
 <DT><U>Variable:</U> CPPFunction * <B>rl_attempted_completion_function</B>
-<DD><A NAME="IDX172"></A>
+<DD><A NAME="IDX175"></A>
 A pointer to an alternative function to create matches.
 The function is called with <VAR>text</VAR>, <VAR>start</VAR>, and <VAR>end</VAR>.
 <VAR>start</VAR> and <VAR>end</VAR> are indices in <CODE>rl_line_buffer</CODE> saying
@@ -2445,7 +2561,7 @@ array of strings returned will be used.
 <P>
 <DL>
 <DT><U>Variable:</U> CPFunction * <B>rl_filename_quoting_function</B>
-<DD><A NAME="IDX173"></A>
+<DD><A NAME="IDX176"></A>
 A pointer to a function that will quote a filename in an application-
 specific fashion.  This is called if filename completion is being
 attempted and one of the characters in <CODE>rl_filename_quote_characters</CODE>
@@ -2463,7 +2579,7 @@ to reset this character.
 <P>
 <DL>
 <DT><U>Variable:</U> CPFunction * <B>rl_filename_dequoting_function</B>
-<DD><A NAME="IDX174"></A>
+<DD><A NAME="IDX177"></A>
 A pointer to a function that will remove application-specific quoting
 characters from a filename before completion is attempted, so those
 characters do not interfere with matching the text against names in
@@ -2477,7 +2593,7 @@ that delimits the filename (usually <SAMP>`''</SAMP> or <SAMP>`"'</SAMP>).  If
 <P>
 <DL>
 <DT><U>Variable:</U> Function * <B>rl_char_is_quoted_p</B>
-<DD><A NAME="IDX175"></A>
+<DD><A NAME="IDX178"></A>
 A pointer to a function to call that determines whether or not a specific
 character in the line buffer is quoted, according to whatever quoting
 mechanism the program calling readline uses.  The function is called with
@@ -2491,7 +2607,7 @@ used to break words for the completer.
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>rl_completion_query_items</B>
-<DD><A NAME="IDX176"></A>
+<DD><A NAME="IDX179"></A>
 Up to this many items will be displayed in response to a
 possible-completions call.  After that, we ask the user if she is sure
 she wants to see them all.  The default value is 100.
@@ -2501,7 +2617,7 @@ she wants to see them all.  The default value is 100.
 <P>
 <DL>
 <DT><U>Variable:</U> char * <B>rl_basic_word_break_characters</B>
-<DD><A NAME="IDX177"></A>
+<DD><A NAME="IDX180"></A>
 The basic list of characters that signal a break between words for the
 completer routine.  The default value of this variable is the characters
 which break words for completion in Bash, i.e.,
@@ -2512,7 +2628,7 @@ which break words for completion in Bash, i.e.,
 <P>
 <DL>
 <DT><U>Variable:</U> char * <B>rl_basic_quote_characters</B>
-<DD><A NAME="IDX178"></A>
+<DD><A NAME="IDX181"></A>
 List of quote characters which can cause a word break.
 </DL>
 
@@ -2520,7 +2636,7 @@ List of quote characters which can cause a word break.
 <P>
 <DL>
 <DT><U>Variable:</U> char * <B>rl_completer_word_break_characters</B>
-<DD><A NAME="IDX179"></A>
+<DD><A NAME="IDX182"></A>
 The list of characters that signal a break between words for
 <CODE>rl_complete_internal ()</CODE>.  The default list is the value of
 <CODE>rl_basic_word_break_characters</CODE>.
@@ -2530,7 +2646,7 @@ The list of characters that signal a break between words for
 <P>
 <DL>
 <DT><U>Variable:</U> char * <B>rl_completer_quote_characters</B>
-<DD><A NAME="IDX180"></A>
+<DD><A NAME="IDX183"></A>
 List of characters which can be used to quote a substring of the line.
 Completion occurs on the entire substring, and within the substring
 <CODE>rl_completer_word_break_characters</CODE> are treated as any other character,
@@ -2541,16 +2657,16 @@ unless they also appear within this list.
 <P>
 <DL>
 <DT><U>Variable:</U> char * <B>rl_filename_quote_characters</B>
-<DD><A NAME="IDX181"></A>
+<DD><A NAME="IDX184"></A>
 A list of characters that cause a filename to be quoted by the completer
-when they appear in a completed filename.  The default is empty.
+when they appear in a completed filename.  The default is the null string.
 </DL>
 
 </P>
 <P>
 <DL>
 <DT><U>Variable:</U> char * <B>rl_special_prefixes</B>
-<DD><A NAME="IDX182"></A>
+<DD><A NAME="IDX185"></A>
 The list of characters that are word break characters, but should be
 left in <VAR>text</VAR> when it is passed to the completion function.
 Programs can use this to help determine what kind of completing to do.
@@ -2562,7 +2678,7 @@ shell variables and hostnames.
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>rl_completion_append_character</B>
-<DD><A NAME="IDX183"></A>
+<DD><A NAME="IDX186"></A>
 When a single completion alternative matches at the end of the command
 line, this character is appended to the inserted completion text.  The
 default is a space character (<SAMP>` '</SAMP>).  Setting this to the null
@@ -2576,7 +2692,7 @@ an application-specific command line syntax specification.
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>rl_ignore_completion_duplicates</B>
-<DD><A NAME="IDX184"></A>
+<DD><A NAME="IDX187"></A>
 If non-zero, then disallow duplicates in the matches.  Default is 1.
 </DL>
 
@@ -2584,7 +2700,7 @@ If non-zero, then disallow duplicates in the matches.  Default is 1.
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>rl_filename_completion_desired</B>
-<DD><A NAME="IDX185"></A>
+<DD><A NAME="IDX188"></A>
 Non-zero means that the results of the matches are to be treated as
 filenames.  This is <EM>always</EM> zero on entry, and can only be changed
 within a completion entry generator function.  If it is set to a non-zero
@@ -2597,7 +2713,7 @@ characters.
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>rl_filename_quoting_desired</B>
-<DD><A NAME="IDX186"></A>
+<DD><A NAME="IDX189"></A>
 Non-zero means that the results of the matches are to be quoted using
 double quotes (or an application-specific quoting mechanism) if the
 completed filename contains any characters in
@@ -2611,7 +2727,7 @@ by <CODE>rl_filename_quoting_function</CODE>.
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>rl_inhibit_completion</B>
-<DD><A NAME="IDX187"></A>
+<DD><A NAME="IDX190"></A>
 If this variable is non-zero, completion is inhibit&#60;ed.  The completion
 character will be inserted as any other bound to <CODE>self-insert</CODE>.
 </DL>
@@ -2620,7 +2736,7 @@ character will be inserted as any other bound to <CODE>self-insert</CODE>.
 <P>
 <DL>
 <DT><U>Variable:</U> Function * <B>rl_ignore_some_completions_function</B>
-<DD><A NAME="IDX188"></A>
+<DD><A NAME="IDX191"></A>
 This function, if defined, is called by the completer when real filename
 completion is done, after all the matching names have been generated.
 It is passed a <CODE>NULL</CODE> terminated array of matches.
@@ -2634,7 +2750,7 @@ from the array must be freed.
 <P>
 <DL>
 <DT><U>Variable:</U> Function * <B>rl_directory_completion_hook</B>
-<DD><A NAME="IDX189"></A>
+<DD><A NAME="IDX192"></A>
 This function, if defined, is allowed to modify the directory portion
 of filenames Readline completes.  It is called with the address of a
 string (the current directory name) as an argument.  It could be used
@@ -3094,7 +3210,7 @@ valid_argument (caller, arg)
 </DIR>
 <H2>r</H2>
 <DIR>
-<LI><A HREF="readline.html#IDX87">readline, function</A>
+<LI><A HREF="readline.html#IDX88">readline, function</A>
 </DIR>
 
 </P>
@@ -3104,13 +3220,13 @@ valid_argument (caller, arg)
 <P>
 <H2>(</H2>
 <DIR>
-<LI><A HREF="readline.html#IDX147">(int</A>
+<LI><A HREF="readline.html#IDX150">(int</A>
 </DIR>
 <H2>a</H2>
 <DIR>
-<LI><A HREF="readline.html#IDX72">abort (C-g)</A>
+<LI><A HREF="readline.html#IDX73">abort (C-g)</A>
 <LI><A HREF="readline.html#IDX26">accept-line (Newline, Return)</A>
-<LI><A HREF="readline.html#IDX150">alphabetic</A>
+<LI><A HREF="readline.html#IDX153">alphabetic</A>
 </DIR>
 <H2>b</H2>
 <DIR>
@@ -3125,15 +3241,15 @@ valid_argument (caller, arg)
 </DIR>
 <H2>c</H2>
 <DIR>
-<LI><A HREF="readline.html#IDX70">call-last-kbd-macro (C-x e)</A>
+<LI><A HREF="readline.html#IDX71">call-last-kbd-macro (C-x e)</A>
 <LI><A HREF="readline.html#IDX48">capitalize-word (M-c)</A>
-<LI><A HREF="readline.html#IDX80">character-search (C-])</A>
-<LI><A HREF="readline.html#IDX81">character-search-backward (M-C-])</A>
+<LI><A HREF="readline.html#IDX81">character-search (C-])</A>
+<LI><A HREF="readline.html#IDX82">character-search-backward (M-C-])</A>
 <LI><A HREF="readline.html#IDX24">clear-screen (C-l)</A>
 <LI><A HREF="readline.html#IDX3">comment-begin</A>
 <LI><A HREF="readline.html#IDX65">complete (TAB)</A>
 <LI><A HREF="readline.html#IDX4">completion-query-items</A>
-<LI><A HREF="readline.html#IDX168">completion_matches</A>
+<LI><A HREF="readline.html#IDX171">completion_matches</A>
 <LI><A HREF="readline.html#IDX5">convert-meta</A>
 <LI><A HREF="readline.html#IDX59">copy-backward-word ()</A>
 <LI><A HREF="readline.html#IDX60">copy-forward-word ()</A>
@@ -3144,33 +3260,33 @@ valid_argument (caller, arg)
 <LI><A HREF="readline.html#IDX39">delete-char (C-d)</A>
 <LI><A HREF="readline.html#IDX56">delete-horizontal-space ()</A>
 <LI><A HREF="readline.html#IDX63">digit-argument (M-0, M-1, ... M--)</A>
-<LI><A HREF="readline.html#IDX155">digit_p</A>
-<LI><A HREF="readline.html#IDX158">digit_value</A>
-<LI><A HREF="readline.html#IDX152">ding</A>
+<LI><A HREF="readline.html#IDX158">digit_p</A>
+<LI><A HREF="readline.html#IDX161">digit_value</A>
+<LI><A HREF="readline.html#IDX155">ding</A>
 <LI><A HREF="readline.html#IDX6">disable-completion</A>
-<LI><A HREF="readline.html#IDX73">do-uppercase-version (M-a, M-b, M-<VAR>x</VAR>, ...)</A>
+<LI><A HREF="readline.html#IDX74">do-uppercase-version (M-a, M-b, M-<VAR>x</VAR>, ...)</A>
 <LI><A HREF="readline.html#IDX47">downcase-word (M-l)</A>
-<LI><A HREF="readline.html#IDX83">dump-functions ()</A>
-<LI><A HREF="readline.html#IDX85">dump-macros ()</A>
-<LI><A HREF="readline.html#IDX84">dump-variables ()</A>
+<LI><A HREF="readline.html#IDX84">dump-functions ()</A>
+<LI><A HREF="readline.html#IDX86">dump-macros ()</A>
+<LI><A HREF="readline.html#IDX85">dump-variables ()</A>
 </DIR>
 <H2>e</H2>
 <DIR>
 <LI><A HREF="readline.html#IDX7">editing-mode</A>
 <LI><A HREF="readline.html#IDX8">enable-keypad</A>
-<LI><A HREF="readline.html#IDX69">end-kbd-macro (C-x ))</A>
+<LI><A HREF="readline.html#IDX70">end-kbd-macro (C-x ))</A>
 <LI><A HREF="readline.html#IDX30">end-of-history (M-&#38;#62;)</A>
 <LI><A HREF="readline.html#IDX19">end-of-line (C-e)</A>
-<LI><A HREF="readline.html#IDX79">exchange-point-and-mark (C-x C-x)</A>
+<LI><A HREF="readline.html#IDX80">exchange-point-and-mark (C-x C-x)</A>
 <LI><A HREF="readline.html#IDX9">expand-tilde</A>
 </DIR>
 <H2>f</H2>
 <DIR>
-<LI><A HREF="readline.html#IDX169">filename_completion_function</A>
+<LI><A HREF="readline.html#IDX172">filename_completion_function</A>
 <LI><A HREF="readline.html#IDX20">forward-char (C-f)</A>
 <LI><A HREF="readline.html#IDX32">forward-search-history (C-s)</A>
 <LI><A HREF="readline.html#IDX22">forward-word (M-f)</A>
-<LI><A HREF="readline.html#IDX131">free_undo_list</A>
+<LI><A HREF="readline.html#IDX134">free_undo_list</A>
 </DIR>
 <H2>h</H2>
 <DIR>
@@ -3181,7 +3297,7 @@ valid_argument (caller, arg)
 <H2>i</H2>
 <DIR>
 <LI><A HREF="readline.html#IDX13">input-meta</A>
-<LI><A HREF="readline.html#IDX82">insert-comment (M-#)</A>
+<LI><A HREF="readline.html#IDX83">insert-comment (M-#)</A>
 <LI><A HREF="readline.html#IDX67">insert-completions (M-*)</A>
 </DIR>
 <H2>k</H2>
@@ -3194,11 +3310,12 @@ valid_argument (caller, arg)
 </DIR>
 <H2>l</H2>
 <DIR>
-<LI><A HREF="readline.html#IDX154">lowercase_p</A>
+<LI><A HREF="readline.html#IDX157">lowercase_p</A>
 </DIR>
 <H2>m</H2>
 <DIR>
 <LI><A HREF="readline.html#IDX12">mark-modified-lines</A>
+<LI><A HREF="readline.html#IDX68">menu-complete ()</A>
 <LI><A HREF="readline.html#IDX14">meta-flag</A>
 </DIR>
 <H2>n</H2>
@@ -3206,7 +3323,7 @@ valid_argument (caller, arg)
 <LI><A HREF="readline.html#IDX28">next-history (C-n)</A>
 <LI><A HREF="readline.html#IDX34">non-incremental-forward-search-history (M-n)</A>
 <LI><A HREF="readline.html#IDX33">non-incremental-reverse-search-history (M-p)</A>
-<LI><A HREF="readline.html#IDX151">numeric</A>
+<LI><A HREF="readline.html#IDX154">numeric</A>
 </DIR>
 <H2>o</H2>
 <DIR>
@@ -3215,7 +3332,7 @@ valid_argument (caller, arg)
 <H2>p</H2>
 <DIR>
 <LI><A HREF="readline.html#IDX66">possible-completions (M-?)</A>
-<LI><A HREF="readline.html#IDX74">prefix-meta (ESC)</A>
+<LI><A HREF="readline.html#IDX75">prefix-meta (ESC)</A>
 <LI><A HREF="readline.html#IDX27">previous-history (C-p)</A>
 </DIR>
 <H2>q</H2>
@@ -3224,123 +3341,125 @@ valid_argument (caller, arg)
 </DIR>
 <H2>r</H2>
 <DIR>
-<LI><A HREF="readline.html#IDX71">re-read-init-file (C-x C-r)</A>
-<LI><A HREF="readline.html#IDX86">readline</A>
+<LI><A HREF="readline.html#IDX72">re-read-init-file (C-x C-r)</A>
+<LI><A HREF="readline.html#IDX87">readline</A>
 <LI><A HREF="readline.html#IDX25">redraw-current-line ()</A>
 <LI><A HREF="readline.html#IDX31">reverse-search-history (C-r)</A>
-<LI><A HREF="readline.html#IDX76">revert-line (M-r)</A>
-<LI><A HREF="readline.html#IDX106">rl_add_defun</A>
-<LI><A HREF="readline.html#IDX130">rl_add_undo</A>
-<LI><A HREF="readline.html#IDX172">rl_attempted_completion_function</A>
-<LI><A HREF="readline.html#IDX178">rl_basic_quote_characters</A>
-<LI><A HREF="readline.html#IDX177">rl_basic_word_break_characters</A>
-<LI><A HREF="readline.html#IDX128">rl_begin_undo_group</A>
-<LI><A HREF="readline.html#IDX115">rl_bind_key</A>
-<LI><A HREF="readline.html#IDX116">rl_bind_key_in_map</A>
-<LI><A HREF="readline.html#IDX105">rl_binding_keymap</A>
-<LI><A HREF="readline.html#IDX159">rl_callback_handler_install</A>
-<LI><A HREF="readline.html#IDX161">rl_callback_handler_remove</A>
-<LI><A HREF="readline.html#IDX160">rl_callback_read_char</A>
-<LI><A HREF="readline.html#IDX175">rl_char_is_quoted_p</A>
-<LI><A HREF="readline.html#IDX139">rl_clear_message</A>
-<LI><A HREF="readline.html#IDX162">rl_complete</A>, <A HREF="rlman.html#IDX165">rl_complete</A>
-<LI><A HREF="readline.html#IDX164">rl_complete_internal</A>
-<LI><A HREF="readline.html#IDX180">rl_completer_quote_characters</A>
-<LI><A HREF="readline.html#IDX179">rl_completer_word_break_characters</A>
-<LI><A HREF="readline.html#IDX183">rl_completion_append_character</A>
-<LI><A HREF="readline.html#IDX163">rl_completion_entry_function</A>, <A HREF="rlman.html#IDX171">rl_completion_entry_function</A>
-<LI><A HREF="readline.html#IDX176">rl_completion_query_items</A>
-<LI><A HREF="readline.html#IDX108">rl_copy_keymap</A>
-<LI><A HREF="readline.html#IDX142">rl_copy_text</A>
-<LI><A HREF="readline.html#IDX141">rl_delete_text</A>
-<LI><A HREF="readline.html#IDX189">rl_directory_completion_hook</A>
-<LI><A HREF="readline.html#IDX110">rl_discard_keymap</A>
-<LI><A HREF="readline.html#IDX132">rl_do_undo</A>
-<LI><A HREF="readline.html#IDX92">rl_done</A>
-<LI><A HREF="readline.html#IDX90">rl_end</A>
-<LI><A HREF="readline.html#IDX129">rl_end_undo_group</A>
-<LI><A HREF="readline.html#IDX101">rl_event_hook</A>
-<LI><A HREF="readline.html#IDX104">rl_executing_keymap</A>
-<LI><A HREF="readline.html#IDX185">rl_filename_completion_desired</A>
-<LI><A HREF="readline.html#IDX174">rl_filename_dequoting_function</A>
-<LI><A HREF="readline.html#IDX181">rl_filename_quote_characters</A>
-<LI><A HREF="readline.html#IDX186">rl_filename_quoting_desired</A>
-<LI><A HREF="readline.html#IDX173">rl_filename_quoting_function</A>
-<LI><A HREF="readline.html#IDX135">rl_forced_update_display</A>
-<LI><A HREF="readline.html#IDX126">rl_function_dumper</A>
-<LI><A HREF="readline.html#IDX123">rl_function_of_keyseq</A>
-<LI><A HREF="readline.html#IDX119">rl_generic_bind</A>
-<LI><A HREF="readline.html#IDX111">rl_get_keymap</A>
-<LI><A HREF="readline.html#IDX113">rl_get_keymap_by_name</A>
-<LI><A HREF="readline.html#IDX114">rl_get_keymap_name</A>
-<LI><A HREF="readline.html#IDX145">rl_getc</A>
-<LI><A HREF="readline.html#IDX102">rl_getc_function</A>
-<LI><A HREF="readline.html#IDX184">rl_ignore_completion_duplicates</A>
-<LI><A HREF="readline.html#IDX188">rl_ignore_some_completions_function</A>
-<LI><A HREF="readline.html#IDX187">rl_inhibit_completion</A>
-<LI><A HREF="readline.html#IDX148">rl_initialize</A>
-<LI><A HREF="readline.html#IDX167">rl_insert_completions</A>
-<LI><A HREF="readline.html#IDX140">rl_insert_text</A>
-<LI><A HREF="readline.html#IDX98">rl_instream</A>
-<LI><A HREF="readline.html#IDX124">rl_invoking_keyseqs</A>
-<LI><A HREF="readline.html#IDX125">rl_invoking_keyseqs_in_map</A>
-<LI><A HREF="readline.html#IDX143">rl_kill_text</A>
-<LI><A HREF="readline.html#IDX95">rl_library_version</A>
-<LI><A HREF="readline.html#IDX88">rl_line_buffer</A>
-<LI><A HREF="readline.html#IDX127">rl_list_funmap_names</A>
-<LI><A HREF="readline.html#IDX107">rl_make_bare_keymap</A>
-<LI><A HREF="readline.html#IDX109">rl_make_keymap</A>
-<LI><A HREF="readline.html#IDX91">rl_mark</A>
-<LI><A HREF="readline.html#IDX138">rl_message</A>
-<LI><A HREF="readline.html#IDX133">rl_modifying</A>
-<LI><A HREF="readline.html#IDX122">rl_named_function</A>
-<LI><A HREF="readline.html#IDX136">rl_on_new_line</A>
-<LI><A HREF="readline.html#IDX99">rl_outstream</A>
-<LI><A HREF="readline.html#IDX120">rl_parse_and_bind</A>
-<LI><A HREF="readline.html#IDX93">rl_pending_input</A>
-<LI><A HREF="readline.html#IDX89">rl_point</A>
-<LI><A HREF="readline.html#IDX166">rl_possible_completions</A>
-<LI><A HREF="readline.html#IDX94">rl_prompt</A>
-<LI><A HREF="readline.html#IDX121">rl_read_init_file</A>
-<LI><A HREF="readline.html#IDX144">rl_read_key</A>
-<LI><A HREF="readline.html#IDX97">rl_readline_name</A>
-<LI><A HREF="readline.html#IDX134">rl_redisplay</A>
-<LI><A HREF="readline.html#IDX103">rl_redisplay_function</A>
-<LI><A HREF="readline.html#IDX137">rl_reset_line_state</A>
-<LI><A HREF="readline.html#IDX149">rl_reset_terminal</A>
-<LI><A HREF="readline.html#IDX112">rl_set_keymap</A>
-<LI><A HREF="readline.html#IDX182">rl_special_prefixes</A>
-<LI><A HREF="readline.html#IDX100">rl_startup_hook</A>
-<LI><A HREF="readline.html#IDX146">rl_stuff_char</A>
-<LI><A HREF="readline.html#IDX96">rl_terminal_name</A>
-<LI><A HREF="readline.html#IDX117">rl_unbind_key</A>
-<LI><A HREF="readline.html#IDX118">rl_unbind_key_in_map</A>
+<LI><A HREF="readline.html#IDX77">revert-line (M-r)</A>
+<LI><A HREF="readline.html#IDX107">rl_add_defun</A>
+<LI><A HREF="readline.html#IDX133">rl_add_undo</A>
+<LI><A HREF="readline.html#IDX175">rl_attempted_completion_function</A>
+<LI><A HREF="readline.html#IDX181">rl_basic_quote_characters</A>
+<LI><A HREF="readline.html#IDX180">rl_basic_word_break_characters</A>
+<LI><A HREF="readline.html#IDX131">rl_begin_undo_group</A>
+<LI><A HREF="readline.html#IDX116">rl_bind_key</A>
+<LI><A HREF="readline.html#IDX117">rl_bind_key_in_map</A>
+<LI><A HREF="readline.html#IDX106">rl_binding_keymap</A>
+<LI><A HREF="readline.html#IDX162">rl_callback_handler_install</A>
+<LI><A HREF="readline.html#IDX164">rl_callback_handler_remove</A>
+<LI><A HREF="readline.html#IDX163">rl_callback_read_char</A>
+<LI><A HREF="readline.html#IDX178">rl_char_is_quoted_p</A>
+<LI><A HREF="readline.html#IDX142">rl_clear_message</A>
+<LI><A HREF="readline.html#IDX165">rl_complete</A>, <A HREF="rlman.html#IDX168">rl_complete</A>
+<LI><A HREF="readline.html#IDX167">rl_complete_internal</A>
+<LI><A HREF="readline.html#IDX183">rl_completer_quote_characters</A>
+<LI><A HREF="readline.html#IDX182">rl_completer_word_break_characters</A>
+<LI><A HREF="readline.html#IDX186">rl_completion_append_character</A>
+<LI><A HREF="readline.html#IDX166">rl_completion_entry_function</A>, <A HREF="rlman.html#IDX174">rl_completion_entry_function</A>
+<LI><A HREF="readline.html#IDX179">rl_completion_query_items</A>
+<LI><A HREF="readline.html#IDX109">rl_copy_keymap</A>
+<LI><A HREF="readline.html#IDX145">rl_copy_text</A>
+<LI><A HREF="readline.html#IDX144">rl_delete_text</A>
+<LI><A HREF="readline.html#IDX192">rl_directory_completion_hook</A>
+<LI><A HREF="readline.html#IDX111">rl_discard_keymap</A>
+<LI><A HREF="readline.html#IDX135">rl_do_undo</A>
+<LI><A HREF="readline.html#IDX93">rl_done</A>
+<LI><A HREF="readline.html#IDX91">rl_end</A>
+<LI><A HREF="readline.html#IDX132">rl_end_undo_group</A>
+<LI><A HREF="readline.html#IDX102">rl_event_hook</A>
+<LI><A HREF="readline.html#IDX105">rl_executing_keymap</A>
+<LI><A HREF="readline.html#IDX188">rl_filename_completion_desired</A>
+<LI><A HREF="readline.html#IDX177">rl_filename_dequoting_function</A>
+<LI><A HREF="readline.html#IDX184">rl_filename_quote_characters</A>
+<LI><A HREF="readline.html#IDX189">rl_filename_quoting_desired</A>
+<LI><A HREF="readline.html#IDX176">rl_filename_quoting_function</A>
+<LI><A HREF="readline.html#IDX138">rl_forced_update_display</A>
+<LI><A HREF="readline.html#IDX129">rl_function_dumper</A>
+<LI><A HREF="readline.html#IDX126">rl_function_of_keyseq</A>
+<LI><A HREF="readline.html#IDX122">rl_generic_bind</A>
+<LI><A HREF="readline.html#IDX112">rl_get_keymap</A>
+<LI><A HREF="readline.html#IDX114">rl_get_keymap_by_name</A>
+<LI><A HREF="readline.html#IDX115">rl_get_keymap_name</A>
+<LI><A HREF="readline.html#IDX148">rl_getc</A>
+<LI><A HREF="readline.html#IDX103">rl_getc_function</A>
+<LI><A HREF="readline.html#IDX187">rl_ignore_completion_duplicates</A>
+<LI><A HREF="readline.html#IDX191">rl_ignore_some_completions_function</A>
+<LI><A HREF="readline.html#IDX190">rl_inhibit_completion</A>
+<LI><A HREF="readline.html#IDX151">rl_initialize</A>
+<LI><A HREF="readline.html#IDX170">rl_insert_completions</A>
+<LI><A HREF="readline.html#IDX143">rl_insert_text</A>
+<LI><A HREF="readline.html#IDX99">rl_instream</A>
+<LI><A HREF="readline.html#IDX127">rl_invoking_keyseqs</A>
+<LI><A HREF="readline.html#IDX128">rl_invoking_keyseqs_in_map</A>
+<LI><A HREF="readline.html#IDX146">rl_kill_text</A>
+<LI><A HREF="readline.html#IDX96">rl_library_version</A>
+<LI><A HREF="readline.html#IDX89">rl_line_buffer</A>
+<LI><A HREF="readline.html#IDX130">rl_list_funmap_names</A>
+<LI><A HREF="readline.html#IDX108">rl_make_bare_keymap</A>
+<LI><A HREF="readline.html#IDX110">rl_make_keymap</A>
+<LI><A HREF="readline.html#IDX92">rl_mark</A>
+<LI><A HREF="readline.html#IDX141">rl_message</A>
+<LI><A HREF="readline.html#IDX136">rl_modifying</A>
+<LI><A HREF="readline.html#IDX125">rl_named_function</A>
+<LI><A HREF="readline.html#IDX139">rl_on_new_line</A>
+<LI><A HREF="readline.html#IDX100">rl_outstream</A>
+<LI><A HREF="readline.html#IDX123">rl_parse_and_bind</A>
+<LI><A HREF="readline.html#IDX94">rl_pending_input</A>
+<LI><A HREF="readline.html#IDX90">rl_point</A>
+<LI><A HREF="readline.html#IDX169">rl_possible_completions</A>
+<LI><A HREF="readline.html#IDX95">rl_prompt</A>
+<LI><A HREF="readline.html#IDX124">rl_read_init_file</A>
+<LI><A HREF="readline.html#IDX147">rl_read_key</A>
+<LI><A HREF="readline.html#IDX98">rl_readline_name</A>
+<LI><A HREF="readline.html#IDX137">rl_redisplay</A>
+<LI><A HREF="readline.html#IDX104">rl_redisplay_function</A>
+<LI><A HREF="readline.html#IDX140">rl_reset_line_state</A>
+<LI><A HREF="readline.html#IDX152">rl_reset_terminal</A>
+<LI><A HREF="readline.html#IDX113">rl_set_keymap</A>
+<LI><A HREF="readline.html#IDX185">rl_special_prefixes</A>
+<LI><A HREF="readline.html#IDX101">rl_startup_hook</A>
+<LI><A HREF="readline.html#IDX149">rl_stuff_char</A>
+<LI><A HREF="readline.html#IDX97">rl_terminal_name</A>
+<LI><A HREF="readline.html#IDX121">rl_unbind_command_in_map</A>
+<LI><A HREF="readline.html#IDX120">rl_unbind_function_in_map</A>
+<LI><A HREF="readline.html#IDX118">rl_unbind_key</A>
+<LI><A HREF="readline.html#IDX119">rl_unbind_key_in_map</A>
 </DIR>
 <H2>s</H2>
 <DIR>
 <LI><A HREF="readline.html#IDX43">self-insert (a, b, A, 1, !, ...)</A>
-<LI><A HREF="readline.html#IDX78">set-mark (C-@)</A>
+<LI><A HREF="readline.html#IDX79">set-mark (C-@)</A>
 <LI><A HREF="readline.html#IDX16">show-all-if-ambiguous</A>
-<LI><A HREF="readline.html#IDX68">start-kbd-macro (C-x ()</A>
+<LI><A HREF="readline.html#IDX69">start-kbd-macro (C-x ()</A>
 </DIR>
 <H2>t</H2>
 <DIR>
 <LI><A HREF="readline.html#IDX42">tab-insert (M-TAB)</A>
-<LI><A HREF="readline.html#IDX77">tilde-expand (M-~)</A>
-<LI><A HREF="readline.html#IDX157">to_lower</A>
-<LI><A HREF="readline.html#IDX156">to_upper</A>
+<LI><A HREF="readline.html#IDX78">tilde-expand (M-~)</A>
+<LI><A HREF="readline.html#IDX160">to_lower</A>
+<LI><A HREF="readline.html#IDX159">to_upper</A>
 <LI><A HREF="readline.html#IDX44">transpose-chars (C-t)</A>
 <LI><A HREF="readline.html#IDX45">transpose-words (M-t)</A>
 </DIR>
 <H2>u</H2>
 <DIR>
-<LI><A HREF="readline.html#IDX75">undo (C-_, C-x C-u)</A>
+<LI><A HREF="readline.html#IDX76">undo (C-_, C-x C-u)</A>
 <LI><A HREF="readline.html#IDX64">universal-argument ()</A>
 <LI><A HREF="readline.html#IDX51">unix-line-discard (C-u)</A>
 <LI><A HREF="readline.html#IDX55">unix-word-rubout (C-w)</A>
 <LI><A HREF="readline.html#IDX46">upcase-word (M-u)</A>
-<LI><A HREF="readline.html#IDX153">uppercase_p</A>
-<LI><A HREF="readline.html#IDX170">username_completion_function</A>
+<LI><A HREF="readline.html#IDX156">uppercase_p</A>
+<LI><A HREF="readline.html#IDX173">username_completion_function</A>
 </DIR>
 <H2>v</H2>
 <DIR>
@@ -3356,7 +3475,7 @@ valid_argument (caller, arg)
 
 </P>
 <P><HR><P>
-This document was generated on 3 June 1997 using the
+This document was generated on 2 April 1998 using the
 <A HREF="http://wwwcn.cern.ch/dci/texi2html/">texi2html</A>
 translator version 1.51.</P>
 </BODY>

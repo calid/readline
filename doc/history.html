@@ -1,7 +1,7 @@
 <HTML>
 <HEAD>
 <!-- This HTML file has been created by texi2html 1.51
-     from /usr/homes/chet/src/bash/readline-2.1/doc/hist.texinfo on 3 June 1997 -->
+     from /usr/homes/chet/src/bash/readline-2.2/doc/hist.texinfo on 2 April 1998 -->
 
 <TITLE>GNU History Library</TITLE>
 </HEAD>
@@ -13,6 +13,13 @@
 <ADDRESS>Chet Ramey, Case Western Reserve University</ADDRESS>
 <P>
 <P><HR><P>
+
+<P>
+@dircategory Libraries
+@direntry
+* History: (history).       The GNU history library API
+
+</P>
 
 <P>
 This document describes the GNU History library, a programming tool that
@@ -65,7 +72,7 @@ see section <A HREF="history.html#SEC6">Programming with GNU History</A>.
 
 
 
-<H2><A NAME="SEC2" HREF="history_toc.html#TOC2">Interactive History Expansion</A></H2>
+<H2><A NAME="SEC2" HREF="history_toc.html#TOC2">History Expansion</A></H2>
 <P>
 <A NAME="IDX1"></A>
 
@@ -85,14 +92,14 @@ fix errors in previous commands quickly.
 </P>
 <P>
 History expansion takes place in two parts.  The first is to determine
-which line from the previous history should be used during substitution.
+which line from the history list should be used during substitution.
 The second is to select portions of that line for inclusion into the
-current one.  The line selected from the previous history is called the
+current one.  The line selected from the history is called the
 <STRONG>event</STRONG>, and the portions of that line that are acted upon are
 called <STRONG>words</STRONG>.  Various <STRONG>modifiers</STRONG> are available to manipulate
 the selected words.  The line is broken into words in the same fashion
-that Bash does, so that several English (or Unix) words
-surrounded by quotes are considered as one word.
+that Bash does, so that several words
+surrounded by quotes are considered one word.
 History expansions are introduced by the appearance of the
 history expansion character, which is <SAMP>`!'</SAMP> by default.
 
@@ -116,7 +123,7 @@ history list.
 <DT><CODE>!</CODE>
 <DD>
 Start a history substitution, except when followed by a space, tab,
-the end of the line, <KBD>=</KBD> or <KBD>(</KBD>.
+the end of the line, <SAMP>`='</SAMP> or <SAMP>`('</SAMP>.
 
 <DT><CODE>!<VAR>n</VAR></CODE>
 <DD>
@@ -159,7 +166,7 @@ The entire command line typed so far.
 <P>
 Word designators are used to select desired words from the event.
 A <SAMP>`:'</SAMP> separates the event specification from the word designator.  It
-can be omitted if the word designator begins with a <SAMP>`^'</SAMP>, <SAMP>`$'</SAMP>,
+may be omitted if the word designator begins with a <SAMP>`^'</SAMP>, <SAMP>`$'</SAMP>,
 <SAMP>`*'</SAMP>, <SAMP>`-'</SAMP>, or <SAMP>`%'</SAMP>.  Words are numbered from the beginning
 of the line, with the first word being denoted by 0 (zero).  Words are
 inserted into the current line separated by single spaces.
@@ -698,7 +705,7 @@ These functions implement <CODE>csh</CODE>-like history expansion.
 <DT><U>Function:</U> int <B>history_expand</B> <I>(char *string, char **output)</I>
 <DD><A NAME="IDX32"></A>
 Expand <VAR>string</VAR>, placing the result into <VAR>output</VAR>, a pointer
-to a string (see section <A HREF="history.html#SEC2">Interactive History Expansion</A>).  Returns:
+to a string (see section <A HREF="history.html#SEC2">History Expansion</A>).  Returns:
 <DL COMPACT>
 
 <DT><CODE>0</CODE>
@@ -1055,7 +1062,7 @@ main ()
 
 </P>
 <P><HR><P>
-This document was generated on 3 June 1997 using the
+This document was generated on 2 April 1998 using the
 <A HREF="http://wwwcn.cern.ch/dci/texi2html/">texi2html</A>
 translator version 1.51.</P>
 </BODY>
