@@ -113,8 +113,16 @@ installdirs:	$(top_srcdir)/support/mkdirs
 	-$(SHELL) $(top_srcdir)/support/mkdirs $(infodir) $(man3dir)
 
 install:	installdirs info
-	${INSTALL_DATA} readline.info $(infodir)/readline.info
-	${INSTALL_DATA} history.info $(infodir)/history.info
+	if test -f readline.info; then \
+		${INSTALL_DATA} readline.info $(infodir)/readline.info; \
+	else \
+		${INSTALL_DATA} $(srcdir)/readline.info $(infodir)/readline.info; \
+	fi
+	if test -f history.info; then \
+		${INSTALL_DATA} history.info $(infodir)/history.info; \
+	else \
+		${INSTALL_DATA} $(srcdir)/history.info $(infodir)/history.info; \
+	fi
 	if $(SHELL) -c 'install-info --version' >/dev/null 2>&1; then \
 		install-info --dir-file=$(infodir)/dir $(infodir)/readline.info ; \
 		install-info --dir-file=$(infodir)/dir $(infodir)/history.info ; \

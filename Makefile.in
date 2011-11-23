@@ -196,14 +196,14 @@ examples: force
 
 force:
 
-install: installdirs libreadline.a
+install: installdirs $(STATIC_LIBS)
 	for f in ${INSTALLED_HEADERS}; do \
 		$(INSTALL_DATA) $(srcdir)/$$f $(includedir)/readline ; \
 	done
 	-$(MV) $(libdir)/libreadline.a $(libdir)/libreadline.old
 	$(INSTALL_DATA) libreadline.a $(libdir)/libreadline.a
 	-test -n "$(RANLIB)" && $(RANLIB) -t $(libdir)/libreadline.a
-	-$(MV) $(libdir)/libreadline.a $(libdir)/libhistory.old
+	-$(MV) $(libdir)/libhistory.a $(libdir)/libhistory.old
 	$(INSTALL_DATA) libhistory.a $(libdir)/libhistory.a
 	-test -n "$(RANLIB)" && $(RANLIB) -t $(libdir)/libhistory.a
 	-( if test -d doc ; then \

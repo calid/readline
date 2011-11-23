@@ -1,3 +1,22 @@
+This document details the changes between this version, readline-2.2.1,
+and the previous version, readline-2.2.
+
+1.  Changes to Readline
+
+a.  The `make install' target was corrected so that it did not move the
+    newly-installed libreadline.a to libhistory.old
+
+b.  The `make install' target for the documentation will now install the
+    info files from the source directory if they do not appear in the
+    build directory, since they are shipped in the readline tar file.
+
+c.  Fixed a problem with redisplay that showed up when the prompt string was
+    longer than the screen width and the prompt contained invisible characters.
+
+d.  Fixed a problem with the paren matching code -- the blink was far too
+    short (it's specified in microseconds, not milliseconds, Chet!).
+
+------------------------------------------------------------------------------
 This document details the changes between this version, readline-2.2,
 and the previous version, readline-2.1.
 
@@ -63,4 +82,3 @@ g.  The key sequence translation code now understands printf-style backslash
     may be used in key sequence definitions or macro values.
 
 h.  An `$include' inputrc file parser directive has been added.
-
