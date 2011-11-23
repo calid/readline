@@ -8,7 +8,7 @@ This document describes the GNU Readline Library, a utility for aiding
 in the consitency of user interface across discrete programs that need
 to provide a command line interface.
 
-Copyright (C) 1988, 1994 Free Software Foundation, Inc.
+Copyright (C) 1988, 1994, 1996 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -44,6 +44,8 @@ in your own programs, this section is for you.
 @menu
 * Basic Behavior::	Using the default behavior of Readline.
 * Custom Functions::	Adding your own functions to Readline.
+* Readline Variables::			Variables accessible to custom
+					functions.
 * Readline Convenience Functions::	Functions which Readline supplies to
 					aid in writing your own
 * Custom Completers::	Supplanting or supplementing Readline's
@@ -230,6 +232,11 @@ to do something useful with both negative and positive arguments.
 At the very least, it should be aware that it can be passed a
 negative argument.
 
+@node Readline Variables
+@section Readline Variables
+
+These variables are available to function writers.
+
 @deftypevar {char *} rl_line_buffer
 This is the line gathered so far.  You are welcome to modify the
 contents of the line, but see @ref{Allowing Undoing}.
@@ -266,6 +273,10 @@ The prompt Readline uses.  This is set from the argument to
 @code{readline ()}, and should not be assigned to directly.
 @end deftypevar
 
+@deftypevar {char *} rl_library_version
+The version number of this revision of the library.
+@end deftypevar
+
 @deftypevar {char *} rl_terminal_name
 The terminal type, used for initialization.
 @end deftypevar
@@ -289,6 +300,35 @@ If non-zero, this is the address of a function to call just
 before @code{readline} prints the first prompt.
 @end deftypevar
 
+@deftypevar {Function *} rl_event_hook
+If non-zero, this is the address of a function to call periodically
+when readline is waiting for terminal input.
+@end deftypevar
+
+@deftypevar {Function *} rl_getc_function
+If non-zero, @code{readline} will call indirectly through this pointer
+to get a character from the input stream.  By default, it is set to
+@code{rl_getc}, the default @code{readline} character input function
+(@pxref{Utility Functions}).
+@end deftypevar
+
+@deftypevar {VFunction *} rl_redisplay_function
+If non-zero, @code{readline} will call indirectly through this pointer
+to update the display with the current contents of the editing buffer.
+By default, it is set to @code{rl_redisplay}, the default @code{readline}
+redisplay function (@pxref{Redisplay}).
+@end deftypevar
+
+@deftypevar {Keymap} rl_executing_keymap
+This variable is set to the keymap (@pxref{Keymaps}) in which the
+currently executing readline function was found.
+@end deftypevar 
+
+@deftypevar {Keymap} rl_binding_keymap
+This variable is set to the keymap (@pxref{Keymaps}) in which the
+last key binding occurred.
+@end deftypevar 
+
 @node Readline Convenience Functions
 @section Readline Convenience Functions
 
@@ -302,6 +342,7 @@ before @code{readline} prints the first prompt.
 * Redisplay::		Functions to control line display.
 * Modifying Text::	Functions to modify @code{rl_line_buffer}.
 * Utility Functions::	Generally useful functions and hooks.
+* Alternate Interface::	Using Readline in a `callback' fashion.
 @end menu
 
 @node Function Naming
@@ -376,6 +417,11 @@ Return the keymap matching @var{name}.  @var{name} is one which would
 be supplied in a @code{set keymap} inputrc line (@pxref{Readline Init File}).
 @end deftypefun
 
+@deftypefun {char *} rl_get_keymap_name (Keymap keymap)
+Return the name matching @var{keymap}.  @var{name} is one which would
+be supplied in a @code{set keymap} inputrc line (@pxref{Readline Init File}).
+@end deftypefun
+
 @node Binding Keys
 @subsection Binding Keys
 
@@ -422,6 +468,11 @@ perform any key bindings and variable assignments found
 (@pxref{Readline Init File}).
 @end deftypefun
 
+@deftypefun int rl_read_init_file (char *filename)
+Read keybindings and variable assignments from @var{filename}
+(@pxref{Readline Init File}).
+@end deftypefun
+
 @node Associating Function Names and Bindings
 @subsection Associating Function Names and Bindings
 
@@ -447,6 +498,17 @@ invoke @var{function} in the current keymap.
 @deftypefun {char **} rl_invoking_keyseqs_in_map (Function *function, Keymap map)
 Return an array of strings representing the key sequences used to
 invoke @var{function} in the keymap @var{map}.
+@end deftypefun
+
+@deftypefun void rl_function_dumper (int readable)
+Print the readline function names and the key sequences currently
+bound to them to @code{rl_outstream}.  If @var{readable} is non-zero,
+the list is formatted in such a way that it can be made part of an
+@code{inputrc} file and re-read.
+@end deftypefun
+
+@deftypefun void rl_list_funmap_names ()
+Print the names of all bindable Readline functions to @code{rl_outstream}.
 @end deftypefun
 
 @node Allowing Undoing
@@ -519,7 +581,7 @@ that text.
 @node Redisplay
 @subsection Redisplay
 
-@deftypefun int rl_redisplay ()
+@deftypefun void rl_redisplay ()
 Change what's displayed on the screen to reflect the current contents
 of @code{rl_line_buffer}.
 @end deftypefun
@@ -577,6 +639,31 @@ not a kill, a new kill ring slot is used.
 @node Utility Functions
 @subsection Utility Functions
 
+@deftypefun int rl_read_key ()
+Return the next character available.  This handles input inserted into
+the input stream via @var{pending input} (@pxref{Readline Variables})
+and @code{rl_stuff_char ()}, macros, and characters read from the keyboard.
+@end deftypefun
+
+@deftypefun int rl_getc (FILE *)
+Return the next character available from the keyboard.
+@end deftypefun
+
+@deftypefun int rl_stuff_char (int c)
+Insert @var{c} into the Readline input stream.  It will be "read"
+before Readline attempts to read characters from the terminal with
+@code{rl_read_key ()}.
+@end deftypefun
+
+@deftypefun rl_extend_line_buffer (int len)
+Ensure that @code{rl_line_buffer} has enough space to hold @var{len}
+characters, possibly reallocating it if necessary.
+@end deftypefun
+
+@deftypefun int rl_initialize ()
+Initialize or re-initialize Readline's internal state.
+@end deftypefun
+
 @deftypefun int rl_reset_terminal (char *terminal_name)
 Reinitialize Readline's idea of the terminal settings using
 @var{terminal_name} as the terminal type (e.g., @code{vt100}).
@@ -606,7 +693,7 @@ Return 1 if @var{c} is a lowercase alphabetic character.
 
 @deftypefun int digit_p (int c)
 Return 1 if @var{c} is a numeric character.
-@deftypefun
+@end deftypefun
 
 @deftypefun int to_upper (int c)
 If @var{c} is a lowercase alphabetic character, return the corresponding
@@ -620,6 +707,37 @@ lowercase character.
 
 @deftypefun int digit_value (int c)
 If @var{c} is a number, return the value it represents.
+@end deftypefun
+
+@node Alternate Interface
+@subsection Alternate Interface
+
+An alternate interface is available to plain @code{readline()}.  Some
+applications need to interleave keyboard I/O with file, device, or
+window system I/O, typically by using a main loop to @code{select()}
+on various file descriptors.  To accomodate this need, readline can
+also be invoked as a `callback' function from an event loop.  There
+are functions available to make this easy.
+
+@deftypefun void rl_callback_handler_install (char *prompt, Vfunction *lhandler)
+Set up the terminal for readline I/O and display the initial
+expanded value of @var{prompt}.  Save the value of @var{lhandler} to
+use as a callback when a complete line of input has been entered.
+@end deftypefun
+
+@deftypefun void rl_callback_read_char ()
+Whenever an application determines that keyboard input is available, it
+should call @code{rl_callback_read_char()}, which will read the next
+character from the current input source.  If that character completes the
+line, @code{rl_callback_read_char} will invoke the @var{lhandler}
+function saved by @code{rl_callback_handler_install} to process the
+line.  @code{EOF} is  indicated by calling @var{lhandler} with a
+@code{NULL} line.
+@end deftypefun
+
+@deftypefun void rl_callback_handler_remove ()
+Restore the terminal to its initial state and remove the line handler.
+This may be called from within a callback as well as independently.
 @end deftypefun
 
 @subsection An Example
@@ -762,7 +880,7 @@ that does the initial simple matching selection algorithm (see
 This is a pointer to the generator function for @code{completion_matches
 ()}.  If the value of @code{rl_completion_entry_function} is
 @code{(Function *)NULL} then the default filename generator function,
-@code{filename_entry_function ()}, is used.
+@code{filename_completion_function ()}, is used.
 @end deftypevar
 
 @node Completion Functions
@@ -850,6 +968,40 @@ returns @code{NULL}, or if this variable is set to @code{NULL}, then
 array of strings returned will be used.
 @end deftypevar
 
+@deftypevar {CPFunction *} rl_filename_quoting_function
+A pointer to a function that will quote a filename in an application-
+specific fashion.  This is called if filename completion is being
+attempted and one of the characters in @code{rl_filename_quote_characters}
+appears in a completed filename.  The function is called with
+@var{text}, @var{match_type}, and @var{quote_pointer}.  The @var{text}
+is the filename to be quoted.  The @var{match_type} is either
+@code{SINGLE_MATCH}, if there is only one completion match, or
+@code{MULT_MATCH}.  Some functions use this to decide whether or not to
+insert a closing quote character.  The @var{quote_pointer} is a pointer
+to any opening quote character the user typed.  Some functions choose
+to reset this character.
+@end deftypevar
+
+@deftypevar {CPFunction *} rl_filename_dequoting_function
+A pointer to a function that will remove application-specific quoting
+characters from a filename before completion is attempted, so those
+characters do not interfere with matching the text against names in
+the filesystem.  It is called with @var{text}, the text of the word
+to be dequoted, and @var{quote_char}, which is the quoting character 
+that delimits the filename (usually @samp{'} or @samp{"}).  If
+@var{quote_char} is zero, the filename was not in an embedded string.
+@end deftypevar
+
+@deftypevar {Function *} rl_char_is_quoted_p
+A pointer to a function to call that determines whether or not a specific
+character in the line buffer is quoted, according to whatever quoting
+mechanism the program calling readline uses.  The function is called with
+two arguments: @var{text}, the text of the line, and @var{index}, the
+index of the character in the line.  It is used to decide whether a
+character found in @code{rl_completer_word_break_characters} should be
+used to break words for the completer.
+@end deftypevar
+
 @deftypevar int rl_completion_query_items
 Up to this many items will be displayed in response to a
 possible-completions call.  After that, we ask the user if she is sure
@@ -863,10 +1015,26 @@ which break words for completion in Bash, i.e.,
 @code{" \t\n\"\\'`@@$><=;|&@{("}.
 @end deftypevar
 
+@deftypevar {char *} rl_basic_quote_characters
+List of quote characters which can cause a word break.
+@end deftypevar
+
 @deftypevar {char *} rl_completer_word_break_characters
 The list of characters that signal a break between words for
 @code{rl_complete_internal ()}.  The default list is the value of
 @code{rl_basic_word_break_characters}.
+@end deftypevar
+
+@deftypevar {char *} rl_completer_quote_characters
+List of characters which can be used to quote a substring of the line.
+Completion occurs on the entire substring, and within the substring
+@code{rl_completer_word_break_characters} are treated as any other character,
+unless they also appear within this list.
+@end deftypevar
+
+@deftypevar {char *} rl_filename_quote_characters
+A list of characters that cause a filename to be quoted by the completer
+when they appear in a completed filename.  The default is empty.
 @end deftypevar
 
 @deftypevar {char *} rl_special_prefixes
@@ -875,6 +1043,16 @@ left in @var{text} when it is passed to the completion function.
 Programs can use this to help determine what kind of completing to do.
 For instance, Bash sets this variable to "$@@" so that it can complete
 shell variables and hostnames.
+@end deftypevar
+
+@deftypevar {int} rl_completion_append_character
+When a single completion alternative matches at the end of the command
+line, this character is appended to the inserted completion text.  The
+default is a space character (@samp{ }).  Setting this to the null
+character (@samp{\0}) prevents anything being appended automatically.
+This can be changed in custom completion functions to
+provide the ``most sensible word separator character'' according to
+an application-specific command line syntax specification.
 @end deftypevar
 
 @deftypevar int rl_ignore_completion_duplicates
@@ -894,9 +1072,15 @@ characters.
 Non-zero means that the results of the matches are to be quoted using
 double quotes (or an application-specific quoting mechanism) if the
 completed filename contains any characters in
-@code{rl_completer_word_break_chars}.  This is @emph{always} non-zero
+@code{rl_filename_quote_chars}.  This is @emph{always} non-zero
 on entry, and can only be changed within a completion entry generator
-function.
+function.  The quoting is effected via a call to the function pointed to
+by @code{rl_filename_quoting_function}.
+@end deftypevar
+
+@deftypevar int rl_inhibit_completion
+If this variable is non-zero, completion is inhibit<ed.  The completion
+character will be inserted as any other bound to @code{self-insert}.
 @end deftypevar
 
 @deftypevar {Function *} rl_ignore_some_completions_function
@@ -909,13 +1093,12 @@ re-arrange the list of matches as required, but each element deleted
 from the array must be freed.
 @end deftypevar
 
-@deftypevar {char *} rl_completer_quote_characters
-List of characters which can be used to quote a substring of the line.
-Completion occurs on the entire substring, and within the substring
-@code{rl_completer_word_break_characters} are treated as any other character,
-unless they also appear within this list.
+@deftypevar {Function *} rl_directory_completion_hook
+This function, if defined, is allowed to modify the directory portion
+of filenames Readline completes.  It is called with the address of a
+string (the current directory name) as an argument.  It could be used
+to expand symbolic links or shell variables in pathnames.
 @end deftypevar
-
 
 @node A Short Completion Example
 @subsection A Short Completion Example
@@ -1124,10 +1307,11 @@ initialize_readline ()
   rl_attempted_completion_function = (CPPFunction *)fileman_completion;
 @}
 
-/* Attempt to complete on the contents of TEXT.  START and END show the
-   region of TEXT that contains the word to complete.  We can use the
-   entire line in case we want to do some simple parsing.  Return the
-   array of matches, or NULL if there aren't any. */
+/* Attempt to complete on the contents of TEXT.  START and END bound the
+   region of rl_line_buffer that contains the word to complete.  TEXT is
+   the word to complete.  We can use the entire contents of rl_line_buffer
+   in case we want to do some simple parsing.  Return the array of matches,
+   or NULL if there aren't any. */
 char **
 fileman_completion (text, start, end)
      char *text;

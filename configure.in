@@ -1,7 +1,21 @@
+dnl
+dnl Configure script for readline library
+dnl
+dnl report bugs to chet@po.cwru.edu
+dnl
 dnl Process this file with autoconf to produce a configure script.
+AC_REVISION([for Readline 2.1, version 2.04, from autoconf version] AC_ACVERSION)
+LIBVERSION=2.1
+
 AC_INIT(readline.h)
 AC_CONFIG_HEADER(config.h)
-AC_REVISION(Configure for Readline 2.0)
+
+dnl make sure we are using a recent autoconf version
+AC_PREREQ(2.10)
+
+AC_CONFIG_AUX_DIR(./support)
+
+AC_CANONICAL_HOST
 
 # We want these before the checks, so the checks can modify their values.
 test -z "$CFLAGS" && CFLAGS=-g auto_cflags=1
@@ -11,38 +25,58 @@ AC_PROG_CC
 # If we're using gcc and the user hasn't specified CFLAGS, add -O to CFLAGS.
 test -n "$GCC" && test -n "$auto_cflags" && CFLAGS="$CFLAGS -O"
 
-AC_SUBST(CFLAGS)dnl
-AC_SUBST(LDFLAGS)dnl
-
-AC_GCC_TRADITIONAL
+AC_PROG_GCC_TRADITIONAL
 AC_PROG_INSTALL
 AC_PROG_RANLIB
 
-AC_USG
+AC_RETSIGTYPE
 
-AC_HAVE_FUNCS(strcasecmp sighold)
+AC_HEADER_STAT
+AC_HEADER_DIRENT
 
-AC_HAVE_HEADERS(unistd.h stdlib.h varargs.h string.h alloca.h \
-		dirent.h sys/ptem.h sys/pte.h sys/stream.h termcap.h \
-		termio.h)
+AC_CHECK_FUNCS(strcasecmp select setenv putenv tcgetattr setlocale lstat)
 
-AC_HEADER_CHECK(sys/file.h, ,AC_DEFINE(NO_SYS_FILE))
+AC_FUNC_STRCOLL
 
-if test -z "$have_tiocgwinsz"; then
-AC_COMPILE_CHECK(TIOCGWINSZ in sys/ioctl.h,
-[#include <sys/types.h>
-#include <sys/ioctl.h>], [int x = TIOCGWINSZ;],
-AC_DEFINE(GWINSZ_IN_SYS_IOCTL))
-fi
+AC_CHECK_HEADERS(unistd.h stdlib.h varargs.h stdarg.h string.h \
+		sys/ptem.h sys/pte.h sys/stream.h sys/select.h \
+		termcap.h termios.h termio.h sys/file.h locale.h)
 
-AC_COMPILE_CHECK(programs able to redeclare getpw functions,
-[#include <sys/types.h>
-#include <pwd.h>
-extern struct passwd *getpwuid();], [struct passwd *z; z = getpwuid(0);], ,
-AC_DEFINE(HAVE_GETPW_DECLS))
+BASH_SIGNAL_CHECK
+BASH_REINSTALL_SIGHANDLERS
 
-AC_ALLOCA
+BASH_FUNC_POSIX_SETJMP
+BASH_FUNC_LSTAT
+BASH_CHECK_GETPW_FUNCS
+BASH_FUNC_STRCOLL
 
-AC_OUTPUT(Makefile, [
+BASH_TYPE_SIGHANDLER
+BASH_HAVE_TIOCGWINSZ
+BASH_HAVE_TIOCSTAT
+BASH_HAVE_FIONREAD
+BASH_MISC_SPEED_T
+BASH_STRUCT_DIRENT_D_INO
+BASH_STRUCT_DIRENT_D_FILENO
+
+case "$host_cpu" in
+*cray*)	LOCAL_CFLAGS=-DCRAY ;;
+esac
+
+case "$host_os" in
+isc*)	LOCAL_CFLAGS=-Disc386 ;;
+esac
+
+AC_SUBST(CFLAGS)
+AC_SUBST(LOCAL_CFLAGS)
+AC_SUBST(LOCAL_DEFS)
+
+AC_SUBST(host_cpu)
+AC_SUBST(host_os)
+
+AC_SUBST(LIBVERSION)
+
+AC_OUTPUT([Makefile doc/Makefile examples/Makefile],
+[
 # Makefile uses this timestamp file to record whether config.h is up to date.
-touch stamp-config])
+echo > stamp-h
+])

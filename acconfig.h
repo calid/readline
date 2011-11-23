@@ -14,12 +14,14 @@
    Leave the following blank line there!!  Autoheader needs it.  */
 
 
-/* Define if your system defines TIOCGWINSZ in sys/ioctl.h.  */
-#undef GWINSZ_IN_SYS_IOCTL
+/* Definitions pulled in from aclocal.m4. */
+#undef VOID_SIGHANDLER
+
+#undef TIOCGWINSZ_IN_SYS_IOCTL
+
+#undef TIOCSTAT_IN_SYS_IOCTL
 
 #undef HAVE_GETPW_DECLS
-
-#undef NO_SYS_FILE
 
 
 /* Leave that blank line there!!  Autoheader needs it.

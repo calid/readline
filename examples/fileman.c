@@ -1,15 +1,38 @@
 /* fileman.c -- A tiny application which demonstrates how to use the
    GNU Readline library.  This application interactively allows users
    to manipulate files and their modes. */
+/*
+ * Remove the next line if you're compiling this against an installed
+ * libreadline.a
+ */
+#define READLINE_LIBRARY
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include <sys/types.h>
+#ifdef HAVE_SYS_FILE_H
+#include <sys/file.h>
+#endif
+#include <sys/stat.h>
 
 #include <stdio.h>
-#include <sys/types.h>
-#include <sys/file.h>
-#include <sys/stat.h>
-#include <sys/errno.h>
+#include <errno.h>
 
-#include <readline/readline.h>
-#include <readline/history.h>
+#if defined (HAVE_STRING_H)
+#  include <string.h>
+#else /* !HAVE_STRING_H */
+#  include <strings.h>
+#endif /* !HAVE_STRING_H */
+
+#ifdef READLINE_LIBRARY
+#  include "readline.h"
+#  include "history.h"
+#else
+#  include <readline/readline.h>
+#  include <readline/history.h>
+#endif
 
 extern char *getwd ();
 extern char *xmalloc ();
@@ -54,7 +77,7 @@ int done;
 
 char *
 dupstr (s)
-     int s;
+     char *s;
 {
   char *r;
 
@@ -194,10 +217,11 @@ initialize_readline ()
   rl_attempted_completion_function = (CPPFunction *)fileman_completion;
 }
 
-/* Attempt to complete on the contents of TEXT.  START and END show the
-   region of TEXT that contains the word to complete.  We can use the
-   entire line in case we want to do some simple parsing.  Return the
-   array of matches, or NULL if there aren't any. */
+/* Attempt to complete on the contents of TEXT.  START and END bound the
+   region of rl_line_buffer that contains the word to complete.  TEXT is
+   the word to complete.  We can use the entire contents of rl_line_buffer
+   in case we want to do some simple parsing.  Return the array of matches,
+   or NULL if there aren't any. */
 char **
 fileman_completion (text, start, end)
      char *text;
@@ -303,7 +327,8 @@ com_stat (arg)
 
   printf ("Statistics for `%s':\n", arg);
 
-  printf ("%s has %d link%s, and is %d byte%s in length.\n", arg,
+  printf ("%s has %d link%s, and is %d byte%s in length.\n",
+	  arg,
           finfo.st_nlink,
           (finfo.st_nlink == 1) ? "" : "s",
           finfo.st_size,

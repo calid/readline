@@ -22,6 +22,10 @@
    675 Mass Ave, Cambridge, MA 02139, USA. */
 #define READLINE_LIBRARY
 
+#if defined (HAVE_CONFIG_H)
+#  include <config.h>
+#endif
+
 #include <sys/types.h>
 #include <stdio.h>
 
@@ -29,21 +33,26 @@
 #  include <unistd.h>
 #endif
 
-#include "memalloc.h"
+#if defined (HAVE_STDLIB_H)
+#  include <stdlib.h>
+#else
+#  include "ansi_stdlib.h"
+#endif
+
 #include "rldefs.h"
 #include "readline.h"
 #include "history.h"
 
-#define STREQ(a, b)	(((a)[0] == (b)[0]) && (strcmp ((a), (b)) == 0))
-#define STREQN(a, b, n)	(((a)[0] == (b)[0]) && (strncmp ((a), (b), (n)) == 0))
-
-#define abs(x)		(((x) > 0) ? (x) : -(x))
+#ifdef abs
+#  undef abs
+#endif
+#define abs(x)		(((x) >= 0) ? (x) : -(x))
 
 extern char *xmalloc (), *xrealloc ();
 
 /* Variables imported from readline.c */
 extern int rl_point, rl_end, rl_line_buffer_len;
-extern Keymap _rl_keymap;
+extern int rl_editing_mode;
 extern char *rl_prompt;
 extern char *rl_line_buffer;
 extern HIST_ENTRY *saved_line_for_history;
@@ -51,9 +60,12 @@ extern Function *rl_last_func;
 
 /* Functions imported from the rest of the library. */
 extern int _rl_free_history_entry ();
+extern char *_rl_make_prompt_for_search ();
+extern void _rl_restore_prompt ();
+extern void rl_extend_line_buffer ();
 
 static char *noninc_search_string = (char *) NULL;
-static int noninc_history_pos = 0;
+static int noninc_history_pos;
 static char *prev_line_found = (char *) NULL;
 
 /* Search the history list for STRING starting at absolute history position
@@ -91,10 +103,10 @@ noninc_dosearch (string, dir)
      char *string;
      int dir;
 {
-  int oldpos, pos;
+  int oldpos, pos, line_len;
   HIST_ENTRY *entry;
 
-  if (string == 0 || *string == 0 || noninc_history_pos < 0)
+  if (string == 0 || *string == '\0' || noninc_history_pos < 0)
     {
       ding ();
       return;
@@ -116,16 +128,15 @@ noninc_dosearch (string, dir)
   oldpos = where_history ();
   history_set_pos (noninc_history_pos);
   entry = current_history ();
+#if defined (VI_MODE)
+  if (rl_editing_mode != vi_mode)
+#endif
   history_set_pos (oldpos);
 
-  {
-    int line_len;
-
-    line_len = strlen (entry->line);
-    if (line_len >= rl_line_buffer_len)
-      rl_extend_line_buffer (line_len);
-    strcpy (rl_line_buffer, entry->line);
-  }
+  line_len = strlen (entry->line);
+  if (line_len >= rl_line_buffer_len)
+    rl_extend_line_buffer (line_len);
+  strcpy (rl_line_buffer, entry->line);
 
   rl_undo_list = (UNDO_LIST *)entry->data;
   rl_end = strlen (rl_line_buffer);
@@ -147,7 +158,7 @@ noninc_search (dir, pchar)
      int dir;
      int pchar;
 {
-  int saved_point, c, pmtlen;
+  int saved_point, c;
   char *p;
 
   maybe_save_line ();
@@ -157,16 +168,11 @@ noninc_search (dir, pchar)
   rl_line_buffer[0] = 0;
   rl_end = rl_point = 0;
 
-  /* XXX - this needs fixing to work with the prompt expansion stuff - XXX */
-  pmtlen = (rl_prompt && *rl_prompt) ? strlen (rl_prompt) : 0;
-  p = xmalloc (2 + pmtlen);
-  if (pmtlen)
-    strcpy (p, rl_prompt);
-  p[pmtlen] = pchar ? pchar : ':';
-  p[pmtlen + 1]  = '\0';
-
+  p = _rl_make_prompt_for_search (pchar ? pchar : ':');
   rl_message (p, 0, 0);
   free (p);
+
+#define SEARCH_RETURN _rl_restore_prompt (); return
 
   /* Read the search string. */
   while (c = rl_read_key ())
@@ -180,17 +186,17 @@ noninc_search (dir, pchar)
 	      maybe_unsave_line ();
 	      rl_clear_message ();
 	      rl_point = saved_point;
-	      return;
+	      SEARCH_RETURN;
 	    }
-	  rl_rubout (1);
+	  rl_rubout (1, c);
 	  break;
 
 	case CTRL('W'):
-	  rl_unix_word_rubout ();
+	  rl_unix_word_rubout (1, c);
 	  break;
 
 	case CTRL('U'):
-	  rl_unix_line_discard ();
+	  rl_unix_line_discard (1, c);
 	  break;
 
 	case RETURN:
@@ -205,13 +211,13 @@ noninc_search (dir, pchar)
 	  rl_clear_message ();
 	  rl_point = saved_point;
 	  ding ();
-	  return;
+	  SEARCH_RETURN;
 
 	default:
 	  rl_insert (1, c);
 	  break;
 	}
-      rl_redisplay ();
+      (*rl_redisplay_function) ();
     }
 
  dosearch:
@@ -223,7 +229,7 @@ noninc_search (dir, pchar)
       if (!noninc_search_string)
 	{
 	  ding ();
-	  return;
+	  SEARCH_RETURN;
 	}
     }
   else
@@ -235,35 +241,33 @@ noninc_search (dir, pchar)
       noninc_search_string = savestring (rl_line_buffer);
     }
 
+  _rl_restore_prompt ();
   noninc_dosearch (noninc_search_string, dir);
 }
 
 /* Search forward through the history list for a string.  If the vi-mode
    code calls this, KEY will be `?'. */
+int
 rl_noninc_forward_search (count, key)
      int count, key;
 {
-  if (key == '?')
-    noninc_search (1, '?');
-  else
-    noninc_search (1, 0);
+  noninc_search (1, (key == '?') ? '?' : 0);
   return 0;
 }
 
 /* Reverse search the history list for a string.  If the vi-mode code
    calls this, KEY will be `/'. */
+int
 rl_noninc_reverse_search (count, key)
      int count, key;
 {
-  if (key == '/')
-    noninc_search (-1, '/');
-  else
-    noninc_search (-1, 0);
+  noninc_search (-1, (key == '/') ? '/' : 0);
   return 0;
 }
 
 /* Search forward through the history list for the last string searched
    for.  If there is no saved search string, abort. */
+int
 rl_noninc_forward_search_again (count, key)
      int count, key;
 {
@@ -278,6 +282,7 @@ rl_noninc_forward_search_again (count, key)
 
 /* Reverse search in the history list for the last string searched
    for.  If there is no saved search string, abort. */
+int
 rl_noninc_reverse_search_again (count, key)
      int count, key;
 {
@@ -303,8 +308,14 @@ rl_history_search_internal (count, direction)
   while (count)
     {
       temp = (direction < 0) ? previous_history () : next_history ();
-      if (!temp)
+      if (temp == 0)
         break;
+      /* On an empty prefix, make this the same as previous-history. */
+      if (rl_point == 0)
+	{
+	  count--;
+	  continue;
+	}
       if (STREQN (rl_line_buffer, temp->line, rl_point))
 	{
 	  /* Don't find multiple instances of the same line. */
@@ -317,7 +328,7 @@ rl_history_search_internal (count, direction)
 	}
     }
 
-  if (!temp)
+  if (temp == 0)
     {
       if (direction < 0 && old_temp)
 	temp = old_temp;
