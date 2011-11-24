@@ -14,7 +14,7 @@ SSYYNNOOPPSSIISS
        rreeaaddlliinnee (_c_o_n_s_t _c_h_a_r _*_p_r_o_m_p_t);
 
 CCOOPPYYRRIIGGHHTT
-       Readline is Copyright (C) 1989-2009 Free Software Foundation,  Inc.
+       Readline is Copyright (C) 1989-2011 Free Software Foundation,  Inc.
 
 DDEESSCCRRIIPPTTIIOONN
        rreeaaddlliinnee will read a line from the terminal and return it, using pprroommpptt
@@ -38,7 +38,7 @@ RREETTUURRNN VVAALLUUEE
        it is treated as a newline.
 
 NNOOTTAATTIIOONN
-       An emacs-style notation is used to denote keystrokes.  Control keys are
+       An Emacs-style notation is used to denote keystrokes.  Control keys are
        denoted  by C-_k_e_y, e.g., C-n means Control-N.  Similarly, _m_e_t_a keys are
        denoted by M-_k_e_y, so M-x means Meta-X.  (On keyboards  without  a  _m_e_t_a
        key,  M-_x means ESC _x, i.e., press the Escape key then the _x key.  This
@@ -187,9 +187,19 @@ IINNIITTIIAALLIIZZAATTIIOONN FFIILLEE
               The string that is inserted in vvii mode when  the  iinnsseerrtt--ccoommmmeenntt
               command is executed.  This command is bound to MM--## in emacs mode
               and to ## in vi command mode.
+       ccoommpplleettiioonn--ddiissppllaayy--wwiiddtthh ((--11))
+              The number of screen columns used to  display  possible  matches
+              when  performing completion.  The value is ignored if it is less
+              than 0 or greater than the terminal screen width.  A value of  0
+              will  cause  matches  to be displayed one per line.  The default
+              value is -1.
        ccoommpplleettiioonn--iiggnnoorree--ccaassee ((OOffff))
               If set to OOnn, readline performs filename matching and completion
               in a case-insensitive fashion.
+       ccoommpplleettiioonn--mmaapp--ccaassee ((OOffff))
+              If  set  to  OOnn, and ccoommpplleettiioonn--iiggnnoorree--ccaassee is enabled, readline
+              treats hyphens (_-) and underscores (__) as equivalent  when  per-
+              forming case-insensitive filename matching and completion.
        ccoommpplleettiioonn--pprreeffiixx--ddiissppllaayy--lleennggtthh ((00))
               The  length in characters of the common prefix of a list of pos-
               sible completions that is displayed without modification.   When
@@ -216,7 +226,7 @@ IINNIITTIIAALLIIZZAATTIIOONN FFIILLEE
               mapped to sseellff--iinnsseerrtt.
        eeddiittiinngg--mmooddee ((eemmaaccss))
               Controls whether readline begins with a set of key bindings sim-
-              ilar to emacs or vi.  eeddiittiinngg--mmooddee can be set to either eemmaaccss or
+              ilar to _E_m_a_c_s or _v_i.  eeddiittiinngg--mmooddee can be set to either eemmaaccss or
               vvii.
        eecchhoo--ccoonnttrrooll--cchhaarraacctteerrss ((OOnn))
               When  set to OOnn, on operating systems that indicate they support
@@ -231,10 +241,10 @@ IINNIITTIIAALLIIZZAATTIIOONN FFIILLEE
               key the terminal claims to support when it is called.   On  many
               terminals, the meta key is used to send eight-bit characters.
        eexxppaanndd--ttiillddee ((OOffff))
-              If  set  to  oonn,  tilde  expansion  is  performed  when readline
+              If  set  to  OOnn,  tilde  expansion  is  performed  when readline
               attempts word completion.
        hhiissttoorryy--pprreesseerrvvee--ppooiinntt ((OOffff))
-              If set to oonn, the history code attempts to place  point  at  the
+              If set to OOnn, the history code attempts to place  point  at  the
               same  location on each history line retrieved with pprreevviioouuss--hhiiss--
               ttoorryy or nneexxtt--hhiissttoorryy.
        hhiissttoorryy--ssiizzee ((00))
@@ -275,8 +285,12 @@ IINNIITTIIAALLIIZZAATTIIOONN FFIILLEE
        mmaattcchh--hhiiddddeenn--ffiilleess ((OOnn))
               This  variable,  when  set to OOnn, causes readline to match files
               whose names begin with a  `.'  (hidden  files)  when  performing
-              filename  completion,  unless the leading `.' is supplied by the
-              user in the filename to be completed.
+              filename  completion.   If  set  to OOffff, the leading `.' must be
+              supplied by the user in the filename to be completed.
+       mmeennuu--ccoommpplleettee--ddiissppllaayy--pprreeffiixx ((OOffff))
+              If set to OOnn, menu completion displays the common prefix of  the
+              list of possible completions (which may be empty) before cycling
+              through the list.
        oouuttppuutt--mmeettaa ((OOffff))
               If set to OOnn, readline will display characters with  the  eighth
               bit set directly rather than as a meta-prefixed escape sequence.
@@ -288,18 +302,18 @@ IINNIITTIIAALLIIZZAATTIIOONN FFIILLEE
               sorted horizontally in alphabetical order, rather than down  the
               screen.
        rreevveerrtt--aallll--aatt--nneewwlliinnee ((OOffff))
-              If  set  to  oonn, readline will undo all changes to history lines
+              If  set  to  OOnn, readline will undo all changes to history lines
               before returning when aacccceepptt--lliinnee is executed.  By default, his-
               tory  lines  may  be  modified  and retain individual undo lists
               across calls to rreeaaddlliinnee.
        sshhooww--aallll--iiff--aammbbiigguuoouuss ((OOffff))
               This alters the default behavior of  the  completion  functions.
-              If set to oonn, words which have more than one possible completion
+              If set to OOnn, words which have more than one possible completion
               cause the matches to be listed immediately  instead  of  ringing
               the bell.
        sshhooww--aallll--iiff--uunnmmooddiiffiieedd ((OOffff))
               This  alters the default behavior of the completion functions in
-              a fashion similar to sshhooww--aallll--iiff--aammbbiigguuoouuss.  If set to oonn, words
+              a fashion similar to sshhooww--aallll--iiff--aammbbiigguuoouuss.  If set to OOnn, words
               which  have more than one possible completion without any possi-
               ble partial completion (the possible completions don't  share  a
               common  prefix)  cause  the  matches  to  be  listed immediately
@@ -350,7 +364,7 @@ IINNIITTIIAALLIIZZAATTIIOONN FFIILLEE
                      to bind key sequences to functions useful for a  specific
                      program.   For instance, the following command adds a key
                      sequence that quotes the  current  or  previous  word  in
-                     Bash:
+                     bbaasshh:
 
                      $$iiff Bash
                      # Quote the current or previous word
@@ -484,12 +498,16 @@ EEDDIITTIINNGG CCOOMMMMAANNDDSS
               "!_n" history expansion had been specified.
        yyaannkk--llaasstt--aarrgg ((MM--..,, MM--__))
               Insert the last argument to the previous command (the last  word
-              of  the  previous  history  entry).   With  an  argument, behave
+              of the previous history entry).  With a numeric argument, behave
               exactly like yyaannkk--nntthh--aarrgg.  Successive  calls  to  yyaannkk--llaasstt--aarrgg
-              move  back through the history list, inserting the last argument
-              of each line in turn.  The history expansion facilities are used
-              to  extract  the last argument, as if the "!$" history expansion
-              had been specified.
+              move  back through the history list, inserting the last word (or
+              the word specified by the argument to the first  call)  of  each
+              line in turn.  Any numeric argument supplied to these successive
+              calls determines the direction to move through the  history.   A
+              negative  argument  switches  the  direction through the history
+              (back or forward).  The history expansion facilities are used to
+              extract  the last argument, as if the "!$" history expansion had
+              been specified.
 
    CCoommmmaannddss ffoorr CChhaannggiinngg TTeexxtt
        ddeelleettee--cchhaarr ((CC--dd))
@@ -612,7 +630,11 @@ EEDDIITTIINNGG CCOOMMMMAANNDDSS
               hand, allows completion of program functions and variables,  and
               only attempts filename completion under certain circumstances.
        ppoossssiibbllee--ccoommpplleettiioonnss ((MM--??))
-              List the possible completions of the text before point.
+              List  the  possible  completions of the text before point.  When
+              displaying completions, readline sets the number of columns used
+              for  display to the value of ccoommpplleettiioonn--ddiissppllaayy--wwiiddtthh, the value
+              of the environment variable CCOOLLUUMMNNSS, or  the  screen  width,  in
+              that order.
        iinnsseerrtt--ccoommpplleettiioonnss ((MM--**))
               Insert  all completions of the text before point that would have
               been generated by ppoossssiibbllee--ccoommpplleettiioonnss.
@@ -626,9 +648,9 @@ EEDDIITTIINNGG CCOOMMMMAANNDDSS
               moves _n positions forward in the list  of  matches;  a  negative
               argument  may  be  used to move backward through the list.  This
               command is intended to be  bound  to  TTAABB,  but  is  unbound  by
-              default.cc
-       mmeennuu--ccoommpplleettee--kkrrdd
-              Identicwwal  to mmeennuu--ccoommpplleettee, but moves backward through the list
+              default.
+       mmeennuu--ccoommpplleettee--bbaacckkwwaarrdd
+              Identical  to mmeennuu--ccoommpplleettee, but moves backward through the list
               of possible completions, as if mmeennuu--ccoommpplleettee had  been  given  a
               negative argument.  This command is unbound by default.
        ddeelleettee--cchhaarr--oorr--lliisstt
@@ -682,7 +704,7 @@ EEDDIITTIINNGG CCOOMMMMAANNDDSS
               A  character  is  read and point is moved to the previous occur-
               rence of that character.  A negative count searches  for  subse-
               quent occurrences.
-       sskkiipp--ccssii--sseeqquueennccee (())
+       sskkiipp--ccssii--sseeqquueennccee
               Read  enough  characters to consume a multi-key sequence such as
               those defined for keys like Home and End.  Such sequences  begin
               with a Control Sequence Indicator (CSI), usually ESC-[.  If this
@@ -967,4 +989,4 @@ BBUUGGSS
 
 
 
-GNU Readline 6.1                2009 October 9                     READLINE(3)
+GNU Readline 6.2                2010 August 28                     READLINE(3)

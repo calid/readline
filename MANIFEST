@@ -71,6 +71,7 @@ undo.c		f
 util.c		f
 vi_keymap.c	f
 vi_mode.c	f
+xfree.c		f
 xmalloc.c	f
 history.c	f
 histexpand.c	f

@@ -1,6 +1,6 @@
-/* savestring.c - function version of savestring for backwards compatibility */
+/* xfree.c -- safe version of free that ignores attempts to free NUL */
 
-/* Copyright (C) 1998,2003 Free Software Foundation, Inc.
+/* Copyright (C) 1991-2010 Free Software Foundation, Inc.
 
    This file is part of the GNU Readline Library (Readline), a library
    for reading lines of text with interactive input and history editing.      
@@ -21,21 +21,30 @@
 
 #define READLINE_LIBRARY
 
+#if defined (HAVE_CONFIG_H)
 #include <config.h>
-#ifdef HAVE_STRING_H
-#  include <string.h>
 #endif
+
+#if defined (HAVE_STDLIB_H)
+#  include <stdlib.h>
+#else
+#  include "ansi_stdlib.h"
+#endif /* HAVE_STDLIB_H */
+
 #include "xmalloc.h"
 
-/* Backwards compatibility, now that savestring has been removed from
-   all `public' readline header files. */
-char *
-savestring (s)
-     const char *s;
-{
-  char *ret;
+/* **************************************************************** */
+/*								    */
+/*		   Memory Deallocation.				    */
+/*								    */
+/* **************************************************************** */
 
-  ret = (char *)xmalloc (strlen (s) + 1);
-  strcpy (ret, s);
-  return ret;
+/* Use this as the function to call when adding unwind protects so we
+   don't need to know what free() returns. */
+void
+xfree (string)
+     PTR_T string;
+{
+  if (string)
+    free (string);
 }

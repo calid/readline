@@ -2,11 +2,11 @@ This is rluserman.info, produced by makeinfo version 4.13 from
 /usr/src/local/chet/src/bash/readline-src/doc/rluserman.texi.
 
 This manual describes the end user interface of the GNU Readline Library
-(version 6.1, 9 October 2009), a library which aids in the consistency
-of user interface across discrete programs which provide a command line
-interface.
+(version 6.2, September 6 2010), a library which aids in the
+consistency of user interface across discrete programs which provide a
+command line interface.
 
-   Copyright (C) 1988-2009 Free Software Foundation, Inc.
+   Copyright (C) 1988-2011 Free Software Foundation, Inc.
 
    Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -399,10 +399,23 @@ Variable Settings
           `insert-comment' command is executed.  The default value is
           `"#"'.
 
+    `completion-display-width'
+          The number of screen columns used to display possible matches
+          when performing completion.  The value is ignored if it is
+          less than 0 or greater than the terminal screen width.  A
+          value of 0 will cause matches to be displayed one per line.
+          The default value is -1.
+
     `completion-ignore-case'
           If set to `on', Readline performs filename matching and
           completion in a case-insensitive fashion.  The default value
           is `off'.
+
+    `completion-map-case'
+          If set to `on', and COMPLETION-IGNORE-CASE is enabled,
+          Readline treats hyphens (`-') and underscores (`_') as
+          equivalent when performing case-insensitive filename matching
+          and completion.
 
     `completion-prefix-display-length'
           The length in characters of the common prefix of a list of
@@ -516,9 +529,14 @@ Variable Settings
     `match-hidden-files'
           This variable, when set to `on', causes Readline to match
           files whose names begin with a `.' (hidden files) when
-          performing filename completion, unless the leading `.' is
-          supplied by the user in the filename to be completed.  This
-          variable is `on' by default.
+          performing filename completion.  If set to `off', the leading
+          `.' must be supplied by the user in the filename to be
+          completed.  This variable is `on' by default.
+
+    `menu-complete-display-prefix'
+          If set to `on', menu completion displays the common prefix of
+          the list of possible completions (which may be empty) before
+          cycling through the list.  The default is `off'.
 
     `output-meta'
           If set to `on', Readline will display characters with the
@@ -989,11 +1007,16 @@ File: rluserman.info,  Node: Commands For History,  Next: Commands For Text,  Pr
 
 `yank-last-arg (M-. or M-_)'
      Insert last argument to the previous command (the last word of the
-     previous history entry).  With an argument, behave exactly like
-     `yank-nth-arg'.  Successive calls to `yank-last-arg' move back
-     through the history list, inserting the last argument of each line
-     in turn.  The history expansion facilities are used to extract the
-     last argument, as if the `!$' history expansion had been specified.
+     previous history entry).  With a numeric argument, behave exactly
+     like `yank-nth-arg'.  Successive calls to `yank-last-arg' move
+     back through the history list, inserting the last word (or the
+     word specified by the argument to the first call) of each line in
+     turn.  Any numeric argument supplied to these successive calls
+     determines the direction to move through the history.  A negative
+     argument switches the direction through the history (back or
+     forward).  The history expansion facilities are used to extract
+     the last argument, as if the `!$' history expansion had been
+     specified.
 
 
 
@@ -1165,7 +1188,11 @@ File: rluserman.info,  Node: Commands For Completion,  Next: Keyboard Macros,  P
      is filename completion.
 
 `possible-completions (M-?)'
-     List the possible completions of the text before point.
+     List the possible completions of the text before point.  When
+     displaying completions, Readline sets the number of columns used
+     for display to the value of `completion-display-width', the value
+     of the environment variable `COLUMNS', or the screen width, in
+     that order.
 
 `insert-completions (M-*)'
      Insert all completions of the text before point that would have
@@ -1318,8 +1345,7 @@ File: rluserman.info,  Node: Readline vi Mode,  Prev: Bindable Readline Commands
 
 While the Readline library does not have a full set of `vi' editing
 functions, it does contain enough to allow simple editing of the line.
-The Readline `vi' mode behaves as specified in the POSIX 1003.2
-standard.
+The Readline `vi' mode behaves as specified in the POSIX standard.
 
    In order to switch interactively between `emacs' and `vi' editing
 modes, use the command `M-C-j' (bound to emacs-editing-mode when in
@@ -1821,29 +1847,29 @@ permit their use in free software.
 
 
 Tag Table:
-Node: Top1371
-Node: Command Line Editing1825
-Node: Introduction and Notation2479
-Node: Readline Interaction4103
-Node: Readline Bare Essentials5296
-Node: Readline Movement Commands7087
-Node: Readline Killing Commands8054
-Node: Readline Arguments9976
-Node: Searching11022
-Node: Readline Init File13175
-Node: Readline Init File Syntax14330
-Node: Conditional Init Constructs28537
-Node: Sample Init File31072
-Node: Bindable Readline Commands34191
-Node: Commands For Moving35250
-Node: Commands For History36113
-Node: Commands For Text39239
-Node: Commands For Killing41967
-Node: Numeric Arguments44111
-Node: Commands For Completion45252
-Node: Keyboard Macros46991
-Node: Miscellaneous Commands47564
-Node: Readline vi Mode51422
-Node: GNU Free Documentation License52343
+Node: Top1373
+Node: Command Line Editing1827
+Node: Introduction and Notation2481
+Node: Readline Interaction4105
+Node: Readline Bare Essentials5298
+Node: Readline Movement Commands7089
+Node: Readline Killing Commands8056
+Node: Readline Arguments9978
+Node: Searching11024
+Node: Readline Init File13177
+Node: Readline Init File Syntax14332
+Node: Conditional Init Constructs29394
+Node: Sample Init File31929
+Node: Bindable Readline Commands35048
+Node: Commands For Moving36107
+Node: Commands For History36970
+Node: Commands For Text40376
+Node: Commands For Killing43104
+Node: Numeric Arguments45248
+Node: Commands For Completion46389
+Node: Keyboard Macros48360
+Node: Miscellaneous Commands48933
+Node: Readline vi Mode52791
+Node: GNU Free Documentation License53705
 
 End Tag Table

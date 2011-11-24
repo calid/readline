@@ -1,3 +1,67 @@
+This document details the changes between this version, readline-6.2,
+and the previous version, readline-6.1.
+
+1.  Changes to Readline
+
+a.  Fixed a bug that caused the unconverted filename to be added to the list of
+    completions when the application specified filename conversion functions.
+
+b.  Fixed a bug that caused the wrong filename to be passed to opendir when the
+    application has specified a filename dequoting function.
+
+c.  Fixed a bug when repeating a character search in vi mode in the case where
+    there was no search to repeat.
+
+d.  When show-all-if-ambiguous is set, the completion routines no longer insert
+    a common match prefix that is shorter than the text being completed.
+
+e.  The full set of vi editing commands may now be used in callback mode.
+
+f.  Fixed a bug that caused readline to not update its idea of the terminal
+    dimensions while running in `no-echo' mode.
+
+h.  Fixed a bug that caused readline to dump core if an application called
+    rl_prep_terminal without setting rl_instream.
+
+i.  Fixed a bug that caused meta-prefixed characters bound to incremental
+    search forward or backward to not be recognized if they were typed
+    subsequently.
+
+j.  The incremental search code treats key sequences that map to the same
+    functions as (default) ^G, ^W, and ^Y as equivalent to those characters.
+
+k.  Fixed a bug in menu-complete that caused it to misbehave with large
+    negative argument.
+
+l.  Fixed a bug that caused vi-mode yank-last-arg to ring the bell when invoked
+    at the end of the line.
+
+m.  Fixed a bug that made an explicit argument of 0 to yank-last-arg behave
+    as if it were a negative argument.
+
+n.  Fixed a bug that caused directory names in words to be completed to not
+    be dequoted correctly.
+
+2.  New Features in Readline
+
+a.  The history library does not try to write the history filename in the
+    current directory if $HOME is unset.  This closes a potential security
+    problem if the application does not specify a history filename.
+
+b.  New bindable variable `completion-display-width' to set the number of
+    columns used when displaying completions.
+
+c.  New bindable variable `completion-case-map' to cause case-insensitive
+    completion to treat `-' and `_' as identical.
+
+d.  There are new bindable vi-mode command names to avoid readline's case-
+    insensitive matching not allowing them to be bound separately.
+
+e.  New bindable variable `menu-complete-display-prefix' causes the menu
+    completion code to display the common prefix of the possible completions
+    before cycling through the list, instead of after.
+
+-------------------------------------------------------------------------------
 This document details the changes between this version, readline-6.1,
 and the previous version, readline-6.0.
 

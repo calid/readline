@@ -70,15 +70,15 @@ TERMCAP_LIB = @TERMCAP_LIB@
 SOURCES = excallback.c fileman.c histexamp.c manexamp.c rl-fgets.c rl.c \
 		rlcat.c rlevent.c rlptytest.c rltest.c rlversion.c
 
-EXECUTABLES = fileman$(EXE) rltest$(EXE) rl$(EXE) rlcat$(EXE) rlevent$(EXE) \
-		rlversion$(EXE) histexamp$(EXE)
+EXECUTABLES = fileman$(EXEEXT) rltest$(EXEEXT) rl$(EXEEXT) rlcat$(EXEEXT) \
+		rlevent$(EXEEXT) rlversion$(EXEEXT) histexamp$(EXEEXT)
 OBJECTS = fileman.o rltest.o rl.o rlevent.o rlcat.o rlversion.o histexamp.o
 
 all: $(EXECUTABLES)
 everything: all
 
-check:	rlversion$(EXE)
-	@echo Readline version: `rlversion$(EXE)`
+check:	rlversion$(EXEEXT)
+	@echo Readline version: `rlversion$(EXEEXT)`
 
 installdirs:
 	-$(SHELL) $(top_srcdir)/support/mkdirs $(DESTDIR)$(installdir)
@@ -86,37 +86,37 @@ installdirs:
 install:	installdirs
 	@for f in $(SOURCES); do \
 		$(RM) $(DESTDIR)$(installdir)/$$f ; \
-		$(INSTALL_DATA) $$f $(DESTDIR)$(installdir) ; \
+		$(INSTALL_DATA) $(srcdir)/$$f $(DESTDIR)$(installdir) ; \
 	done
-	
+
 uninstall:
 	@for f in $(SOURCES); do \
 		$(RM) $(DESTDIR)$(installdir)/$$f ; \
 	done
 	-rmdir $(DESTDIR)$(installdir)
-	
-rl$(EXE): rl.o $(READLINE_LIB)
+
+rl$(EXEEXT): rl.o $(READLINE_LIB)
 	$(PURIFY) $(CC) $(LDFLAGS) -o $@ rl.o $(READLINE_LIB) $(TERMCAP_LIB)
 
-rlcat$(EXE): rlcat.o $(READLINE_LIB)
+rlcat$(EXEEXT): rlcat.o $(READLINE_LIB)
 	$(PURIFY) $(CC) $(LDFLAGS) -o $@ rlcat.o $(READLINE_LIB) $(TERMCAP_LIB)
 
-rlevent$(EXE): rlevent.o $(READLINE_LIB)
+rlevent$(EXEEXT): rlevent.o $(READLINE_LIB)
 	$(PURIFY) $(CC) $(LDFLAGS) -o $@ rlevent.o $(READLINE_LIB) $(TERMCAP_LIB)
 
-fileman$(EXE): fileman.o $(READLINE_LIB)
+fileman$(EXEEXT): fileman.o $(READLINE_LIB)
 	$(PURIFY) $(CC) $(LDFLAGS) -o $@ fileman.o $(READLINE_LIB) $(TERMCAP_LIB)
 
-rltest$(EXE): rltest.o $(READLINE_LIB)
+rltest$(EXEEXT): rltest.o $(READLINE_LIB)
 	$(PURIFY) $(CC) $(LDFLAGS) -o $@ rltest.o $(READLINE_LIB) $(TERMCAP_LIB)
 
-rlptytest$(EXE): rlptytest.o $(READLINE_LIB)
+rlptytest$(EXEEXT): rlptytest.o $(READLINE_LIB)
 	$(PURIFY) $(CC) $(LDFLAGS) -o $@ rlptytest.o $(READLINE_LIB) $(TERMCAP_LIB)
 
-rlversion$(EXE): rlversion.o $(READLINE_LIB)
+rlversion$(EXEEXT): rlversion.o $(READLINE_LIB)
 	$(CC) $(LDFLAGS) -o $@ rlversion.o $(READLINE_LIB) $(TERMCAP_LIB)
 
-histexamp$(EXE): histexamp.o $(HISTORY_LIB)
+histexamp$(EXEEXT): histexamp.o $(HISTORY_LIB)
 	$(PURIFY) $(CC) $(LDFLAGS) -o $@ histexamp.o -lhistory $(TERMCAP_LIB)
 
 clean mostlyclean:

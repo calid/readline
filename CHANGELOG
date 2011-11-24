@@ -1077,3 +1077,19 @@ doc/Makefile.in
 				   -----
 [readline-6.1 frozen]
 
+				 2/5/2010
+				 --------
+examples/Makefile.in
+        - make sure to install example C files using $(srcdir)/$$f in case
+          we're building outside the source directory.  Bug report and fix
+          from Peter Breitenlohner <peb@mppmu.mpg.de>
+
+				   7/25
+				   ----
+xfree.c
+	- new file with xfree() implementation, moved from xmalloc.c
+
+				   12/28
+				   -----
+{examples,shlib}/Makefile.in
+	- Cygwin-based changes from Eric Blake <eblake@redhat.com>

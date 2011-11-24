@@ -20,9 +20,9 @@ dnl Process this file with autoconf to produce a configure script.
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-AC_REVISION([for Readline 6.1, version 2.66])
+AC_REVISION([for Readline 6.2, version 2.67])
 
-AC_INIT(readline, 6.1, bug-readline@gnu.org)
+AC_INIT(readline, 6.2, bug-readline@gnu.org)
 
 dnl make sure we are using a recent autoconf version
 AC_PREREQ(2.50)
@@ -32,7 +32,7 @@ AC_CONFIG_AUX_DIR(./support)
 AC_CONFIG_HEADERS(config.h)
 
 dnl update the value of RL_READLINE_VERSION in readline.h when this changes
-LIBVERSION=6.1
+LIBVERSION=6.2
 
 AC_CANONICAL_HOST
 
