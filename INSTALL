@@ -1,7 +1,7 @@
 Basic Installation
 ==================
 
-These are installation instructions for Readline 4.2a.
+These are installation instructions for Readline-4.3.
 
 The simplest way to compile readline is:
 
@@ -14,14 +14,16 @@ The simplest way to compile readline is:
      Running `configure' takes some time.  While running, it prints some
      messages telling which features it is checking for.
 
-  2. Type `make' to compile readline and build the static libreadline
-     and libhistory libraries.  See below for instructions on compiling
+  2. Type `make' to compile readline and build the static readline
+     and history libraries.  If supported, the shared readline and history
+     libraries will be built also.  See below for instructions on compiling
      the other parts of the distribution.  Typing `make everything' will
      cause the static and shared libraries (if supported) and the example
      programs to be built.
 
-  3. Type `make install' to install the static libreadline and libhistory
-     libraries, the readline include files, and the documentation.
+  3. Type `make install' to install the static readline and history
+     libraries, the readline include files, the documentation, and, if
+     supported, the shared readline and history libraries.
 
   4. You can remove the created libraries and object files from the
      build directory by typing `make clean'.  To also remove the
@@ -52,7 +54,8 @@ remove or edit it.
 The file `configure.in' is used to create `configure' by a
 program called `autoconf'.  You only need `configure.in' if you
 want to change it or regenerate `configure' using a newer version
-of `autoconf'. 
+of `autoconf'.  The readline `configure.in' requires autoconf
+version 2.50 or newer. 
 
 Compilers and Options
 =====================
@@ -161,7 +164,7 @@ operates.
 Optional Features
 =================
 
-The readline `configure' takes a single `--with-PACKAGE' option:
+The readline `configure' recognizes a single `--with-PACKAGE' option:
 
 `--with-curses'
     This tells readline that it can find the termcap library functions
@@ -171,6 +174,15 @@ The readline `configure' takes a single `--with-PACKAGE' option:
     which link with readline the to choose an appropriate library.
     This option tells readline to link the example programs with the
     curses library rather than libtermcap.
+
+`configure' also recognizes two `--enable-FEATURE' options:
+
+`--enable-shared'
+    Build the shared libraries by default on supported platforms.  The
+    default is `yes'.
+
+`--enable-static'
+    Build the static libraries by default.  The default is `yes'.
  
 Shared Libraries
 ================
@@ -179,8 +191,10 @@ There is support for building shared versions of the readline and
 history libraries.  The configure script creates a Makefile in
 the `shlib' subdirectory, and typing `make shared' will cause
 shared versions of the readline and history libraries to be built
-on supported platforms.  `make everything' will run `make shared'
-after building the static libraries. 
+on supported platforms.
+
+If `configure' is given the `--enable-shared' option, it will attempt
+to build the shared libraries by default on supported platforms.
 
 Configure calls the script support/shobj-conf to test whether or
 not shared library creation is supported and to generate the values
@@ -242,15 +256,18 @@ SHLIB_LIBVERSION The string to append to the filename to indicate the version
 
 SHLIB_STATUS	Set this to `supported' when you have defined the other
 		necessary variables.  Make uses this to determine whether
-		or not shared library creation should be attempted.
+		or not shared library creation should be attempted.  If
+		shared libraries are not supported, this will be set to
+		`unsupported'.
 
 You should look at the existing stanzas in support/shobj-conf for ideas.
 
 Once you have updated support/shobj-conf, re-run configure and type
-`make shared'.  The shared libraries will be created in the shlib
-subdirectory.
+`make shared' or `make'.  The shared libraries will be created in the
+shlib subdirectory.
 
-Since shared libraries are not created on all platforms, `make install'
-will not automatically install the shared libraries.  To install them,
-change the current directory to shlib and type `make install'.  Running
-`make install-shared' from the top-level build directory will also work.
+If shared libraries are created, `make install' will install them. 
+You may install only the shared libraries by running `make
+install-shared' from the top-level build directory.  Running `make
+install' in the shlib subdirectory will also work.  If you don't want
+to install any created shared libraries, run `make install-static'. 

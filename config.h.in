@@ -13,6 +13,10 @@
 
 #undef ssize_t
 
+#undef PROTOTYPES
+
+#undef __CHAR_UNSIGNED__
+
 /* Define if the `S_IS*' macros in <sys/stat.h> do not work properly.  */
 #undef STAT_MACROS_BROKEN
 
@@ -26,6 +30,9 @@
 
 /* Define if you have the lstat function. */
 #undef HAVE_LSTAT
+
+/* Define if you have the mbsrtowcs function. */
+#undef HAVE_MBSRTOWCS
 
 /* Define if you have the memmove function. */
 #undef HAVE_MEMMOVE
@@ -45,6 +52,11 @@
 /* Define if you have the strcasecmp function.  */
 #undef HAVE_STRCASECMP
 
+/* Define if you have the strcoll function.  */
+#undef HAVE_STRCOLL
+
+#undef STRCOLL_BROKEN
+
 /* Define if you have the strpbrk function.  */
 #undef HAVE_STRPBRK
 
@@ -54,16 +66,29 @@
 /* Define if you have the vsnprintf function.  */
 #undef HAVE_VSNPRINTF
 
-/* Define if you have the strcoll function.  */
-#undef HAVE_STRCOLL
-
-#undef STRCOLL_BROKEN
+/* Define if you have the wcwidth function.  */
+#undef HAVE_WCWIDTH
 
 /* Define if you have the <dirent.h> header file.  */
 #undef HAVE_DIRENT_H
 
+/* Define if you have the <langinfo.h> header file.  */
+#undef HAVE_LANGINFO_H
+
+/* Define if you have the <limits.h> header file.  */
+#undef HAVE_LIMITS_H
+
+/* Define if you have the <locale.h> header file.  */
+#undef HAVE_LOCALE_H
+
+/* Define if you have the <memory.h> header file.  */
+#undef HAVE_MEMORY_H
+
 /* Define if you have the <ndir.h> header file.  */
 #undef HAVE_NDIR_H
+
+/* Define if you have the <stdarg.h> header file.  */
+#undef HAVE_STDARG_H
 
 /* Define if you have the <stdlib.h> header file.  */
 #undef HAVE_STDLIB_H
@@ -110,14 +135,16 @@
 /* Define if you have the <varargs.h> header file.  */
 #undef HAVE_VARARGS_H
 
-/* Define if you have the <stdarg.h> header file.  */
-#undef HAVE_STDARG_H
+/* Define if you have the <wchar.h> header file.  */
+#undef HAVE_WCHAR_H
 
-#undef HAVE_LOCALE_H
+/* Define if you have the <varargs.h> header file.  */
+#undef HAVE_WCTYPE_H
 
-#undef HAVE_LIMITS_H
+#undef HAVE_MBSTATE_T
 
-#undef HAVE_MEMORY_H
+/* Define if you have <langinfo.h> and nl_langinfo(CODESET). */
+#undef HAVE_LANGINFO_CODESET
 
 /* Definitions pulled in from aclocal.m4. */
 #undef VOID_SIGHANDLER

@@ -8,7 +8,7 @@ NNAAMMEE
        history - GNU History Library
 
 CCOOPPYYRRIIGGHHTT
-       The  GNU History Library is Copyright (C) 1989-2001 by the
+       The  GNU History Library is Copyright (C) 1989-2002 by the
        Free Software Foundation, Inc.
 
 DDEESSCCRRIIPPTTIIOONN
@@ -61,7 +61,7 @@ HHIISSTTOORRYY EEXXPPAANNSSIIOONN
 
 
 
-GNU History 4.2             2001 Mar 6                          1
+GNU History 4.3          2002 January 31                        1
 
 
 
@@ -127,7 +127,7 @@ HISTORY(3)                                             HISTORY(3)
 
 
 
-GNU History 4.2             2001 Mar 6                          2
+GNU History 4.3          2002 January 31                        2
 
 
 
@@ -193,7 +193,7 @@ PPRROOGGRRAAMMMMIINNGG WWIITTHH HHIISSTTOORRYY FFUUNNC
 
 
 
-GNU History 4.2             2001 Mar 6                          3
+GNU History 4.3          2002 January 31                        3
 
 
 
@@ -259,7 +259,7 @@ HHiissttoorryy FFuunnccttiioonnss
 
 
 
-GNU History 4.2             2001 Mar 6                          4
+GNU History 4.3          2002 January 31                        4
 
 
 
@@ -299,33 +299,33 @@ HISTORY(3)                                             HISTORY(3)
        entries.
 
        _i_n_t uunnssttiiffllee__hhiissttoorryy (_v_o_i_d)
-       Stop  stifling  the  history.   This  returns the previous
-       amount the history was stifled.  The value is positive  if
-       the history was stifled, negative if it wasn't.
+       Stop  stifling  the history.  This returns the previously-
+       set maximum number of history  entries  (as  set  by  ssttii--
+       ffllee__hhiissttoorryy(())).   history was stifled.  The value is posi-
+       tive if the history was stifled, negative if it wasn't.
 
        _i_n_t hhiissttoorryy__iiss__ssttiifflleedd (_v_o_i_d)
-       Returns  non-zero if the history is stifled, zero if it is
+       Returns non-zero if the history is stifled, zero if it  is
        not.
 
 
    IInnffoorrmmaattiioonn AAbboouutt tthhee HHiissttoorryy LLiisstt
-       These functions return information about the  entire  his-
+       These  functions  return information about the entire his-
        tory list or individual list entries.
 
        _H_I_S_T___E_N_T_R_Y _*_* hhiissttoorryy__lliisstt (_v_o_i_d)
-       Return  a  NNUULLLL  terminated array of _H_I_S_T___E_N_T_R_Y _* which is
-       the current input history.  Element 0 of this list is  the
+       Return a NNUULLLL terminated array of _H_I_S_T___E_N_T_R_Y  _*  which  is
+       the  current input history.  Element 0 of this list is the
        beginning of time.  If there is no history, return NNUULLLL.
 
        _i_n_t wwhheerree__hhiissttoorryy (_v_o_i_d)
        Returns the offset of the current history element.
 
        _H_I_S_T___E_N_T_R_Y _* ccuurrrreenntt__hhiissttoorryy (_v_o_i_d)
-       Return  the  history  entry  at  the  current position, as
 
 
 
-GNU History 4.2             2001 Mar 6                          5
+GNU History 4.3          2002 January 31                        5
 
 
 
@@ -334,7 +334,8 @@ GNU History 4.2             2001 Mar 6                          5
 HISTORY(3)                                             HISTORY(3)
 
 
-       determined by  wwhheerree__hhiissttoorryy(()).   If  there  is  no  entry
+       Return the history  entry  at  the  current  position,  as
+       determined  by  wwhheerree__hhiissttoorryy(()).   If  there  is  no entry
        there, return a NNUULLLL pointer.
 
        _H_I_S_T___E_N_T_R_Y _* hhiissttoorryy__ggeett (_i_n_t _o_f_f_s_e_t)
@@ -343,18 +344,18 @@ HISTORY(3)                                             HISTORY(3)
        greater than the history length, return a NNUULLLL pointer.
 
        _i_n_t hhiissttoorryy__ttoottaall__bbyytteess (_v_o_i_d)
-       Return  the  number  of  bytes  that  the  primary history
-       entries are using.  This function returns the sum  of  the
+       Return the  number  of  bytes  that  the  primary  history
+       entries  are  using.  This function returns the sum of the
        lengths of all the lines in the history.
 
 
    MMoovviinngg AArroouunndd tthhee HHiissttoorryy LLiisstt
-       These  functions  allow the current index into the history
+       These functions allow the current index into  the  history
        list to be set or changed.
 
        _i_n_t hhiissttoorryy__sseett__ppooss (_i_n_t _p_o_s)
-       Set the current history offset to _p_o_s, an  absolute  index
-       into  the  list.   Returns  1 on success, 0 if _p_o_s is less
+       Set  the  current history offset to _p_o_s, an absolute index
+       into the list.  Returns 1 on success, 0  if  _p_o_s  is  less
        than zero or greater than the number of history entries.
 
        _H_I_S_T___E_N_T_R_Y _* pprreevviioouuss__hhiissttoorryy (_v_o_i_d)
@@ -363,35 +364,34 @@ HISTORY(3)                                             HISTORY(3)
        previous entry, return a NNUULLLL pointer.
 
        _H_I_S_T___E_N_T_R_Y _* nneexxtt__hhiissttoorryy (_v_o_i_d)
-       Move the current history offset forward to the  next  his-
-       tory  entry,  and  return the a pointer to that entry.  If
+       Move  the  current history offset forward to the next his-
+       tory entry, and return the a pointer to  that  entry.   If
        there is no next entry, return a NNUULLLL pointer.
 
 
    SSeeaarrcchhiinngg tthhee HHiissttoorryy LLiisstt
-       These functions allow searching of the  history  list  for
-       entries  containing  a  specific string.  Searching may be
-       performed both forward and backward from the current  his-
-       tory  position.   The search may be _a_n_c_h_o_r_e_d, meaning that
-       the string must match at  the  beginning  of  the  history
+       These  functions  allow  searching of the history list for
+       entries containing a specific string.   Searching  may  be
+       performed  both forward and backward from the current his-
+       tory position.  The search may be _a_n_c_h_o_r_e_d,  meaning  that
+       the  string  must  match  at  the beginning of the history
        entry.
 
        _i_n_t hhiissttoorryy__sseeaarrcchh (_c_o_n_s_t _c_h_a_r _*_s_t_r_i_n_g_, _i_n_t _d_i_r_e_c_t_i_o_n)
-       Search  the  history  for  _s_t_r_i_n_g, starting at the current
-       history offset.  If _d_i_r_e_c_t_i_o_n is less  than  0,  then  the
+       Search the history for _s_t_r_i_n_g,  starting  at  the  current
+       history  offset.   If  _d_i_r_e_c_t_i_o_n  is less than 0, then the
        search is through previous entries, otherwise through sub-
-       sequent entries.  If _s_t_r_i_n_g is  found,  then  the  current
-       history  index is set to that history entry, and the value
-       returned is the offset in the  line  of  the  entry  where
+       sequent  entries.   If  _s_t_r_i_n_g  is found, then the current
+       history index is set to that history entry, and the  value
+       returned  is  the  offset  in  the line of the entry where
        _s_t_r_i_n_g was found.  Otherwise, nothing is changed, and a -1
        is returned.
 
-       _i_n_t  hhiissttoorryy__sseeaarrcchh__pprreeffiixx  (_c_o_n_s_t   _c_h_a_r   _*_s_t_r_i_n_g_,   _i_n_t
-       _d_i_r_e_c_t_i_o_n)
+       _i_n_t   hhiissttoorryy__sseeaarrcchh__pprreeffiixx   (_c_o_n_s_t   _c_h_a_r  _*_s_t_r_i_n_g_,  _i_n_t
 
 
 
-GNU History 4.2             2001 Mar 6                          6
+GNU History 4.3          2002 January 31                        6
 
 
 
@@ -400,47 +400,48 @@ GNU History 4.2             2001 Mar 6                          6
 HISTORY(3)                                             HISTORY(3)
 
 
-       Search  the  history  for  _s_t_r_i_n_g, starting at the current
-       history offset.  The search is  anchored:  matching  lines
+       _d_i_r_e_c_t_i_o_n)
+       Search the history for _s_t_r_i_n_g,  starting  at  the  current
+       history  offset.   The  search is anchored: matching lines
        must begin with _s_t_r_i_n_g.  If _d_i_r_e_c_t_i_o_n is less than 0, then
-       the search is through previous entries, otherwise  through
-       subsequent  entries.  If _s_t_r_i_n_g is found, then the current
-       history index is set to that entry, and the  return  value
+       the  search is through previous entries, otherwise through
+       subsequent entries.  If _s_t_r_i_n_g is found, then the  current
+       history  index  is set to that entry, and the return value
        is  0.   Otherwise,  nothing  is  changed,  and  a  -1  is
        returned.
 
        _i_n_t hhiissttoorryy__sseeaarrcchh__ppooss (_c_o_n_s_t _c_h_a_r _*_s_t_r_i_n_g_, _i_n_t _d_i_r_e_c_t_i_o_n_,
        _i_n_t _p_o_s)
        Search for _s_t_r_i_n_g in the history list, starting at _p_o_s, an
-       absolute index into the list.  If _d_i_r_e_c_t_i_o_n  is  negative,
-       the  search proceeds backward from _p_o_s, otherwise forward.
-       Returns the absolute index of the  history  element  where
+       absolute  index  into the list.  If _d_i_r_e_c_t_i_o_n is negative,
+       the search proceeds backward from _p_o_s, otherwise  forward.
+       Returns  the  absolute  index of the history element where
        _s_t_r_i_n_g was found, or -1 otherwise.
 
 
    MMaannaaggiinngg tthhee HHiissttoorryy FFiillee
        The History library can read the history from and write it
-       to a file.  This section documents the functions for  man-
+       to  a file.  This section documents the functions for man-
        aging a history file.
 
        _i_n_t rreeaadd__hhiissttoorryy (_c_o_n_s_t _c_h_a_r _*_f_i_l_e_n_a_m_e)
-       Add  the  contents of _f_i_l_e_n_a_m_e to the history list, a line
-       at a time.  If _f_i_l_e_n_a_m_e is NNUULLLL, then  read  from  _~_/_._h_i_s_-
+       Add the contents of _f_i_l_e_n_a_m_e to the history list,  a  line
+       at  a  time.   If _f_i_l_e_n_a_m_e is NNUULLLL, then read from _~_/_._h_i_s_-
        _t_o_r_y.  Returns 0 if successful, or eerrrrnnoo if not.
 
-       _i_n_t  rreeaadd__hhiissttoorryy__rraannggee  (_c_o_n_s_t  _c_h_a_r _*_f_i_l_e_n_a_m_e_, _i_n_t _f_r_o_m_,
+       _i_n_t rreeaadd__hhiissttoorryy__rraannggee (_c_o_n_s_t _c_h_a_r  _*_f_i_l_e_n_a_m_e_,  _i_n_t  _f_r_o_m_,
        _i_n_t _t_o)
-       Read a range of lines from _f_i_l_e_n_a_m_e, adding  them  to  the
-       history  list.   Start reading at line _f_r_o_m and end at _t_o.
-       If _f_r_o_m is zero, start at the beginning.  If  _t_o  is  less
-       than  _f_r_o_m, then read until the end of the file.  If _f_i_l_e_-
-       _n_a_m_e is NNUULLLL, then read from  _~_/_._h_i_s_t_o_r_y.   Returns  0  if
+       Read  a  range  of lines from _f_i_l_e_n_a_m_e, adding them to the
+       history list.  Start reading at line _f_r_o_m and end  at  _t_o.
+       If  _f_r_o_m  is  zero, start at the beginning.  If _t_o is less
+       than _f_r_o_m, then read until the end of the file.  If  _f_i_l_e_-
+       _n_a_m_e  is  NNUULLLL,  then  read from _~_/_._h_i_s_t_o_r_y.  Returns 0 if
        successful, or eerrrrnnoo if not.
 
        _i_n_t wwrriittee__hhiissttoorryy (_c_o_n_s_t _c_h_a_r _*_f_i_l_e_n_a_m_e)
-       Write  the  current history to _f_i_l_e_n_a_m_e, overwriting _f_i_l_e_-
-       _n_a_m_e if necessary.  If _f_i_l_e_n_a_m_e is NNUULLLL,  then  write  the
-       history  list  to  _~_/_._h_i_s_t_o_r_y.   Returns  0 on success, or
+       Write the current history to _f_i_l_e_n_a_m_e,  overwriting  _f_i_l_e_-
+       _n_a_m_e  if  necessary.   If _f_i_l_e_n_a_m_e is NNUULLLL, then write the
+       history list to _~_/_._h_i_s_t_o_r_y.   Returns  0  on  success,  or
        eerrrrnnoo on a read or write error.
 
 
@@ -449,81 +450,80 @@ HISTORY(3)                                             HISTORY(3)
        If _f_i_l_e_n_a_m_e is NNUULLLL, then append to _~_/_._h_i_s_t_o_r_y.  Returns 0
        on success, or eerrrrnnoo on a read or write error.
 
-       _i_n_t  hhiissttoorryy__ttrruunnccaattee__ffiillee  (_c_o_n_s_t  _c_h_a_r  _*_f_i_l_e_n_a_m_e_,   _i_n_t
+       _i_n_t   hhiissttoorryy__ttrruunnccaattee__ffiillee  (_c_o_n_s_t  _c_h_a_r  _*_f_i_l_e_n_a_m_e_,  _i_n_t
        _n_l_i_n_e_s)
-       Truncate  the history file _f_i_l_e_n_a_m_e, leaving only the last
-       _n_l_i_n_e_s lines.  If _f_i_l_e_n_a_m_e is  NNUULLLL,  then  _~_/_._h_i_s_t_o_r_y  is
-       truncated.  Returns 0 on success, or eerrrrnnoo on failure.
+       Truncate the history file _f_i_l_e_n_a_m_e, leaving only the  last
+       _n_l_i_n_e_s  lines.   If  _f_i_l_e_n_a_m_e  is NNUULLLL, then _~_/_._h_i_s_t_o_r_y is
 
 
 
-GNU History 4.2             2001 Mar 6                          7
+GNU History 4.3          2002 January 31                        7
 
 
 
 
 
 HISTORY(3)                                             HISTORY(3)
+
+
+       truncated.  Returns 0 on success, or eerrrrnnoo on failure.
 
 
    HHiissttoorryy EExxppaannssiioonn
        These functions implement history expansion.
 
        _i_n_t hhiissttoorryy__eexxppaanndd (_c_h_a_r _*_s_t_r_i_n_g_, _c_h_a_r _*_*_o_u_t_p_u_t)
-       Expand  _s_t_r_i_n_g,  placing the result into _o_u_t_p_u_t, a pointer
+       Expand _s_t_r_i_n_g, placing the result into _o_u_t_p_u_t,  a  pointer
        to a string.  Returns:
               0      If no expansions took place (or, if the only
                      change in the text was the removal of escape
-                     characters preceding the  history  expansion
+                     characters  preceding  the history expansion
                      character);
               1      if expansions did take place;
               -1     if there was an error in expansion;
-              2      if  the  returned  line should be displayed,
+              2      if the returned line  should  be  displayed,
                      but not executed, as with the ::pp modifier.
-       If an error ocurred in expansion, then _o_u_t_p_u_t  contains  a
+       If  an  error ocurred in expansion, then _o_u_t_p_u_t contains a
        descriptive error message.
 
        _c_h_a_r _* ggeett__hhiissttoorryy__eevveenntt (_c_o_n_s_t _c_h_a_r _*_s_t_r_i_n_g_, _i_n_t _*_c_i_n_d_e_x_,
        _i_n_t _q_c_h_a_r)
-       Returns the text of the history event beginning at  _s_t_r_i_n_g
-       +  _*_c_i_n_d_e_x.   _*_c_i_n_d_e_x  is  modified  to point to after the
-       event specifier.  At function entry, _c_i_n_d_e_x points to  the
-       index  into  _s_t_r_i_n_g  where the history event specification
-       begins.  _q_c_h_a_r is a character that is allowed to  end  the
-       event  specification  in addition to the ``normal'' termi-
+       Returns  the text of the history event beginning at _s_t_r_i_n_g
+       + _*_c_i_n_d_e_x.  _*_c_i_n_d_e_x is modified  to  point  to  after  the
+       event  specifier.  At function entry, _c_i_n_d_e_x points to the
+       index into _s_t_r_i_n_g where the  history  event  specification
+       begins.   _q_c_h_a_r  is a character that is allowed to end the
+       event specification in addition to the  ``normal''  termi-
        nating characters.
 
        _c_h_a_r _*_* hhiissttoorryy__ttookkeenniizzee (_c_o_n_s_t _c_h_a_r _*_s_t_r_i_n_g)
-       Return an array of tokens parsed out of  _s_t_r_i_n_g,  much  as
-       the  shell  might.  The tokens are split on the characters
+       Return  an  array  of tokens parsed out of _s_t_r_i_n_g, much as
+       the shell might.  The tokens are split on  the  characters
        in the hhiissttoorryy__wwoorrdd__ddeelliimmiitteerrss variable, and shell quoting
        conventions are obeyed.
 
-       _c_h_a_r  _*  hhiissttoorryy__aarrgg__eexxttrraacctt  (_i_n_t  _f_i_r_s_t_, _i_n_t _l_a_s_t_, _c_o_n_s_t
+       _c_h_a_r _* hhiissttoorryy__aarrgg__eexxttrraacctt (_i_n_t  _f_i_r_s_t_,  _i_n_t  _l_a_s_t_,  _c_o_n_s_t
        _c_h_a_r _*_s_t_r_i_n_g)
-       Extract a string segment consisting of the  _f_i_r_s_t  through
-       _l_a_s_t  arguments  present  in  _s_t_r_i_n_g.  Arguments are split
+       Extract  a  string segment consisting of the _f_i_r_s_t through
+       _l_a_s_t arguments present in  _s_t_r_i_n_g.   Arguments  are  split
        using hhiissttoorryy__ttookkeenniizzee(()).
 
 
    HHiissttoorryy VVaarriiaabblleess
-       This section describes  the  externally-visible  variables
+       This  section  describes  the externally-visible variables
        exported by the GNU History Library.
 
        _i_n_t hhiissttoorryy__bbaassee
        The logical offset of the first entry in the history list.
 
        _i_n_t hhiissttoorryy__lleennggtthh
-       The number of entries  currently  stored  in  the  history
+       The  number  of  entries  currently  stored in the history
        list.
 
-       _i_n_t hhiissttoorryy__mmaaxx__eennttrriieess
-       The  maximum  number  of  history  entries.   This must be
-       changed using ssttiiffllee__hhiissttoorryy(()).
 
 
 
-GNU History 4.2             2001 Mar 6                          8
+GNU History 4.3          2002 January 31                        8
 
 
 
@@ -532,20 +532,24 @@ GNU History 4.2             2001 Mar 6                          8
 HISTORY(3)                                             HISTORY(3)
 
 
+       _i_n_t hhiissttoorryy__mmaaxx__eennttrriieess
+       The maximum number  of  history  entries.   This  must  be
+       changed using ssttiiffllee__hhiissttoorryy(()).
+
        _c_h_a_r hhiissttoorryy__eexxppaannssiioonn__cchhaarr
        The  character  that  introduces  a  history  event.   The
-       default  is  !!.  Setting this to 0 inhibits history expan-
+       default is !!.  Setting this to 0 inhibits  history  expan-
        sion.
 
        _c_h_a_r hhiissttoorryy__ssuubbsstt__cchhaarr
-       The character that invokes word substitution if  found  at
+       The  character  that invokes word substitution if found at
        the start of a line.  The default is ^^.
 
        _c_h_a_r hhiissttoorryy__ccoommmmeenntt__cchhaarr
-       During  tokenization,  if  this  character  is seen as the
-       first character of a word,  then  it  and  all  subsequent
-       characters  up  to a newline are ignored, suppressing his-
-       tory expansion for the remainder of  the  line.   This  is
+       During tokenization, if this  character  is  seen  as  the
+       first  character  of  a  word,  then it and all subsequent
+       characters up to a newline are ignored,  suppressing  his-
+       tory  expansion  for  the  remainder of the line.  This is
        disabled by default.
 
        _c_h_a_r _* hhiissttoorryy__wwoorrdd__ddeelliimmiitteerrss
@@ -553,27 +557,27 @@ HISTORY(3)                                             HISTORY(3)
        eenniizzee(()).  The default value is "" \\tt\\nn(())<<>>;;&&||"".
 
        _c_h_a_r _* hhiissttoorryy__nnoo__eexxppaanndd__cchhaarrss
-       The list of characters which inhibit history expansion  if
-       found  immediately  following hhiissttoorryy__eexxppaannssiioonn__cchhaarr.  The
+       The  list of characters which inhibit history expansion if
+       found immediately following  hhiissttoorryy__eexxppaannssiioonn__cchhaarr.   The
        default is space, tab, newline, \\rr, and ==.
 
        _c_h_a_r _* hhiissttoorryy__sseeaarrcchh__ddeelliimmiitteerr__cchhaarrss
        The list of additional characters which can delimit a his-
-       tory  search string, in addition to space, tab, _: and _? in
+       tory search string, in addition to space, tab, _: and _?  in
        the case of a substring search.  The default is empty.
 
        _i_n_t hhiissttoorryy__qquuootteess__iinnhhiibbiitt__eexxppaannssiioonn
-       If non-zero, single-quoted words are not scanned  for  the
+       If  non-zero,  single-quoted words are not scanned for the
        history expansion character.  The default value is 0.
 
        _r_l___l_i_n_e_b_u_f___f_u_n_c___t _* hhiissttoorryy__iinnhhiibbiitt__eexxppaannssiioonn__ffuunnccttiioonn
        This should be set to the address of a function that takes
-       two arguments: a cchhaarr ** (_s_t_r_i_n_g) and  an  iinntt  index  into
+       two  arguments:  a  cchhaarr  ** (_s_t_r_i_n_g) and an iinntt index into
        that string (_i).  It should return a non-zero value if the
        history expansion starting at _s_t_r_i_n_g_[_i_] should not be per-
-       formed;  zero  if  the  expansion  should  be done.  It is
-       intended for use by applications like bbaasshh  that  use  the
-       history  expansion  character for additional purposes.  By
+       formed; zero if the  expansion  should  be  done.   It  is
+       intended  for  use  by applications like bbaasshh that use the
+       history expansion character for additional  purposes.   By
        default, this variable is set to NNUULLLL.
 
 FFIILLEESS
@@ -581,15 +585,11 @@ FFIILLEESS
               Default filename for reading and writing saved his-
               tory
 
-SSEEEE AALLSSOO
-       _T_h_e _G_n_u _R_e_a_d_l_i_n_e _L_i_b_r_a_r_y, Brian Fox and Chet Ramey
-       _T_h_e _G_n_u _H_i_s_t_o_r_y _L_i_b_r_a_r_y, Brian Fox and Chet Ramey
-       _b_a_s_h(1)
 
 
 
 
-GNU History 4.2             2001 Mar 6                          9
+GNU History 4.3          2002 January 31                        9
 
 
 
@@ -598,6 +598,10 @@ GNU History 4.2             2001 Mar 6                          9
 HISTORY(3)                                             HISTORY(3)
 
 
+SSEEEE AALLSSOO
+       _T_h_e _G_n_u _R_e_a_d_l_i_n_e _L_i_b_r_a_r_y, Brian Fox and Chet Ramey
+       _T_h_e _G_n_u _H_i_s_t_o_r_y _L_i_b_r_a_r_y, Brian Fox and Chet Ramey
+       _b_a_s_h(1)
        _r_e_a_d_l_i_n_e(3)
 
 AAUUTTHHOORRSS
@@ -608,19 +612,19 @@ AAUUTTHHOORRSS
        chet@ins.CWRU.Edu
 
 BBUUGG RREEPPOORRTTSS
-       If  you  find  a  bug  in  the hhiissttoorryy library, you should
+       If you find a bug  in  the  hhiissttoorryy  library,  you  should
        report it.  But first, you should make sure that it really
        is a bug, and that it appears in the latest version of the
        hhiissttoorryy library that you have.
 
-       Once you have determined that a bug actually exists,  mail
-       a  bug report to _b_u_g_-_r_e_a_d_l_i_n_e@_g_n_u_._o_r_g.  If you have a fix,
-       you are welcome to mail that  as  well!   Suggestions  and
-       `philosophical'  bug  reports  may  be mailed to _b_u_g_-_r_e_a_d_-
+       Once  you have determined that a bug actually exists, mail
+       a bug report to _b_u_g_-_r_e_a_d_l_i_n_e@_g_n_u_._o_r_g.  If you have a  fix,
+       you  are  welcome  to  mail that as well!  Suggestions and
+       `philosophical' bug reports may  be  mailed  to  _b_u_g_-_r_e_a_d_-
        _l_i_n_e@_g_n_u_._o_r_g   or   posted   to   the   Usenet   newsgroup
        ggnnuu..bbaasshh..bbuugg.
 
-       Comments  and  bug  reports  concerning  this  manual page
+       Comments and  bug  reports  concerning  this  manual  page
        should be directed to _c_h_e_t_@_i_n_s_._C_W_R_U_._E_d_u.
 
 
@@ -651,10 +655,6 @@ BBUUGG RREEPPOORRTTSS
 
 
 
-
-
-
-
-GNU History 4.2             2001 Mar 6                         10
+GNU History 4.3          2002 January 31                       10
 
 

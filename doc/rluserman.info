@@ -1,4 +1,4 @@
-This is rluserman.info, produced by makeinfo version 4.0 from
+This is rluserman.info, produced by makeinfo version 4.1 from
 /usr/homes/chet/src/bash/readline-src/doc/rluserman.texinfo.
 
 INFO-DIR-SECTION Libraries
@@ -10,7 +10,7 @@ END-INFO-DIR-ENTRY
 Library, a utility which aids in the consistency of user interface
 across discrete programs that need to provide a command line interface.
 
-   Copyright (C) 1988-2001 Free Software Foundation, Inc.
+   Copyright (C) 1988-2002 Free Software Foundation, Inc.
 
    Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice pare
@@ -466,6 +466,11 @@ Variable Settings
           asterisk (`*') at the start of history lines which have been
           modified.  This variable is `off' by default.
 
+    `mark-symlinked-directories'
+          If set to `on', completed names which are symbolic links to
+          directories have a slash appended (subject to the value of
+          `mark-directories').  The default is `off'.
+
     `match-hidden-files'
           This variable, when set to `on', causes Readline to match
           files whose names begin with a `.' (hidden files) when
@@ -477,6 +482,11 @@ Variable Settings
           If set to `on', Readline will display characters with the
           eighth bit set directly rather than as a meta-prefixed escape
           sequence.  The default is `off'.
+
+    `page-completions'
+          If set to `on', Readline uses an internal `more'-like pager
+          to display a screenful of possible completions at a time.
+          This variable is `on' by default.
 
     `print-completions-horizontally'
           If set to `on', Readline will display completions with matches
@@ -680,14 +690,14 @@ binding, variable assignment, and conditional syntax.
 
 
      # This file controls the behaviour of line input editing for
-     # programs that use the Gnu Readline library.  Existing programs
-     # include FTP, Bash, and Gdb.
+     # programs that use the GNU Readline library.  Existing
+     # programs include FTP, Bash, and GDB.
      #
      # You can re-read the inputrc file with C-x C-r.
      # Lines beginning with '#' are comments.
      #
-     # First, include any systemwide bindings and variable assignments from
-     # /etc/Inputrc
+     # First, include any systemwide bindings and variable
+     # assignments from /etc/Inputrc
      $include /etc/Inputrc
      
      #
@@ -739,10 +749,12 @@ binding, variable assignment, and conditional syntax.
      $if Bash
      # edit the path
      "\C-xp": "PATH=${PATH}\e\C-e\C-a\ef\C-f"
-     # prepare to type a quoted word -- insert open and close double quotes
+     # prepare to type a quoted word --
+     # insert open and close double quotes
      # and move to just after the open quote
      "\C-x\"": "\"\"\C-b"
-     # insert a backslash (testing backslash escapes in sequences and macros)
+     # insert a backslash (testing backslash escapes
+     # in sequences and macros)
      "\C-x\\": "\\"
      # Quote the current or previous word
      "\C-xq": "\eb\"\ef\""
@@ -758,16 +770,16 @@ binding, variable assignment, and conditional syntax.
      # don't strip characters to 7 bits when reading
      set input-meta on
      
-     # allow iso-latin1 characters to be inserted rather than converted to
-     # prefix-meta sequences
+     # allow iso-latin1 characters to be inserted rather
+     # than converted to prefix-meta sequences
      set convert-meta off
      
-     # display characters with the eighth bit set directly rather than
-     # as meta-prefixed characters
+     # display characters with the eighth bit set directly
+     # rather than as meta-prefixed characters
      set output-meta on
      
-     # if there are more than 150 possible completions for a word, ask the
-     # user if he wants to see all of them
+     # if there are more than 150 possible completions for
+     # a word, ask the user if he wants to see all of them
      set completion-query-items 150
      
      # For FTP
@@ -958,6 +970,20 @@ Commands For Changing Text
      Capitalize the current (or following) word.  With a negative
      argument, capitalize the previous word, but do not move the cursor.
 
+`overwrite-mode ()'
+     Toggle overwrite mode.  With an explicit positive numeric argument,
+     switches to overwrite mode.  With an explicit non-positive numeric
+     argument, switches to insert mode.  This command affects only
+     `emacs' mode; `vi' mode does overwrite differently.  Each call to
+     `readline()' starts in insert mode.
+
+     In overwrite mode, characters bound to `self-insert' replace the
+     text at point rather than pushing the text to the right.
+     Characters bound to `backward-delete-char' replace the character
+     before point with a space.
+
+     By default, this command is unbound.
+
 
 File: rluserman.info,  Node: Commands For Killing,  Next: Numeric Arguments,  Prev: Commands For Text,  Up: Bindable Readline Commands
 
@@ -1147,9 +1173,14 @@ Some Miscellaneous Commands
      occurrences.
 
 `insert-comment (M-#)'
-     The value of the `comment-begin' variable is inserted at the
-     beginning of the current line, and the line is accepted as if a
-     newline had been typed.
+     Without a numeric argument, the value of the `comment-begin'
+     variable is inserted at the beginning of the current line.  If a
+     numeric argument is supplied, this command acts as a toggle:  if
+     the characters at the beginning of the line do not match the value
+     of `comment-begin', the value is inserted, otherwise the
+     characters in `comment-begin' are deleted from the beginning of
+     the line.  In either case, the line is accepted as if a newline
+     had been typed.
 
 `dump-functions ()'
      Print all of the functions and their key bindings to the Readline
@@ -1168,6 +1199,14 @@ Some Miscellaneous Commands
      strings they output.  If a numeric argument is supplied, the
      output is formatted in such a way that it can be made part of an
      INPUTRC file.  This command is unbound by default.
+
+`emacs-editing-mode (C-e)'
+     When in `vi' command mode, this causes a switch to `emacs' editing
+     mode.
+
+`vi-editing-mode (M-C-j)'
+     When in `emacs' editing mode, this causes a switch to `vi' editing
+     mode.
 
 
 File: rluserman.info,  Node: Readline vi Mode,  Prev: Bindable Readline Commands,  Up: Command Line Editing
@@ -1205,17 +1244,17 @@ Node: Readline Arguments9675
 Node: Searching10712
 Node: Readline Init File12856
 Node: Readline Init File Syntax13918
-Node: Conditional Init Constructs24369
-Node: Sample Init File26895
-Node: Bindable Readline Commands30066
-Node: Commands For Moving31117
-Node: Commands For History31967
-Node: Commands For Text34826
-Node: Commands For Killing36918
-Node: Numeric Arguments38870
-Node: Commands For Completion39999
-Node: Keyboard Macros41532
-Node: Miscellaneous Commands42092
-Node: Readline vi Mode44886
+Node: Conditional Init Constructs24802
+Node: Sample Init File27328
+Node: Bindable Readline Commands30513
+Node: Commands For Moving31564
+Node: Commands For History32414
+Node: Commands For Text35273
+Node: Commands For Killing37988
+Node: Numeric Arguments39940
+Node: Commands For Completion41069
+Node: Keyboard Macros42602
+Node: Miscellaneous Commands43162
+Node: Readline vi Mode46512
 
 End Tag Table

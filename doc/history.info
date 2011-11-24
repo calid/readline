@@ -1,4 +1,4 @@
-This is history.info, produced by makeinfo version 4.0 from
+This is history.info, produced by makeinfo version 4.1 from
 /usr/homes/chet/src/bash/readline-src/doc/hist.texinfo.
 
 INFO-DIR-SECTION Libraries
@@ -10,7 +10,7 @@ END-INFO-DIR-ENTRY
 that provides a consistent user interface for recalling lines of
 previously typed input.
 
-   Copyright (C) 1988-2001 Free Software Foundation, Inc.
+   Copyright (C) 1988-2002 Free Software Foundation, Inc.
 
    Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice pare
@@ -400,9 +400,10 @@ parameters managing the list itself.
      Stifle the history list, remembering only the last MAX entries.
 
  - Function: int unstifle_history (void)
-     Stop stifling the history.  This returns the previous amount the
-     history was stifled.  The value is positive if the history was
-     stifled, negative if it wasn't.
+     Stop stifling the history.  This returns the previously-set
+     maximum number of history entries (as set by `stifle_history()').
+     The value is positive if the history was stifled, negative if it
+     wasn't.
 
  - Function: int history_is_stifled (void)
      Returns non-zero if the history is stifled, zero if it is not.
@@ -826,14 +827,14 @@ Node: History Storage9746
 Node: History Functions10857
 Node: Initializing History and State Management11841
 Node: History List Management12641
-Node: Information About the History List14191
-Node: Moving Around the History List15547
-Node: Searching the History List16536
-Node: Managing the History File18454
-Node: History Expansion20260
-Node: History Variables22155
-Node: History Programming Example24722
-Node: Concept Index27444
-Node: Function and Variable Index27930
+Node: Information About the History List14235
+Node: Moving Around the History List15591
+Node: Searching the History List16580
+Node: Managing the History File18498
+Node: History Expansion20304
+Node: History Variables22199
+Node: History Programming Example24766
+Node: Concept Index27488
+Node: Function and Variable Index27974
 
 End Tag Table

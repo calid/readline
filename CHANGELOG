@@ -608,3 +608,92 @@ Makefile.in
 				   ----
 Makefile.in, shlib/Makefile.in
 	- don't put -I$(includedir) into CFLAGS
+
+				   11/15
+				   -----
+[readline-4.2a released]
+
+				   11/20
+				   -----
+examples/rlcat.c
+	- new file
+
+examples/Makefile.in
+	- changes for rlcat
+
+				   11/28
+				   -----
+configure.in
+	- default TERMCAP_LIB to -lcurses if $prefer_curses == yes (as when
+	  --with-curses is supplied)
+
+examples/Makefile.in
+	- substitute @LDFLAGS@ in LDFLAGS assignment
+
+				   11/29
+				   -----
+config.h.in
+	- add necessary defines for multibyte include files and functions
+	- add code to define HANDLE_MULTIBYTE if prerequisites are met
+
+configure.in
+	- call BASH_CHECK_MULTIBYTE
+
+				   12/14
+				   -----
+config.h.in
+	- add #undef PROTOTYPES, filled in by AC_C_PROTOTYPES
+
+				   12/17
+				   -----
+config.h.in
+	- moved HANDLE_MULTIBYTE code to rlmbutil.h
+
+rlmbutil.h, mbutil.c
+	- new files
+
+Makefile.in, shlib/Makefile.in
+	- added rules for mbutil.c
+
+				   12/20
+				   -----
+configure.in
+	- added --enable-shared, --enable-static options to configure to
+	  say which libraries are built by default (both default to yes)
+	- if SHLIB_STATUS == 'unsupported', turn off default shared library
+	  building
+	- substitute new STATIC_TARGET, SHARED_TARGET, STATIC_INSTALL_TARGET,
+	  and SHARED_INSTALL_TARGET
+
+Makefile.in
+	- `all' target now depends on (substituted) @STATIC_TARGET@ and
+	  @SHARED_TARGET@
+	- `install' target now depends on (substituted) @STATIC_INSTALL_TARGET@
+	  and @SHARED_INSTALL_TARGET@
+
+INSTALL, README
+	- updated with new info about --enable-shared and --enable-static
+
+				 1/10/2002
+				 ---------
+configure.in
+	- bumped the library version number to 4.3
+
+				   1/24
+				   ----
+Makefile.in,shlib/Makefile.in
+	- changes for new file, text.c, with character and text handling
+	  functions from readline.c
+
+				   2/20
+				   ----
+{configure.config.h}.in
+	- call AC_C_CHAR_UNSIGNED, define __CHAR_UNSIGNED__ if chars are
+	  unsigned by default
+
+				   5/20
+				   ----
+doc/Makefile.in
+	- new maybe-clean target that removes the generated documentation if
+	  the build directory differs from the source directory
+	- distclean target now depends on maybe-clean

@@ -8,7 +8,7 @@
 %DVIPSWebPage: (www.radicaleye.com)
 %DVIPSCommandLine: dvips -D 300 -t letter -o history.ps history.dvi
 %DVIPSParameters: dpi=300, compressed
-%DVIPSSource:  TeX output 2001.10.09:1508
+%DVIPSSource:  TeX output 2002.06.27:1354
 %%BeginProcSet: texc.pro
 %!
 /TeXDict 300 dict def TeXDict begin/N{def}def/B{bind def}N/S{exch}N/X{S
@@ -820,12 +820,12 @@ letter
 %%EndSetup
 %%Page: 1 1
 1 0 bop 75 659 a Fq(GNU)33 b(History)f(Library)p 75 709
-1800 17 v 915 757 a Fp(Edition)16 b(4.2a,)e(for)g Fo(History)g(Library)
-h Fp(V)l(ersion)h(4.2a.)1608 811 y(Octob)q(er)g(2001)75
-2467 y Fn(Brian)23 b(F)-6 b(o)n(x,)23 b(F)-6 b(ree)23
-b(Soft)n(w)n(are)f(F)-6 b(oundation)75 2534 y(Chet)22
-b(Ramey)-6 b(,)23 b(Case)e(W)-6 b(estern)23 b(Reserv)n(e)f(Univ)n
-(ersit)n(y)p 75 2570 1800 9 v eop
+1800 17 v 960 757 a Fp(Edition)16 b(4.3,)e(for)h Fo(History)f(Library)g
+Fp(V)l(ersion)i(4.3.)1643 811 y(Marc)o(h)e(2002)75 2467
+y Fn(Brian)23 b(F)-6 b(o)n(x,)23 b(F)-6 b(ree)23 b(Soft)n(w)n(are)f(F)
+-6 b(oundation)75 2534 y(Chet)22 b(Ramey)-6 b(,)23 b(Case)e(W)-6
+b(estern)23 b(Reserv)n(e)f(Univ)n(ersit)n(y)p 75 2570
+1800 9 v eop
 %%Page: 2 2
 2 1 bop 75 217 a Fp(This)21 b(do)q(cumen)o(t)g(describ)q(es)h(the)f
 (GNU)f(History)g(library)l(,)j(a)d(programming)g(to)q(ol)g(that)g(pro)o
@@ -850,7 +850,7 @@ g(lan-)75 869 y(guage,)e(under)h(the)f(ab)q(o)o(v)o(e)g(conditions)i
 (ermission)g(notice)75 924 y(ma)o(y)f(b)q(e)i(stated)f(in)h(a)f
 (translation)g(appro)o(v)o(ed)g(b)o(y)g(the)g(F)l(ree)h(Soft)o(w)o(are)
 d(F)l(oundation.)75 2661 y(Cop)o(yrigh)o(t)301 2660 y(c)289
-2661 y Fm(\015)h Fp(1988-2001)f(F)l(ree)i(Soft)o(w)o(are)f(F)l
+2661 y Fm(\015)h Fp(1988-2002)f(F)l(ree)i(Soft)o(w)o(are)f(F)l
 (oundation,)h(Inc.)p eop
 %%Page: 1 3
 1 2 bop 75 -58 a Fp(Chapter)15 b(1:)k(Using)d(History)f(In)o(teractiv)o
@@ -1124,65 +1124,66 @@ y Fp(Clear)15 b(the)h(history)f(list)h(b)o(y)f(deleting)i(all)f(the)f
 b Fg(sti\015e)p 320 149 18 3 v 21 w(history)j Ff(\()p
 Fo(int)14 b(max)p Ff(\))195 204 y Fp(Sti\015e)i(the)f(history)h(list,)f
 (remem)o(b)q(ering)h(only)g(the)f(last)g Fj(max)j Fp(en)o(tries.)1762
-307 y(F)l(unction)-1861 b Fh(int)20 b Fg(unsti\015e)p
-358 307 V 21 w(history)i Ff(\()p Fo(void)p Ff(\))195
-361 y Fp(Stop)c(sti\015ing)i(the)e(history)l(.)29 b(This)19
-b(returns)f(the)h(previous)g(amoun)o(t)e(the)i(history)f(w)o(as)f
-(sti\015ed.)195 416 y(The)e(v)m(alue)i(is)f(p)q(ositiv)o(e)g(if)f(the)h
-(history)f(w)o(as)f(sti\015ed,)i(negativ)o(e)f(if)h(it)f(w)o(asn't.)
-1762 518 y(F)l(unction)-1861 b Fh(int)20 b Fg(history)p
-351 518 V 20 w(is)p 409 518 V 21 w(sti\015ed)k Ff(\()p
-Fo(void)p Ff(\))195 573 y Fp(Returns)15 b(non-zero)g(if)h(the)f
+302 y(F)l(unction)-1861 b Fh(int)20 b Fg(unsti\015e)p
+358 302 V 21 w(history)i Ff(\()p Fo(void)p Ff(\))195
+357 y Fp(Stop)14 b(sti\015ing)g(the)g(history)l(.)20
+b(This)14 b(returns)f(the)h(previously-set)h(maxim)o(um)f(n)o(um)o(b)q
+(er)g(of)f(history)195 411 y(en)o(tries)h(\(as)e(set)i(b)o(y)f
+Fo(stifle_history\(\))p Fp(\).)k(The)c(v)m(alue)i(is)f(p)q(ositiv)o(e)g
+(if)g(the)g(history)f(w)o(as)f(sti\015ed,)195 466 y(negativ)o(e)j(if)h
+(it)f(w)o(asn't.)1762 564 y(F)l(unction)-1861 b Fh(int)20
+b Fg(history)p 351 564 V 20 w(is)p 409 564 V 21 w(sti\015ed)k
+Ff(\()p Fo(void)p Ff(\))195 619 y Fp(Returns)15 b(non-zero)g(if)h(the)f
 (history)g(is)h(sti\015ed,)g(zero)f(if)g(it)h(is)g(not.)75
-676 y Fi(2.3.3)30 b(Information)19 b(Ab)r(out)i(the)f(History)h(List)
-137 770 y Fp(These)13 b(functions)h(return)f(information)g(ab)q(out)f
+719 y Fi(2.3.3)30 b(Information)19 b(Ab)r(out)i(the)f(History)h(List)
+137 811 y Fp(These)13 b(functions)h(return)f(information)g(ab)q(out)f
 (the)h(en)o(tire)h(history)e(list)i(or)e(individual)k(list)e(en)o
-(tries.)1762 872 y(F)l(unction)-1861 b Fh(HIST_ENTRY)21
-b(**)e Fg(history)p 605 872 V 21 w(list)24 b Ff(\()p
-Fo(void)p Ff(\))195 927 y Fp(Return)15 b(a)g Fo(NULL)f
+(tries.)1762 909 y(F)l(unction)-1861 b Fh(HIST_ENTRY)21
+b(**)e Fg(history)p 605 909 V 21 w(list)24 b Ff(\()p
+Fo(void)p Ff(\))195 964 y Fp(Return)15 b(a)g Fo(NULL)f
 Fp(terminated)i(arra)o(y)e(of)h Fo(HIST_ENTRY)f(*)h Fp(whic)o(h)h(is)f
-(the)h(curren)o(t)f(input)h(history)l(.)195 982 y(Elemen)o(t)g(0)f(of)f
-(this)i(list)g(is)g(the)f(b)q(eginning)i(of)e(time.)20
+(the)h(curren)o(t)f(input)h(history)l(.)195 1018 y(Elemen)o(t)g(0)f(of)
+f(this)i(list)g(is)g(the)f(b)q(eginning)i(of)e(time.)20
 b(If)c(there)f(is)h(no)f(history)l(,)g(return)g Fo(NULL)p
-Fp(.)1762 1084 y(F)l(unction)-1861 b Fh(int)20 b Fg(where)p
-325 1084 V 20 w(history)j Ff(\()p Fo(void)p Ff(\))195
-1139 y Fp(Returns)15 b(the)g(o\013set)f(of)h(the)g(curren)o(t)g
-(history)g(elemen)o(t.)1762 1241 y(F)l(unction)-1861
-b Fh(HIST_ENTRY)21 b(*)e Fg(curren)n(t)p 587 1241 V 21
-w(history)k Ff(\()p Fo(void)p Ff(\))195 1296 y Fp(Return)12
+Fp(.)1762 1116 y(F)l(unction)-1861 b Fh(int)20 b Fg(where)p
+325 1116 V 20 w(history)j Ff(\()p Fo(void)p Ff(\))195
+1171 y Fp(Returns)15 b(the)g(o\013set)f(of)h(the)g(curren)o(t)g
+(history)g(elemen)o(t.)1762 1268 y(F)l(unction)-1861
+b Fh(HIST_ENTRY)21 b(*)e Fg(curren)n(t)p 587 1268 V 21
+w(history)k Ff(\()p Fo(void)p Ff(\))195 1323 y Fp(Return)12
 b(the)h(history)f(en)o(try)g(at)g(the)g(curren)o(t)h(p)q(osition,)g(as)
 f(determined)i(b)o(y)e Fo(where_history\(\))p Fp(.)195
-1350 y(If)j(there)h(is)f(no)h(en)o(try)e(there,)h(return)g(a)g
-Fo(NULL)g Fp(p)q(oin)o(ter.)1762 1453 y(F)l(unction)-1861
-b Fh(HIST_ENTRY)21 b(*)e Fg(history)p 579 1453 V 21 w(get)j
-Ff(\()p Fo(int)15 b(offset)p Ff(\))195 1508 y Fp(Return)20
+1378 y(If)j(there)h(is)f(no)h(en)o(try)e(there,)h(return)g(a)g
+Fo(NULL)g Fp(p)q(oin)o(ter.)1762 1475 y(F)l(unction)-1861
+b Fh(HIST_ENTRY)21 b(*)e Fg(history)p 579 1475 V 21 w(get)j
+Ff(\()p Fo(int)15 b(offset)p Ff(\))195 1530 y Fp(Return)20
 b(the)h(history)g(en)o(try)f(at)h(p)q(osition)g Fj(o\013set)p
 Fp(,)g(starting)f(from)g Fo(history_base)f Fp(\(see)i(Sec-)195
-1562 y(tion)15 b(2.4)f([History)g(V)l(ariables],)h(page)g(10\).)j(If)d
+1585 y(tion)15 b(2.4)f([History)g(V)l(ariables],)h(page)g(10\).)j(If)d
 (there)g(is)g(no)g(en)o(try)f(there,)h(or)f(if)h Fj(o\013set)g
-Fp(is)g(greater)195 1617 y(than)g(the)g(history)g(length,)h(return)f(a)
-g Fo(NULL)g Fp(p)q(oin)o(ter.)1762 1719 y(F)l(unction)-1861
-b Fh(int)20 b Fg(history)p 351 1719 V 20 w(total)p 487
-1719 V 22 w(b)n(ytes)j Ff(\()p Fo(void)p Ff(\))195 1774
+Fp(is)g(greater)195 1640 y(than)g(the)g(history)g(length,)h(return)f(a)
+g Fo(NULL)g Fp(p)q(oin)o(ter.)1762 1737 y(F)l(unction)-1861
+b Fh(int)20 b Fg(history)p 351 1737 V 20 w(total)p 487
+1737 V 22 w(b)n(ytes)j Ff(\()p Fo(void)p Ff(\))195 1792
 y Fp(Return)13 b(the)h(n)o(um)o(b)q(er)g(of)g(b)o(ytes)f(that)g(the)h
 (primary)g(history)g(en)o(tries)g(are)g(using.)20 b(This)14
-b(function)195 1829 y(returns)h(the)g(sum)h(of)e(the)i(lengths)f(of)g
-(all)h(the)g(lines)g(in)g(the)g(history)l(.)75 1932 y
+b(function)195 1847 y(returns)h(the)g(sum)h(of)e(the)i(lengths)f(of)g
+(all)h(the)g(lines)g(in)g(the)g(history)l(.)75 1947 y
 Fi(2.3.4)30 b(Mo)n(ving)21 b(Around)f(the)h(History)g(List)137
-2026 y Fp(These)16 b(functions)g(allo)o(w)f(the)g(curren)o(t)h(index)g
+2040 y Fp(These)16 b(functions)g(allo)o(w)f(the)g(curren)o(t)h(index)g
 (in)o(to)f(the)h(history)f(list)h(to)e(b)q(e)i(set)f(or)g(c)o(hanged.)
-1762 2128 y(F)l(unction)-1861 b Fh(int)20 b Fg(history)p
-351 2128 V 20 w(set)p 442 2128 V 21 w(p)r(os)h Ff(\()p
-Fo(int)15 b(pos)p Ff(\))195 2183 y Fp(Set)j(the)h(curren)o(t)f(history)
+1762 2137 y(F)l(unction)-1861 b Fh(int)20 b Fg(history)p
+351 2137 V 20 w(set)p 442 2137 V 21 w(p)r(os)h Ff(\()p
+Fo(int)15 b(pos)p Ff(\))195 2192 y Fp(Set)j(the)h(curren)o(t)f(history)
 g(o\013set)g(to)f Fj(p)q(os)p Fp(,)i(an)f(absolute)h(index)h(in)o(to)e
-(the)g(list.)30 b(Returns)18 b(1)g(on)195 2237 y(success,)d(0)g(if)h
+(the)g(list.)30 b(Returns)18 b(1)g(on)195 2247 y(success,)d(0)g(if)h
 Fj(p)q(os)h Fp(is)f(less)g(than)f(zero)g(or)g(greater)f(than)h(the)g(n)
-o(um)o(b)q(er)h(of)e(history)i(en)o(tries.)1762 2340
+o(um)o(b)q(er)h(of)e(history)i(en)o(tries.)1762 2344
 y(F)l(unction)-1861 b Fh(HIST_ENTRY)21 b(*)e Fg(previous)p
-615 2340 V 20 w(history)k Ff(\()p Fo(void)p Ff(\))195
-2394 y Fp(Bac)o(k)14 b(up)h(the)g(curren)o(t)f(history)g(o\013set)g(to)
+615 2344 V 20 w(history)k Ff(\()p Fo(void)p Ff(\))195
+2399 y Fp(Bac)o(k)14 b(up)h(the)g(curren)o(t)f(history)g(o\013set)g(to)
 f(the)i(previous)g(history)f(en)o(try)l(,)g(and)h(return)f(a)g(p)q(oin)
-o(ter)195 2449 y(to)h(that)f(en)o(try)l(.)20 b(If)15
+o(ter)195 2454 y(to)h(that)f(en)o(try)l(.)20 b(If)15
 b(there)g(is)h(no)f(previous)h(en)o(try)l(,)f(return)g(a)g
 Fo(NULL)g Fp(p)q(oin)o(ter.)1762 2552 y(F)l(unction)-1861
 b Fh(HIST_ENTRY)21 b(*)e Fg(next)p 514 2552 V 21 w(history)k
