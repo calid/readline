@@ -232,7 +232,7 @@ available to be yanked back later, when you are typing another line.
      as those used by `M-f'.
 
 `M-<DEL>'
-     Kill from the cursor the start of the previous word, or, if between
+     Kill from the cursor the start of the current word, or, if between
      words, to the start of the previous word.  Word boundaries are the
      same as those used by `M-b'.
 
@@ -304,6 +304,10 @@ search and execute that command.  For instance, a <RET> will terminate
 the search and accept the line, thereby executing the command from the
 history list.  A movement command will terminate the search, make the
 last line found the current line, and begin editing.
+
+   Readline remembers the last incremental search string.  If two
+`C-r's are typed without any intervening characters defining a new
+search string, any remembered search string is used.
 
    Non-incremental searches read the entire search string before
 starting to search for matching history lines.  The search string may be
@@ -419,6 +423,10 @@ Variable Settings
           If set to `on', tilde expansion is performed when Readline
           attempts word completion.  The default is `off'.
 
+          If set to `on', the history code attempts to place point at
+          the same location on each history line retrived with
+          `previous-history' or `next-history'.
+
     `horizontal-scroll-mode'
           This variable can be set to either `on' or `off'.  Setting it
           to `on' means that the text of the lines being edited will
@@ -457,6 +465,13 @@ Variable Settings
           This variable, when set to `on', causes Readline to display an
           asterisk (`*') at the start of history lines which have been
           modified.  This variable is `off' by default.
+
+    `match-hidden-files'
+          This variable, when set to `on', causes Readline to match
+          files whose names begin with a `.' (hidden files) when
+          performing filename completion, unless the leading `.' is
+          supplied by the user in the filename to be completed.  This
+          variable is `on' by default.
 
     `output-meta'
           If set to `on', Readline will display characters with the
@@ -578,12 +593,12 @@ Key Bindings
           vertical tab
 
     `\NNN'
-          the character whose ASCII code is the octal value NNN (one to
-          three digits)
-
-    `\xNNN'
-          the character whose ASCII code is the hexadecimal value NNN
+          the eight-bit character whose value is the octal value NNN
           (one to three digits)
+
+    `\xHH'
+          the eight-bit character whose value is the hexadecimal value
+          HH (one or two hex digits)
 
      When entering the text of a macro, single or double quotes must be
      used to indicate a macro definition.  Unquoted text is assumed to
@@ -928,7 +943,8 @@ Commands For Changing Text
 
 `transpose-words (M-t)'
      Drag the word before point past the word after point, moving point
-     past that word as well.
+     past that word as well.  If the insertion point is at the end of
+     the line, this transposes the last two words on the line.
 
 `upcase-word (M-u)'
      Uppercase the current (or following) word.  With a negative
@@ -1185,21 +1201,21 @@ Node: Readline Interaction3837
 Node: Readline Bare Essentials5025
 Node: Readline Movement Commands6807
 Node: Readline Killing Commands7765
-Node: Readline Arguments9676
-Node: Searching10713
-Node: Readline Init File12670
-Node: Readline Init File Syntax13732
-Node: Conditional Init Constructs23655
-Node: Sample Init File26181
-Node: Bindable Readline Commands29352
-Node: Commands For Moving30403
-Node: Commands For History31253
-Node: Commands For Text34112
-Node: Commands For Killing36100
-Node: Numeric Arguments38052
-Node: Commands For Completion39181
-Node: Keyboard Macros40714
-Node: Miscellaneous Commands41274
-Node: Readline vi Mode44068
+Node: Readline Arguments9675
+Node: Searching10712
+Node: Readline Init File12856
+Node: Readline Init File Syntax13918
+Node: Conditional Init Constructs24369
+Node: Sample Init File26895
+Node: Bindable Readline Commands30066
+Node: Commands For Moving31117
+Node: Commands For History31967
+Node: Commands For Text34826
+Node: Commands For Killing36918
+Node: Numeric Arguments38870
+Node: Commands For Completion39999
+Node: Keyboard Macros41532
+Node: Miscellaneous Commands42092
+Node: Readline vi Mode44886
 
 End Tag Table

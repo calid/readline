@@ -626,8 +626,8 @@ the GNU History Library.
      remainder of the line.  This is disabled by default.
 
  - Variable: char * history_word_delimiters
-     The characters that separate tokens for \fBhistory_tokenize()\fP.
-     The default value is `" \t\n()<>;&|"'.
+     The characters that separate tokens for `history_tokenize()'.  The
+     default value is `" \t\n()<>;&|"'.
 
  - Variable: char * history_no_expand_chars
      The list of characters which inhibit history expansion if found
@@ -832,8 +832,8 @@ Node: Searching the History List16536
 Node: Managing the History File18454
 Node: History Expansion20260
 Node: History Variables22155
-Node: History Programming Example24725
-Node: Concept Index27447
-Node: Function and Variable Index27933
+Node: History Programming Example24722
+Node: Concept Index27444
+Node: Function and Variable Index27930
 
 End Tag Table

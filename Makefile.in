@@ -50,6 +50,9 @@ infodir = @infodir@
 
 man3dir = $(mandir)/man3
 
+# Support an alternate destination root directory for package building
+DESTDIR =
+
 # Programs to make tags files.
 ETAGS = etags -tw
 CTAGS = ctags -tw
@@ -64,7 +67,7 @@ LOCAL_DEFS = @LOCAL_DEFS@
 TERMCAP_LIB = @TERMCAP_LIB@
 
 # For libraries which include headers from other libraries.
-INCLUDES = -I. -I$(srcdir) -I$(includedir)
+INCLUDES = -I. -I$(srcdir)
 
 XCCFLAGS = $(DEFS) $(LOCAL_DEFS) $(CPPFLAGS) $(INCLUDES)
 CCFLAGS = $(XCCFLAGS) $(LOCAL_CFLAGS) $(CFLAGS)
@@ -72,7 +75,7 @@ CCFLAGS = $(XCCFLAGS) $(LOCAL_CFLAGS) $(CFLAGS)
 # could add -Werror here
 GCC_LINT_FLAGS = -ansi -Wall -Wshadow -Wpointer-arith -Wcast-qual \
 		 -Wwrite-strings -Wstrict-prototypes \
-		 -Wmissing-prototypes -Wno-implicit
+		 -Wmissing-prototypes -Wno-implicit -pedantic
 GCC_LINT_CFLAGS = $(XCCFLAGS) $(GCC_LINT_FLAGS) @CFLAGS@ @LOCAL_CFLAGS@
 
 .c.o:
@@ -141,6 +144,12 @@ libhistory.a: $(HISTOBJ) xmalloc.o
 	$(AR) $(ARFLAGS) $@ $(HISTOBJ) xmalloc.o
 	-test -n "$(RANLIB)" && $(RANLIB) $@
 
+# Since tilde.c is shared between readline and bash, make sure we compile
+# it with the right flags when it's built as part of readline
+tilde.o:	tilde.c
+	rm -f $@
+	$(CC) $(CCFLAGS) -DREADLINE_LIBRARY -c $(srcdir)/tilde.c
+
 readline: $(OBJECTS) readline.h rldefs.h chardefs.h ./libreadline.a
 	$(CC) $(CCFLAGS) -o $@ ./examples/rl.c ./libreadline.a ${TERMCAP_LIB}
 
@@ -184,40 +193,47 @@ force:
 
 install-headers: installdirs ${INSTALLED_HEADERS}
 	for f in ${INSTALLED_HEADERS}; do \
-		$(INSTALL_DATA) $(srcdir)/$$f $(includedir)/readline ; \
+		$(INSTALL_DATA) $(srcdir)/$$f $(DESTDIR)$(includedir)/readline ; \
 	done
 
 uninstall-headers:
-	-test -n "$(includedir)" && cd $(includedir)/readline && \
+	-test -n "$(includedir)" && cd $(DESTDIR)$(includedir)/readline && \
 		${RM} ${INSTALLED_HEADERS}
 
 maybe-uninstall-headers: uninstall-headers
 
 install: installdirs $(STATIC_LIBS) install-headers
-	-$(MV) $(libdir)/libreadline.a $(libdir)/libreadline.old
-	$(INSTALL_DATA) libreadline.a $(libdir)/libreadline.a
-	-test -n "$(RANLIB)" && $(RANLIB) $(libdir)/libreadline.a
-	-$(MV) $(libdir)/libhistory.a $(libdir)/libhistory.old
-	$(INSTALL_DATA) libhistory.a $(libdir)/libhistory.a
-	-test -n "$(RANLIB)" && $(RANLIB) $(libdir)/libhistory.a
+	-$(MV) $(DESTDIR)$(libdir)/libreadline.a $(DESTDIR)$(libdir)/libreadline.old
+	$(INSTALL_DATA) libreadline.a $(DESTDIR)$(libdir)/libreadline.a
+	-test -n "$(RANLIB)" && $(RANLIB) $(DESTDIR)$(libdir)/libreadline.a
+	-$(MV) $(DESTDIR)$(libdir)/libhistory.a $(DESTDIR)$(libdir)/libhistory.old
+	$(INSTALL_DATA) libhistory.a $(DESTDIR)$(libdir)/libhistory.a
+	-test -n "$(RANLIB)" && $(RANLIB) $(DESTDIR)$(libdir)/libhistory.a
 	-( if test -d doc ; then \
 		cd doc && \
-		${MAKE} ${MFLAGS} infodir=$(infodir) $@; \
+		${MAKE} ${MFLAGS} infodir=$(infodir) DESTDIR=${DESTDIR} $@; \
 	  fi )
+	-( cd shlib ; ${MAKE} ${MFLAGS} DESTDIR=${DESTDIR} install )
 
 installdirs: $(srcdir)/support/mkdirs
-	-$(SHELL) $(srcdir)/support/mkdirs $(includedir) \
-		$(includedir)/readline $(libdir) $(infodir) $(man3dir)
+	-$(SHELL) $(srcdir)/support/mkdirs $(DESTDIR)$(includedir) \
+		$(DESTDIR)$(includedir)/readline $(DESTDIR)$(libdir) \
+		$(DESTDIR)$(infodir) $(DESTDIR)$(man3dir)
 
 uninstall: uninstall-headers
-	-test -n "$(libdir)" && cd $(libdir) && \
+	-test -n "$(DESTDIR)$(libdir)" && cd $(DESTDIR)$(libdir) && \
 		${RM} libreadline.a libreadline.old libhistory.a libhistory.old $(SHARED_LIBS)
+	-( if test -d doc ; then \
+		cd doc && \
+		${MAKE} ${MFLAGS} infodir=$(infodir) DESTDIR=${DESTDIR} $@; \
+	  fi )
+	-( cd shlib; ${MAKE} ${MFLAGS} DESTDIR=${DESTDIR} uninstall )
 
 install-shared: installdirs install-headers shared
-	-( cd shlib ; ${MAKE} ${MFLAGS} install )
+	-( cd shlib ; ${MAKE} ${MFLAGS} DESTDIR=${DESTDIR} install )
 
 uninstall-shared: maybe-uninstall-headers
-	-( cd shlib; ${MAKE} ${MFLAGS} uninstall )
+	-( cd shlib; ${MAKE} ${MFLAGS} DESTDIR=${DESTDIR} uninstall )
 
 TAGS:	force
 	$(ETAGS) $(CSOURCES) $(HSOURCES)

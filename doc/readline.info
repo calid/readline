@@ -236,7 +236,7 @@ available to be yanked back later, when you are typing another line.
      as those used by `M-f'.
 
 `M-<DEL>'
-     Kill from the cursor the start of the previous word, or, if between
+     Kill from the cursor the start of the current word, or, if between
      words, to the start of the previous word.  Word boundaries are the
      same as those used by `M-b'.
 
@@ -308,6 +308,10 @@ search and execute that command.  For instance, a <RET> will terminate
 the search and accept the line, thereby executing the command from the
 history list.  A movement command will terminate the search, make the
 last line found the current line, and begin editing.
+
+   Readline remembers the last incremental search string.  If two
+`C-r's are typed without any intervening characters defining a new
+search string, any remembered search string is used.
 
    Non-incremental searches read the entire search string before
 starting to search for matching history lines.  The search string may be
@@ -423,6 +427,10 @@ Variable Settings
           If set to `on', tilde expansion is performed when Readline
           attempts word completion.  The default is `off'.
 
+          If set to `on', the history code attempts to place point at
+          the same location on each history line retrived with
+          `previous-history' or `next-history'.
+
     `horizontal-scroll-mode'
           This variable can be set to either `on' or `off'.  Setting it
           to `on' means that the text of the lines being edited will
@@ -461,6 +469,13 @@ Variable Settings
           This variable, when set to `on', causes Readline to display an
           asterisk (`*') at the start of history lines which have been
           modified.  This variable is `off' by default.
+
+    `match-hidden-files'
+          This variable, when set to `on', causes Readline to match
+          files whose names begin with a `.' (hidden files) when
+          performing filename completion, unless the leading `.' is
+          supplied by the user in the filename to be completed.  This
+          variable is `on' by default.
 
     `output-meta'
           If set to `on', Readline will display characters with the
@@ -582,12 +597,12 @@ Key Bindings
           vertical tab
 
     `\NNN'
-          the character whose ASCII code is the octal value NNN (one to
-          three digits)
-
-    `\xNNN'
-          the character whose ASCII code is the hexadecimal value NNN
+          the eight-bit character whose value is the octal value NNN
           (one to three digits)
+
+    `\xHH'
+          the eight-bit character whose value is the hexadecimal value
+          HH (one or two hex digits)
 
      When entering the text of a macro, single or double quotes must be
      used to indicate a macro definition.  Unquoted text is assumed to
@@ -932,7 +947,8 @@ Commands For Changing Text
 
 `transpose-words (M-t)'
      Drag the word before point past the word after point, moving point
-     past that word as well.
+     past that word as well.  If the insertion point is at the end of
+     the line, this transposes the last two words on the line.
 
 `upcase-word (M-u)'
      Uppercase the current (or following) word.  With a negative
@@ -1332,6 +1348,15 @@ uses Readline's features.  Since some of the definitions in
 `readline.h' use the `stdio' library, the file `<stdio.h>' should be
 included before `readline.h'.
 
+   `readline.h' defines a C preprocessor variable that should be
+treated as an integer, `RL_READLINE_VERSION', which may be used to
+conditionally compile application code depending on the installed
+Readline version.  The value is a hexadecimal encoding of the major and
+minor version numbers of the library, of the form 0xMMMM.  MM is the
+two-digit major version number; MM is the two-digit minor version
+number.  For Readline 4.2, for example, the value of
+`RL_READLINE_VERSION' would be `0x0402'.
+
 * Menu:
 
 * Readline Typedefs::	C declarations to make code readable.
@@ -1497,6 +1522,13 @@ Readline Variables
 
  - Variable: const char * rl_library_version
      The version number of this revision of the library.
+
+ - Variable: int rl_readline_version
+     An integer encoding the current version of the library.  The
+     encoding is of the form 0xMMMM, where MM is the two-digit major
+     version number, and MM is the two-digit minor version number.  For
+     example, for Readline-4.2, `rl_readline_version' would have the
+     value 0x0402.
 
  - Variable: int rl_gnu_readline_p
      Always set to 1, denoting that this is GNU readline rather than
@@ -2194,6 +2226,14 @@ Miscellaneous Functions
      Set the time interval (in microseconds) that Readline waits when
      showing a balancing character when `blink-matching-paren' has been
      enabled.
+
+ - Function: char * rl_get_termcap (const char *cap)
+     Retrieve the string value of the termcap capability CAP.  Readline
+     fetches the termcap entry for the current terminal name and uses
+     those capabilities to move around the screen line and perform other
+     terminal-specific operations, like erasing a line.  Readline does
+     not use all of a terminal's capabilities, and this function will
+     return values for only those capabilities Readline uses.
 
 
 File: readline.info,  Node: Alternate Interface,  Next: A Readline Example,  Prev: Miscellaneous Functions,  Up: Readline Convenience Functions
@@ -3250,6 +3290,7 @@ Function and Variable Index
 * forward-char (C-f):                    Commands For Moving.
 * forward-search-history (C-s):          Commands For History.
 * forward-word (M-f):                    Commands For Moving.
+* history-preserve-point:                Readline Init File Syntax.
 * history-search-backward ():            Commands For History.
 * history-search-forward ():             Commands For History.
 * horizontal-scroll-mode:                Readline Init File Syntax.
@@ -3263,6 +3304,7 @@ Function and Variable Index
 * kill-whole-line ():                    Commands For Killing.
 * kill-word (M-d):                       Commands For Killing.
 * mark-modified-lines:                   Readline Init File Syntax.
+* match-hidden-files:                    Readline Init File Syntax.
 * menu-complete ():                      Commands For Completion.
 * meta-flag:                             Readline Init File Syntax.
 * next-history (C-n):                    Commands For History.
@@ -3354,6 +3396,7 @@ Function and Variable Index
 * rl_get_keymap_by_name:                 Keymaps.
 * rl_get_keymap_name:                    Keymaps.
 * rl_get_screen_size:                    Readline Signal Handling.
+* rl_get_termcap:                        Miscellaneous Functions.
 * rl_getc:                               Character Input.
 * rl_getc_function:                      Readline Variables.
 * rl_gnu_readline_p:                     Readline Variables.
@@ -3397,6 +3440,7 @@ Function and Variable Index
 * rl_read_key:                           Character Input.
 * rl_readline_name:                      Readline Variables.
 * rl_readline_state:                     Readline Variables.
+* rl_readline_version:                   Readline Variables.
 * rl_redisplay:                          Redisplay.
 * rl_redisplay_function:                 Readline Variables.
 * rl_reset_after_signal:                 Readline Signal Handling.
@@ -3452,49 +3496,49 @@ Node: Readline Interaction4032
 Node: Readline Bare Essentials5219
 Node: Readline Movement Commands7000
 Node: Readline Killing Commands7957
-Node: Readline Arguments9867
-Node: Searching10903
-Node: Readline Init File12859
-Node: Readline Init File Syntax13920
-Node: Conditional Init Constructs23842
-Node: Sample Init File26367
-Node: Bindable Readline Commands29537
-Node: Commands For Moving30587
-Node: Commands For History31436
-Node: Commands For Text34294
-Node: Commands For Killing36281
-Node: Numeric Arguments38232
-Node: Commands For Completion39360
-Node: Keyboard Macros40892
-Node: Miscellaneous Commands41451
-Node: Readline vi Mode44244
-Node: Programming with GNU Readline46062
-Node: Basic Behavior47030
-Node: Custom Functions50443
-Node: Readline Typedefs51421
-Node: Function Writing53050
-Node: Readline Variables54134
-Node: Readline Convenience Functions63133
-Node: Function Naming64115
-Node: Keymaps65367
-Node: Binding Keys67123
-Node: Associating Function Names and Bindings70049
-Node: Allowing Undoing72294
-Node: Redisplay74829
-Node: Modifying Text77900
-Node: Character Input79033
-Node: Terminal Management80678
-Node: Utility Functions81853
-Node: Miscellaneous Functions83920
-Node: Alternate Interface85512
-Node: A Readline Example87135
-Node: Readline Signal Handling89072
-Node: Custom Completers94675
-Node: How Completing Works95390
-Node: Completion Functions98388
-Node: Completion Variables101392
-Node: A Short Completion Example110763
-Node: Concept Index123288
-Node: Function and Variable Index124110
+Node: Readline Arguments9866
+Node: Searching10902
+Node: Readline Init File13045
+Node: Readline Init File Syntax14106
+Node: Conditional Init Constructs24556
+Node: Sample Init File27081
+Node: Bindable Readline Commands30251
+Node: Commands For Moving31301
+Node: Commands For History32150
+Node: Commands For Text35008
+Node: Commands For Killing37099
+Node: Numeric Arguments39050
+Node: Commands For Completion40178
+Node: Keyboard Macros41710
+Node: Miscellaneous Commands42269
+Node: Readline vi Mode45062
+Node: Programming with GNU Readline46880
+Node: Basic Behavior47848
+Node: Custom Functions51261
+Node: Readline Typedefs52739
+Node: Function Writing54368
+Node: Readline Variables55452
+Node: Readline Convenience Functions64784
+Node: Function Naming65766
+Node: Keymaps67018
+Node: Binding Keys68774
+Node: Associating Function Names and Bindings71700
+Node: Allowing Undoing73945
+Node: Redisplay76480
+Node: Modifying Text79551
+Node: Character Input80684
+Node: Terminal Management82329
+Node: Utility Functions83504
+Node: Miscellaneous Functions85571
+Node: Alternate Interface87635
+Node: A Readline Example89258
+Node: Readline Signal Handling91195
+Node: Custom Completers96798
+Node: How Completing Works97513
+Node: Completion Functions100511
+Node: Completion Variables103515
+Node: A Short Completion Example112886
+Node: Concept Index125411
+Node: Function and Variable Index126233
 
 End Tag Table

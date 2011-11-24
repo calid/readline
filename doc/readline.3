@@ -6,9 +6,9 @@
 .\"	Case Western Reserve University
 .\"	chet@ins.CWRU.Edu
 .\"
-.\"	Last Change: Mon Mar  5 09:58:38 EST 2001
+.\"	Last Change: Tue Oct  9 15:06:03 EDT 2001
 .\"
-.TH READLINE 3 "2001 Mar 5" "GNU Readline 4.2"
+.TH READLINE 3 "2001 October 9" "GNU Readline 4.2a"
 .\"
 .\" File Name macro.  This used to be `.PN', for Path Name,
 .\" but Sun doesn't seem to like that very much.
@@ -282,12 +282,12 @@ horizontal tab
 vertical tab
 .TP
 .B \e\fInnn\fP
-the character whose ASCII code is the octal value \fInnn\fP
+the eight-bit character whose value is the octal value \fInnn\fP
 (one to three digits)
 .TP
-.B \ex\fInnn\fP
-the character whose ASCII code is the hexadecimal value \fInnn\fP
-(one to three digits)
+.B \ex\fIHH\fP
+the eight-bit character whose value is the hexadecimal value \fIHH\fP
+(one or two hex digits)
 .RE
 .PD
 .PP
@@ -391,6 +391,11 @@ arrow keys.
 If set to \fBon\fP, tilde expansion is performed when readline
 attempts word completion.
 .TP
+.B history-preserve-point     
+If set to \fBon\fP, the history code attempts to place point at the 
+same location on each history line retrived with \fBprevious-history\fP 
+or \fBnext-history\fP.
+.TP
 .B horizontal\-scroll\-mode (Off)
 When set to \fBOn\fP, makes readline use a single line for display,
 scrolling the input horizontally on a single screen line when it
@@ -428,6 +433,12 @@ appended.
 .B mark\-modified\-lines (Off)
 If set to \fBOn\fP, history lines that have been modified are displayed
 with a preceding asterisk (\fB*\fP).
+.TP
+.B match\-hidden\-files (On)
+This variable, when set to \fBOn\fP, causes readline to match files whose 
+names begin with a `.' (hidden files) when performing filename     
+completion, unless the leading `.' is     
+supplied by the user in the filename to be completed.
 .TP
 .B output\-meta (Off)
 If set to \fBOn\fP, readline will display characters with the
@@ -710,6 +721,8 @@ Negative arguments have no effect.
 .B transpose\-words (M\-t)
 Drag the word before point past the word after point,
 moving point over that word as well.
+If point is at the end of the line, this transposes
+the last two words on the line.
 .TP
 .B upcase\-word (M\-u)
 Uppercase the current (or following) word.  With a negative argument,

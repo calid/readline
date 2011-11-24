@@ -94,6 +94,7 @@ examples/Makefile.in	f
 examples/excallback.c	f
 examples/fileman.c	f
 examples/manexamp.c	f
+examples/readlinebuf.h	f
 examples/rlfe.c		f
 examples/rltest.c	f
 examples/rl.c		f

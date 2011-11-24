@@ -47,6 +47,9 @@ exec_prefix = @exec_prefix@
 includedir = @includedir@
 libdir = @libdir@
 
+# Support an alternate destination root directory for package building
+DESTDIR =
+
 CFLAGS = @CFLAGS@
 LOCAL_CFLAGS = @LOCAL_CFLAGS@ -DRL_LIBRARY_VERSION='"$(RL_LIBRARY_VERSION)"'
 CPPFLAGS = @CPPFLAGS@
@@ -83,7 +86,7 @@ SHLIB_MAJOR=		@SHLIB_MAJOR@
 SHLIB_MINOR=		.@SHLIB_MINOR@
 
 # For libraries which include headers from other libraries.
-INCLUDES = -I. -I.. -I$(topdir) -I$(includedir)
+INCLUDES = -I. -I.. -I$(topdir)
 
 CCFLAGS = $(DEFS) $(LOCAL_DEFS) $(CPPFLAGS) $(INCLUDES) $(LOCAL_CFLAGS) $(CFLAGS)
 
@@ -147,17 +150,24 @@ $(SHARED_HISTORY):	$(SHARED_HISTOBJ) xmalloc.so
 	$(RM) $@
 	$(SHOBJ_LD) ${SHOBJ_LDFLAGS} ${SHLIB_XLDFLAGS} -o $@ $(SHARED_HISTOBJ) xmalloc.so $(SHLIB_LIBS)
 
+# Since tilde.c is shared between readline and bash, make sure we compile 
+# it with the right flags when it's built as part of readline
+tilde.so:        tilde.c
+	${RM} $@
+	$(SHOBJ_CC) -c $(CCFLAGS) $(SHOBJ_CFLAGS) -DREADLINE_LIBRARY -c -o tilde.o $(topdir)/tilde.c
+	$(MV) tilde.o $@
+
 installdirs: $(topdir)/support/mkdirs
-	-$(SHELL) $(topdir)/support/mkdirs $(libdir)
+	-$(SHELL) $(topdir)/support/mkdirs $(DESTDIR)$(libdir)
 
 install: installdirs $(SHLIB_STATUS)
-	$(SHELL) $(topdir)/support/shlib-install -O $(host_os) -d $(libdir) -i "$(INSTALL_DATA)" $(SHARED_HISTORY)
-	$(SHELL) $(topdir)/support/shlib-install -O $(host_os) -d $(libdir) -i "$(INSTALL_DATA)" $(SHARED_READLINE)
+	$(SHELL) $(topdir)/support/shlib-install -O $(host_os) -d $(DESTDIR)$(libdir) -i "$(INSTALL_DATA)" $(SHARED_HISTORY)
+	$(SHELL) $(topdir)/support/shlib-install -O $(host_os) -d $(DESTDIR)$(libdir) -i "$(INSTALL_DATA)" $(SHARED_READLINE)
 	@echo install: you may need to run ldconfig
 
 uninstall:
-	$(SHELL) $(topdir)/support/shlib-install -O $(host_os) -d $(libdir) -U $(SHARED_HISTORY)
-	$(SHELL) $(topdir)/support/shlib-install -O $(host_os) -d $(libdir) -U $(SHARED_READLINE)
+	$(SHELL) $(topdir)/support/shlib-install -O $(host_os) -d $(DESTDIR)$(libdir) -U $(SHARED_HISTORY)
+	$(SHELL) $(topdir)/support/shlib-install -O $(host_os) -d $(DESTDIR)$(libdir) -U $(SHARED_READLINE)
 	@echo uninstall: you may need to run ldconfig
 
 clean mostlyclean:	force
