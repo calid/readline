@@ -6,9 +6,9 @@
 .\"	Case Western Reserve University
 .\"	chet@ins.CWRU.Edu
 .\"
-.\"	Last Change: Thu May  8 09:29:59 EDT 2008
+.\"	Last Change: Fri Oct  9 12:57:27 EDT 2009
 .\"
-.TH READLINE 3 "2008 May 8" "GNU Readline 6.0"
+.TH READLINE 3 "2009 October 9" "GNU Readline 6.1"
 .\"
 .\" File Name macro.  This used to be `.PN', for Path Name,
 .\" but Sun doesn't seem to like that very much.
@@ -401,10 +401,20 @@ can be set to either
 or
 .BR vi .
 .TP
+.B echo\-control\-characters (On)
+When set to \fBOn\fP, on operating systems that indicate they support it,
+readline echoes a character corresponding to a signal generated from the
+keyboard.
+.TP
 .B enable\-keypad (Off)
 When set to \fBOn\fP, readline will try to enable the application
 keypad when it is called.  Some systems need this to enable the
 arrow keys.
+.TP
+.B enable\-meta\-key (On)
+When set to \fBOn\fP, readline will try to enable any meta modifier
+key the terminal claims to support when it is called.  On many terminals,
+the meta key is used to send eight-bit characters.
 .TP
 .B expand\-tilde (Off)
 If set to \fBon\fP, tilde expansion is performed when readline
@@ -503,6 +513,14 @@ words which have more than one possible completion without any
 possible partial completion (the possible completions don't share 
 a common prefix) cause the matches to be listed immediately instead
 of ringing the bell.
+.TP
+.B skip\-completed\-text (Off)
+If set to \fBOn\fP, this alters the default completion behavior when
+inserting a single match into the line.  It's only active when
+performing completion in the middle of a word.  If enabled, readline
+does not insert characters from the completion that match characters
+after point in the word being completed, so portions of the word
+following the cursor are not duplicated.
 .TP
 .B visible\-stats (Off)
 If set to \fBOn\fP, a character denoting a file's type as reported  
@@ -924,6 +942,11 @@ through the list.
 This command is intended to be bound to \fBTAB\fP, but is unbound
 by default.
 .TP
+.B menu\-complete-\backward
+Identical to \fBmenu\-complete\fP, but moves backward through the list
+of possible completions, as if \fBmenu\-complete\fP had been given a
+negative argument.  This command is unbound by default.
+.TP
 .B delete\-char\-or\-list
 Deletes the character under the cursor if not at the beginning or
 end of the line (like \fBdelete-char\fP).
@@ -996,6 +1019,15 @@ character.  A negative count searches for previous occurrences.
 .B character\-search\-backward (M\-C\-])
 A character is read and point is moved to the previous occurrence of that
 character.  A negative count searches for subsequent occurrences.
+.TP
+.B skip\-csi\-sequence ()
+Read enough characters to consume a multi-key sequence such as those
+defined for keys like Home and End.  Such sequences begin with a
+Control Sequence Indicator (CSI), usually ESC\-[.  If this sequence is
+bound to "\e[", keys producing such sequences will have no effect
+unless explicitly bound to a readline command, instead of inserting
+stray characters into the editing buffer.  This is unbound by default,
+but usually bound to ESC\-[.
 .TP
 .B insert\-comment (M\-#)
 Without a numeric argument, the value of the readline

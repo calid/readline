@@ -63,9 +63,9 @@ PSPDF       = gs -sPAPERSIZE=${PAPERSIZE} -sDEVICE=pdfwrite -dNOPAUSE -dBATCH -s
 
 RLSRC = $(srcdir)/rlman.texi $(srcdir)/rluser.texi \
 	$(srcdir)/rltech.texi $(srcdir)/version.texi \
-	$(srcdir)/rluserman.texi
+	$(srcdir)/rluserman.texi $(srcdir)/fdl.texi
 HISTSRC = $(srcdir)/history.texi $(srcdir)/hsuser.texi \
-	  $(srcdir)/hstech.texi $(srcdir)/version.texi
+	  $(srcdir)/hstech.texi $(srcdir)/version.texi $(srcdir)/fdl.texi
 
 # This should be a program that converts troff to an ascii-readable format
 NROFF       = groff -Tascii
@@ -183,7 +183,7 @@ distclean: clean maybe-clean
 	$(RM) Makefile
 
 maybe-clean:
-	-if test "X$(topdir)" != "X$(BUILD_DIR)"; then \
+	-if test "X$(topdir)" != "X.." && test "X$(topdir)" != "X$(BUILD_DIR)"; then \
 		$(RM) $(DIST_DOCS); \
 	fi
 

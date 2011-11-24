@@ -4,6 +4,8 @@
    characters, even if the OS supports them. */
 #undef NO_MULTIBYTE_SUPPORT
 
+#undef _FILE_OFFSET_BITS
+
 /* Define if on MINIX.  */
 #undef _MINIX
 

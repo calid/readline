@@ -289,10 +289,14 @@ distclean maintainer-clean: clean
 	$(RM) $(CREATED_CONFIGURE)
 	$(RM) $(CREATED_TAGS)
 
-info dvi:
+info dvi htm pdf ps:
 	-( cd doc && $(MAKE) $(MFLAGS) $@ )
 
 install-info:
+install-dvi:
+install-html:
+install-pdf:
+install-ps:
 check:
 installcheck:
 

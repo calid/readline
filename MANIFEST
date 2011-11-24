@@ -27,6 +27,7 @@ histlib.h	f
 keymaps.h	f
 posixdir.h	f
 posixjmp.h	f
+posixselect.h	f
 posixstat.h	f
 readline.h	f
 rlconf.h	f

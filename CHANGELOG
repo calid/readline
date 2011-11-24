@@ -1020,7 +1020,60 @@ configure.in
 support/config.{guess,sub}
 	- updated to newer versions from autoconf-2.62 distribution
 
-				    9/6
-				    ---
-{configure,config.h}.in
-	- add AC_SYS_LARGEFILE and consequent #defines for large file support
+				 3/5/2009
+				 --------
+support/shlib-install
+	- take a new -V host_vendor argument
+	- add ${host_vendor} to string tested in case statement for symlink
+	  creation section
+	- add support for FreeBSD/gentoo, which uses Linux library naming
+	  scheme
+	- change FreeBSD symlink rules, since FreeBSD 7+ has only ELF shared
+	  libraries.  DragonflyBSD rules are the same.  Fix from Timothy
+	  Redaelli <drizzt@gentoo.org>
+
+shlib/Makefile.in
+	- add definition of host_vendor, substituted by configure
+	- add -V host_vendor argument to all invocations of shlib-install.
+	  Fix from Timothy Redaelli <drizzt@gentoo.org>
+
+				   3/10
+				   ----
+configure.in
+	- add call to AC_SYS_LARGEFILE for readdir and largefile support on
+	  Linux
+
+config.h.in
+	- add _FILE_OFFSET_BITS define
+
+				   4/19
+				   ----
+Makefile.in
+	- add targets for making and installing documentation required by GNU
+	  coding standards.  Fix from Joseph Myers <joseph@codesourcery.com>
+
+posixselect.h
+	- pick up from bash.  Inspired by Mike Frysinger <vapier@gentoo.org>
+
+				   10/28
+				   -----
+support/shlib-install
+	- decrease the default version of FreeBSD that installs shared libraries
+	  to 4.x.  Advice from Peter Jeremy <peterjeremy@acm.org>
+
+				   12/18
+				   -----
+[readline-6.1-rc1 released]
+
+				   12/23
+				   -----
+doc/Makefile.in
+	- make sure $(topdir) is not ".." before removing all of the formatted
+	  documentation in `make distclean'.  $(topdir) is set to `..' if
+	  readline is being built in the source directory.  Fixes problem
+	  noticed by THOUMIN Damien <thoumin@ipanematech.com>
+
+				   12/29
+				   -----
+[readline-6.1 frozen]
+
