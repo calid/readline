@@ -37,6 +37,3 @@ h.  There is support for replacing a prefix  of a pathname with a `...' when
 i.  There is a new `revert-all-at-newline' variable.  If enabled, readline will
     undo all outstanding changes to all history lines when `accept-line' is
     executed.
-
-j.  If the kernel supports it, readline displays special characters
-    corresponding to a keyboard-generated signal when the signal is received.

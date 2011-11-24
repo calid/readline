@@ -1019,8 +1019,3 @@ configure.in
 				   ----
 support/config.{guess,sub}
 	- updated to newer versions from autoconf-2.62 distribution
-
-				    9/6
-				    ---
-{configure,config.h}.in
-	- add AC_SYS_LARGEFILE and consequent #defines for large file support

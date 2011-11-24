@@ -100,8 +100,6 @@ i.  There is a new `revert-all-at-newline' variable.  If enabled, readline will
     undo all outstanding changes to all history lines when `accept-line' is
     executed.
 
-j.  If the kernel supports it, readline displays special characters
-    corresponding to a keyboard-generated signal when the signal is received.
 -------------------------------------------------------------------------------
 This document details the changes between this version, readline-5.2,
 and the previous version, readline-5.1.
