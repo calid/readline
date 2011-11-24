@@ -1,14 +1,14 @@
 <HTML>
 <HEAD>
 <!-- This HTML file has been created by texi2html 1.52
-     from /usr/homes/chet/src/bash/readline-src/doc/hist.texinfo on 19 January 2000 -->
+     from /usr/homes/chet/src/bash/readline-src/doc/hist.texinfo on 16 April 2001 -->
 
 <TITLE>GNU History Library</TITLE>
 </HEAD>
 <BODY>
 <H1>GNU History Library</H1>
-<H2>Edition 4.1, for <CODE>History Library</CODE> Version 4.1.</H2>
-<H2>January 2000</H2>
+<H2>Edition 4.2, for <CODE>History Library</CODE> Version 4.2.</H2>
+<H2>Apr 2001</H2>
 <ADDRESS>Brian Fox, Free Software Foundation</ADDRESS>
 <ADDRESS>Chet Ramey, Case Western Reserve University</ADDRESS>
 <P>
@@ -79,7 +79,7 @@ by the Free Software Foundation.
 
 </P>
 <P>
-Copyright (C) 1988-1999 Free Software Foundation, Inc.
+Copyright (C) 1988-2001 Free Software Foundation, Inc.
 
 </P>
 
@@ -359,10 +359,10 @@ For information on the interactive use of GNU History, see section <A HREF="hist
 <H2><A NAME="SEC7" HREF="history.html#TOC7">Introduction to History</A></H2>
 
 <P>
-Many programs read input from the user a line at a time.  The GNU History
-library is able to keep track of those lines, associate arbitrary data with
-each line, and utilize information from previous lines in composing new
-ones.
+Many programs read input from the user a line at a time.  The GNU
+History library is able to keep track of those lines, associate arbitrary
+data with each line, and utilize information from previous lines in
+composing new ones. 
 
 </P>
 <P>
@@ -409,9 +409,11 @@ declared as follows:
 </P>
 
 <PRE>
+typedef void *histdata_t;
+
 typedef struct _hist_entry {
   char *line;
-  char *data;
+  histdata_t data;
 } HIST_ENTRY;
 </PRE>
 
@@ -430,12 +432,14 @@ The state of the History library is encapsulated into a single structure:
 </P>
 
 <PRE>
-/* A structure used to pass the current state of the history stuff around. */
+/*
+ * A structure used to pass around the current state of the history.
+ */
 typedef struct _hist_state {
-  HIST_ENTRY **entries;         /* Pointer to the entries themselves. */
-  int offset;                   /* The location pointer within this array. */
-  int length;                   /* Number of elements within this array. */
-  int size;                     /* Number of slots allocated to this array. */
+  HIST_ENTRY **entries; /* Pointer to the entries themselves. */
+  int offset;           /* The location pointer within this array. */
+  int length;           /* Number of elements within this array. */
+  int size;             /* Number of slots allocated to this array. */
   int flags;
 } HISTORY_STATE;
 </PRE>
@@ -451,7 +455,7 @@ stifled.
 
 <P>
 This section describes the calling sequence for the various functions
-present in GNU History.
+exported by the GNU History library.
 
 </P>
 
@@ -485,7 +489,7 @@ functions in your program.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> void <B>using_history</B> <I>()</I>
+<DT><U>Function:</U> void <B>using_history</B> <I>(void)</I>
 <DD><A NAME="IDX4"></A>
 Begin a session in which the history functions might be used.  This
 initializes the interactive variables.
@@ -494,7 +498,7 @@ initializes the interactive variables.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> HISTORY_STATE * <B>history_get_history_state</B> <I>()</I>
+<DT><U>Function:</U> HISTORY_STATE * <B>history_get_history_state</B> <I>(void)</I>
 <DD><A NAME="IDX5"></A>
 Return a structure describing the current state of the input history.
 </DL>
@@ -519,7 +523,7 @@ parameters managing the list itself.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> void <B>add_history</B> <I>(char *string)</I>
+<DT><U>Function:</U> void <B>add_history</B> <I>(const char *string)</I>
 <DD><A NAME="IDX7"></A>
 Place <VAR>string</VAR> at the end of the history list.  The associated data
 field (if any) is set to <CODE>NULL</CODE>.
@@ -538,7 +542,7 @@ and containing structure.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> HIST_ENTRY * <B>replace_history_entry</B> <I>(int which, char *line, char *data)</I>
+<DT><U>Function:</U> HIST_ENTRY * <B>replace_history_entry</B> <I>(int which, const char *line, histdata_t data)</I>
 <DD><A NAME="IDX9"></A>
 Make the history entry at offset <VAR>which</VAR> have <VAR>line</VAR> and <VAR>data</VAR>.
 This returns the old entry so you can dispose of the data.  In the case
@@ -548,7 +552,7 @@ of an invalid <VAR>which</VAR>, a <CODE>NULL</CODE> pointer is returned.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> void <B>clear_history</B> <I>()</I>
+<DT><U>Function:</U> void <B>clear_history</B> <I>(void)</I>
 <DD><A NAME="IDX10"></A>
 Clear the history list by deleting all the entries.
 </DL>
@@ -564,7 +568,7 @@ Stifle the history list, remembering only the last <VAR>max</VAR> entries.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> int <B>unstifle_history</B> <I>()</I>
+<DT><U>Function:</U> int <B>unstifle_history</B> <I>(void)</I>
 <DD><A NAME="IDX12"></A>
 Stop stifling the history.  This returns the previous amount the
 history was stifled.  The value is positive if the history was
@@ -574,7 +578,7 @@ stifled, negative if it wasn't.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> int <B>history_is_stifled</B> <I>()</I>
+<DT><U>Function:</U> int <B>history_is_stifled</B> <I>(void)</I>
 <DD><A NAME="IDX13"></A>
 Returns non-zero if the history is stifled, zero if it is not.
 </DL>
@@ -591,9 +595,9 @@ individual list entries.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> HIST_ENTRY ** <B>history_list</B> <I>()</I>
+<DT><U>Function:</U> HIST_ENTRY ** <B>history_list</B> <I>(void)</I>
 <DD><A NAME="IDX14"></A>
-Return a <CODE>NULL</CODE> terminated array of <CODE>HIST_ENTRY</CODE> which is the
+Return a <CODE>NULL</CODE> terminated array of <CODE>HIST_ENTRY *</CODE> which is the
 current input history.  Element 0 of this list is the beginning of time.
 If there is no history, return <CODE>NULL</CODE>.
 </DL>
@@ -601,7 +605,7 @@ If there is no history, return <CODE>NULL</CODE>.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> int <B>where_history</B> <I>()</I>
+<DT><U>Function:</U> int <B>where_history</B> <I>(void)</I>
 <DD><A NAME="IDX15"></A>
 Returns the offset of the current history element.
 </DL>
@@ -609,10 +613,10 @@ Returns the offset of the current history element.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> HIST_ENTRY * <B>current_history</B> <I>()</I>
+<DT><U>Function:</U> HIST_ENTRY * <B>current_history</B> <I>(void)</I>
 <DD><A NAME="IDX16"></A>
 Return the history entry at the current position, as determined by
-<CODE>where_history ()</CODE>.  If there is no entry there, return a <CODE>NULL</CODE>
+<CODE>where_history()</CODE>.  If there is no entry there, return a <CODE>NULL</CODE>
 pointer.
 </DL>
 
@@ -622,14 +626,15 @@ pointer.
 <DT><U>Function:</U> HIST_ENTRY * <B>history_get</B> <I>(int offset)</I>
 <DD><A NAME="IDX17"></A>
 Return the history entry at position <VAR>offset</VAR>, starting from
-<CODE>history_base</CODE>.  If there is no entry there, or if <VAR>offset</VAR>
+<CODE>history_base</CODE> (see section <A HREF="history.html#SEC17">History Variables</A>).
+If there is no entry there, or if <VAR>offset</VAR>
 is greater than the history length, return a <CODE>NULL</CODE> pointer.
 </DL>
 
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> int <B>history_total_bytes</B> <I>()</I>
+<DT><U>Function:</U> int <B>history_total_bytes</B> <I>(void)</I>
 <DD><A NAME="IDX18"></A>
 Return the number of bytes that the primary history entries are using.
 This function returns the sum of the lengths of all the lines in the
@@ -650,14 +655,16 @@ set or changed.
 <DL>
 <DT><U>Function:</U> int <B>history_set_pos</B> <I>(int pos)</I>
 <DD><A NAME="IDX19"></A>
-Set the position in the history list to <VAR>pos</VAR>, an absolute index
+Set the current history offset to <VAR>pos</VAR>, an absolute index
 into the list.
+Returns 1 on success, 0 if <VAR>pos</VAR> is less than zero or greater
+than the number of history entries.
 </DL>
 
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> HIST_ENTRY * <B>previous_history</B> <I>()</I>
+<DT><U>Function:</U> HIST_ENTRY * <B>previous_history</B> <I>(void)</I>
 <DD><A NAME="IDX20"></A>
 Back up the current history offset to the previous history entry, and
 return a pointer to that entry.  If there is no previous entry, return
@@ -667,7 +674,7 @@ a <CODE>NULL</CODE> pointer.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> HIST_ENTRY * <B>next_history</B> <I>()</I>
+<DT><U>Function:</U> HIST_ENTRY * <B>next_history</B> <I>(void)</I>
 <DD><A NAME="IDX21"></A>
 Move the current history offset forward to the next history entry, and
 return the a pointer to that entry.  If there is no next entry, return
@@ -692,11 +699,12 @@ meaning that the string must match at the beginning of the history entry.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> int <B>history_search</B> <I>(char *string, int direction)</I>
+<DT><U>Function:</U> int <B>history_search</B> <I>(const char *string, int direction)</I>
 <DD><A NAME="IDX24"></A>
-Search the history for <VAR>string</VAR>, starting at the current history
-offset.  If <VAR>direction</VAR> &#60; 0, then the search is through previous entries,
-else through subsequent.  If <VAR>string</VAR> is found, then
+Search the history for <VAR>string</VAR>, starting at the current history offset.
+If <VAR>direction</VAR> is less than 0, then the search is through
+previous entries, otherwise through subsequent entries.
+If <VAR>string</VAR> is found, then
 the current history index is set to that history entry, and the value
 returned is the offset in the line of the entry where
 <VAR>string</VAR> was found.  Otherwise, nothing is changed, and a -1 is
@@ -706,12 +714,13 @@ returned.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> int <B>history_search_prefix</B> <I>(char *string, int direction)</I>
+<DT><U>Function:</U> int <B>history_search_prefix</B> <I>(const char *string, int direction)</I>
 <DD><A NAME="IDX25"></A>
 Search the history for <VAR>string</VAR>, starting at the current history
 offset.  The search is anchored: matching lines must begin with
-<VAR>string</VAR>.  If <VAR>direction</VAR> &#60; 0, then the search is through previous
-entries, else through subsequent.  If <VAR>string</VAR> is found, then the
+<VAR>string</VAR>.  If <VAR>direction</VAR> is less than 0, then the search is
+through previous entries, otherwise through subsequent entries.
+If <VAR>string</VAR> is found, then the
 current history index is set to that entry, and the return value is 0. 
 Otherwise, nothing is changed, and a -1 is returned. 
 </DL>
@@ -719,7 +728,7 @@ Otherwise, nothing is changed, and a -1 is returned.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> int <B>history_search_pos</B> <I>(char *string, int direction, int pos)</I>
+<DT><U>Function:</U> int <B>history_search_pos</B> <I>(const char *string, int direction, int pos)</I>
 <DD><A NAME="IDX26"></A>
 Search for <VAR>string</VAR> in the history list, starting at <VAR>pos</VAR>, an
 absolute index into the list.  If <VAR>direction</VAR> is negative, the search
@@ -739,21 +748,21 @@ This section documents the functions for managing a history file.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> int <B>read_history</B> <I>(char *filename)</I>
+<DT><U>Function:</U> int <B>read_history</B> <I>(const char *filename)</I>
 <DD><A NAME="IDX27"></A>
-Add the contents of <VAR>filename</VAR> to the history list, a line at a
-time.  If <VAR>filename</VAR> is <CODE>NULL</CODE>, then read from
-<TT>`~/.history'</TT>.  Returns 0 if successful, or errno if not.
+Add the contents of <VAR>filename</VAR> to the history list, a line at a time.
+If <VAR>filename</VAR> is <CODE>NULL</CODE>, then read from <TT>`~/.history'</TT>.
+Returns 0 if successful, or <CODE>errno</CODE> if not.
 </DL>
 
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> int <B>read_history_range</B> <I>(char *filename, int from, int to)</I>
+<DT><U>Function:</U> int <B>read_history_range</B> <I>(const char *filename, int from, int to)</I>
 <DD><A NAME="IDX28"></A>
 Read a range of lines from <VAR>filename</VAR>, adding them to the history list.
-Start reading at line <VAR>from</VAR> and end at <VAR>to</VAR>.  If
-<VAR>from</VAR> is zero, start at the beginning.  If <VAR>to</VAR> is less than
+Start reading at line <VAR>from</VAR> and end at <VAR>to</VAR>.
+If <VAR>from</VAR> is zero, start at the beginning.  If <VAR>to</VAR> is less than
 <VAR>from</VAR>, then read until the end of the file.  If <VAR>filename</VAR> is
 <CODE>NULL</CODE>, then read from <TT>`~/.history'</TT>.  Returns 0 if successful,
 or <CODE>errno</CODE> if not.
@@ -762,29 +771,34 @@ or <CODE>errno</CODE> if not.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> int <B>write_history</B> <I>(char *filename)</I>
+<DT><U>Function:</U> int <B>write_history</B> <I>(const char *filename)</I>
 <DD><A NAME="IDX29"></A>
 Write the current history to <VAR>filename</VAR>, overwriting <VAR>filename</VAR>
-if necessary.  If <VAR>filename</VAR> is
-<CODE>NULL</CODE>, then write the history list to <TT>`~/.history'</TT>.  Values
-returned are as in <CODE>read_history ()</CODE>.
+if necessary.
+If <VAR>filename</VAR> is <CODE>NULL</CODE>, then write the history list to
+<TT>`~/.history'</TT>.
+Returns 0 on success, or <CODE>errno</CODE> on a read or write error.
 </DL>
 
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> int <B>append_history</B> <I>(int nelements, char *filename)</I>
+<DT><U>Function:</U> int <B>append_history</B> <I>(int nelements, const char *filename)</I>
 <DD><A NAME="IDX30"></A>
 Append the last <VAR>nelements</VAR> of the history list to <VAR>filename</VAR>.
+If <VAR>filename</VAR> is <CODE>NULL</CODE>, then append to <TT>`~/.history'</TT>.
+Returns 0 on success, or <CODE>errno</CODE> on a read or write error.
 </DL>
 
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> int <B>history_truncate_file</B> <I>(char *filename, int nlines)</I>
+<DT><U>Function:</U> int <B>history_truncate_file</B> <I>(const char *filename, int nlines)</I>
 <DD><A NAME="IDX31"></A>
 Truncate the history file <VAR>filename</VAR>, leaving only the last
 <VAR>nlines</VAR> lines.
+If <VAR>filename</VAR> is <CODE>NULL</CODE>, then <TT>`~/.history'</TT> is truncated.
+Returns 0 on success, or <CODE>errno</CODE> on failure.
 </DL>
 
 </P>
@@ -793,7 +807,7 @@ Truncate the history file <VAR>filename</VAR>, leaving only the last
 <H3><A NAME="SEC16" HREF="history.html#TOC16">History Expansion</A></H3>
 
 <P>
-These functions implement <CODE>csh</CODE>-like history expansion.
+These functions implement history expansion.
 
 </P>
 <P>
@@ -807,7 +821,7 @@ to a string (see section <A HREF="history.html#SEC2">History Expansion</A>).  Re
 <DT><CODE>0</CODE>
 <DD>
 If no expansions took place (or, if the only change in
-the text was the de-slashifying of the history expansion
+the text was the removal of escape characters preceding the history expansion
 character);
 <DT><CODE>1</CODE>
 <DD>
@@ -829,17 +843,8 @@ error message.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> char * <B>history_arg_extract</B> <I>(int first, int last, char *string)</I>
+<DT><U>Function:</U> char * <B>get_history_event</B> <I>(const char *string, int *cindex, int qchar)</I>
 <DD><A NAME="IDX33"></A>
-Extract a string segment consisting of the <VAR>first</VAR> through <VAR>last</VAR>
-arguments present in <VAR>string</VAR>.  Arguments are broken up as in Bash.
-</DL>
-
-</P>
-<P>
-<DL>
-<DT><U>Function:</U> char * <B>get_history_event</B> <I>(char *string, int *cindex, int qchar)</I>
-<DD><A NAME="IDX34"></A>
 Returns the text of the history event beginning at <VAR>string</VAR> +
 <VAR>*cindex</VAR>.  <VAR>*cindex</VAR> is modified to point to after the event
 specifier.  At function entry, <VAR>cindex</VAR> points to the index into
@@ -851,12 +856,22 @@ to the "normal" terminating characters.
 </P>
 <P>
 <DL>
-<DT><U>Function:</U> char ** <B>history_tokenize</B> <I>(char *string)</I>
-<DD><A NAME="IDX35"></A>
+<DT><U>Function:</U> char ** <B>history_tokenize</B> <I>(const char *string)</I>
+<DD><A NAME="IDX34"></A>
 Return an array of tokens parsed out of <VAR>string</VAR>, much as the
-shell might.  The tokens are split on white space and on the
-characters <CODE>()&#60;&#62;;&#38;|$</CODE>, and shell quoting conventions are
-obeyed.
+shell might.  The tokens are split on the characters in the
+<VAR>history_word_delimiters</VAR> variable,
+and shell quoting conventions are obeyed.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function:</U> char * <B>history_arg_extract</B> <I>(int first, int last, const char *string)</I>
+<DD><A NAME="IDX35"></A>
+Extract a string segment consisting of the <VAR>first</VAR> through <VAR>last</VAR>
+arguments present in <VAR>string</VAR>.  Arguments are split using
+<CODE>history_tokenize</CODE>.
 </DL>
 
 </P>
@@ -865,7 +880,7 @@ obeyed.
 <H2><A NAME="SEC17" HREF="history.html#TOC17">History Variables</A></H2>
 
 <P>
-This section describes the externally visible variables exported by
+This section describes the externally-visible variables exported by
 the GNU History Library.
 
 </P>
@@ -887,10 +902,10 @@ The number of entries currently stored in the history list.
 </P>
 <P>
 <DL>
-<DT><U>Variable:</U> int <B>max_input_history</B>
+<DT><U>Variable:</U> int <B>history_max_entries</B>
 <DD><A NAME="IDX38"></A>
 The maximum number of history entries.  This must be changed using
-<CODE>stifle_history ()</CODE>.
+<CODE>stifle_history()</CODE>.
 </DL>
 
 </P>
@@ -898,7 +913,8 @@ The maximum number of history entries.  This must be changed using
 <DL>
 <DT><U>Variable:</U> char <B>history_expansion_char</B>
 <DD><A NAME="IDX39"></A>
-The character that starts a history event.  The default is <SAMP>`!'</SAMP>.
+The character that introduces a history event.  The default is <SAMP>`!'</SAMP>.
+Setting this to 0 inhibits history expansion.
 </DL>
 
 </P>
@@ -924,20 +940,29 @@ This is disabled by default.
 </P>
 <P>
 <DL>
-<DT><U>Variable:</U> char * <B>history_no_expand_chars</B>
+<DT><U>Variable:</U> char * <B>history_word_delimiters</B>
 <DD><A NAME="IDX42"></A>
+The characters that separate tokens for \fBhistory_tokenize()\fP.
+The default value is <CODE>" \t\n()&#60;&#62;;&#38;|"</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Variable:</U> char * <B>history_no_expand_chars</B>
+<DD><A NAME="IDX43"></A>
 The list of characters which inhibit history expansion if found immediately
-following <VAR>history_expansion_char</VAR>.  The default is whitespace and
-<SAMP>`='</SAMP>.
+following <VAR>history_expansion_char</VAR>.  The default is space, tab, newline,
+carriage return, and <SAMP>`='</SAMP>.
 </DL>
 
 </P>
 <P>
 <DL>
 <DT><U>Variable:</U> char * <B>history_search_delimiter_chars</B>
-<DD><A NAME="IDX43"></A>
+<DD><A NAME="IDX44"></A>
 The list of additional characters which can delimit a history search
-string, in addition to whitespace, <SAMP>`:'</SAMP> and <SAMP>`?'</SAMP> in the case of
+string, in addition to space, TAB, <SAMP>`:'</SAMP> and <SAMP>`?'</SAMP> in the case of
 a substring search.  The default is empty.
 </DL>
 
@@ -945,7 +970,7 @@ a substring search.  The default is empty.
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>history_quotes_inhibit_expansion</B>
-<DD><A NAME="IDX44"></A>
+<DD><A NAME="IDX45"></A>
 If non-zero, single-quoted words are not scanned for the history expansion
 character.  The default value is 0.
 </DL>
@@ -953,16 +978,17 @@ character.  The default value is 0.
 </P>
 <P>
 <DL>
-<DT><U>Variable:</U> Function * <B>history_inhibit_expansion_function</B>
-<DD><A NAME="IDX45"></A>
+<DT><U>Variable:</U> rl_linebuf_func_t * <B>history_inhibit_expansion_function</B>
+<DD><A NAME="IDX46"></A>
 This should be set to the address of a function that takes two arguments:
-a <CODE>char *</CODE> (<VAR>string</VAR>) and an integer index into that string (<VAR>i</VAR>).
+a <CODE>char *</CODE> (<VAR>string</VAR>)
+and an <CODE>int</CODE> index into that string (<VAR>i</VAR>).
 It should return a non-zero value if the history expansion starting at
 <VAR>string[i]</VAR> should not be performed; zero if the expansion should
 be done.
 It is intended for use by applications like Bash that use the history
 expansion character for additional purposes.
-By default, this variable is set to NULL.
+By default, this variable is set to <CODE>NULL</CODE>.
 </DL>
 
 </P>
@@ -976,7 +1002,12 @@ The following program demonstrates simple use of the GNU History Library.
 </P>
 
 <PRE>
-main ()
+#include &#60;stdio.h&#62;
+#include &#60;readline/history.h&#62;
+
+main (argc, argv)
+     int argc;
+     char **argv;
 {
   char line[1024], *t;
   int len, done = 0;
@@ -1098,8 +1129,6 @@ Jump to:
 -
 <A HREF="#vindex_h">h</A>
 -
-<A HREF="#vindex_m">m</A>
--
 <A HREF="#vindex_n">n</A>
 -
 <A HREF="#vindex_p">p</A>
@@ -1124,37 +1153,35 @@ Jump to:
 </DIR>
 <H2><A NAME="vindex_g">g</A></H2>
 <DIR>
-<LI><A HREF="history.html#IDX34">get_history_event</A>
+<LI><A HREF="history.html#IDX33">get_history_event</A>
 </DIR>
 <H2><A NAME="vindex_h">h</A></H2>
 <DIR>
-<LI><A HREF="history.html#IDX33">history_arg_extract</A>
+<LI><A HREF="history.html#IDX35">history_arg_extract</A>
 <LI><A HREF="history.html#IDX36">history_base</A>
 <LI><A HREF="history.html#IDX41">history_comment_char</A>
 <LI><A HREF="history.html#IDX32">history_expand</A>
 <LI><A HREF="history.html#IDX39">history_expansion_char</A>
 <LI><A HREF="history.html#IDX17">history_get</A>
 <LI><A HREF="history.html#IDX5">history_get_history_state</A>
-<LI><A HREF="history.html#IDX45">history_inhibit_expansion_function</A>
+<LI><A HREF="history.html#IDX46">history_inhibit_expansion_function</A>
 <LI><A HREF="history.html#IDX13">history_is_stifled</A>
 <LI><A HREF="history.html#IDX37">history_length</A>
 <LI><A HREF="history.html#IDX14">history_list</A>
-<LI><A HREF="history.html#IDX42">history_no_expand_chars</A>
-<LI><A HREF="history.html#IDX44">history_quotes_inhibit_expansion</A>
+<LI><A HREF="history.html#IDX38">history_max_entries</A>
+<LI><A HREF="history.html#IDX43">history_no_expand_chars</A>
+<LI><A HREF="history.html#IDX45">history_quotes_inhibit_expansion</A>
 <LI><A HREF="history.html#IDX24">history_search</A>
-<LI><A HREF="history.html#IDX43">history_search_delimiter_chars</A>
+<LI><A HREF="history.html#IDX44">history_search_delimiter_chars</A>
 <LI><A HREF="history.html#IDX26">history_search_pos</A>
 <LI><A HREF="history.html#IDX25">history_search_prefix</A>
 <LI><A HREF="history.html#IDX6">history_set_history_state</A>
 <LI><A HREF="history.html#IDX19">history_set_pos</A>
 <LI><A HREF="history.html#IDX40">history_subst_char</A>
-<LI><A HREF="history.html#IDX35">history_tokenize</A>
+<LI><A HREF="history.html#IDX34">history_tokenize</A>
 <LI><A HREF="history.html#IDX18">history_total_bytes</A>
 <LI><A HREF="history.html#IDX31">history_truncate_file</A>
-</DIR>
-<H2><A NAME="vindex_m">m</A></H2>
-<DIR>
-<LI><A HREF="history.html#IDX38">max_input_history</A>
+<LI><A HREF="history.html#IDX42">history_word_delimiters</A>
 </DIR>
 <H2><A NAME="vindex_n">n</A></H2>
 <DIR>
@@ -1188,7 +1215,7 @@ Jump to:
 
 </P>
 <P><HR><P>
-This document was generated on 19 January 2000 using the
+This document was generated on 16 April 2001 using the
 <A HREF="http://wwwinfo.cern.ch/dis/texi2html/">texi2html</A>
 translator version 1.52.</P>
 </BODY>
