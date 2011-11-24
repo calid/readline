@@ -1,20 +1,20 @@
 ## -*- text -*- ##
 # Master Makefile for the GNU readline library.
-# Copyright (C) 1994-2004 Free Software Foundation, Inc.
+# Copyright (C) 1994-2009 Free Software Foundation, Inc.
 
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2, or (at your option)
-# any later version.
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
 
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
 
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA.
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 RL_LIBRARY_VERSION = @LIBVERSION@
 RL_LIBRARY_NAME = readline
 
@@ -51,12 +51,14 @@ SHELL = @MAKE_SHELL@
 prefix = @prefix@
 exec_prefix = @exec_prefix@
 
+datarootdir = @datarootdir@
+
 bindir = @bindir@
 libdir = @libdir@
 mandir = @mandir@
 includedir = @includedir@
 datadir = @datadir@
-localedir = $(datadir)/locale
+localedir = @localedir@
 
 infodir = @infodir@
 
@@ -166,7 +168,7 @@ tilde.o:	tilde.c
 	$(CC) $(CCFLAGS) -DREADLINE_LIBRARY -c $(srcdir)/tilde.c
 
 readline: $(OBJECTS) readline.h rldefs.h chardefs.h ./libreadline.a
-	$(CC) $(CCFLAGS) -o $@ ./examples/rl.c ./libreadline.a ${TERMCAP_LIB}
+	$(CC) $(CCFLAGS) -DREADLINE_LIBRARY -o $@ $(top_srcdir)/examples/rl.c ./libreadline.a ${TERMCAP_LIB}
 
 lint:	force
 	$(MAKE) $(MFLAGS) CCFLAGS='$(GCC_LINT_CFLAGS)' static
@@ -206,6 +208,8 @@ examples: force
 
 force:
 
+install:	$(INSTALL_TARGETS)
+
 install-headers: installdirs ${INSTALLED_HEADERS}
 	for f in ${INSTALLED_HEADERS}; do \
 		$(INSTALL_DATA) $(srcdir)/$$f $(DESTDIR)$(includedir)/readline ; \
@@ -217,9 +221,7 @@ uninstall-headers:
 
 maybe-uninstall-headers: uninstall-headers
 
-install:	$(INSTALL_TARGETS)
-
-install-static: installdirs $(STATIC_LIBS) install-headers install-doc
+install-static: installdirs $(STATIC_LIBS) install-headers install-doc install-examples
 	-$(MV) $(DESTDIR)$(libdir)/libreadline.a $(DESTDIR)$(libdir)/libreadline.old
 	$(INSTALL_DATA) libreadline.a $(DESTDIR)$(libdir)/libreadline.a
 	-test -n "$(RANLIB)" && $(RANLIB) $(DESTDIR)$(libdir)/libreadline.a
@@ -232,7 +234,7 @@ installdirs: $(srcdir)/support/mkinstalldirs
 		$(DESTDIR)$(includedir)/readline $(DESTDIR)$(libdir) \
 		$(DESTDIR)$(infodir) $(DESTDIR)$(man3dir)
 
-uninstall: uninstall-headers uninstall-doc
+uninstall: uninstall-headers uninstall-doc uninstall-examples
 	-test -n "$(DESTDIR)$(libdir)" && cd $(DESTDIR)$(libdir) && \
 		${RM} libreadline.a libreadline.old libhistory.a libhistory.old $(SHARED_LIBS)
 	-( cd shlib; ${MAKE} ${MFLAGS} DESTDIR=${DESTDIR} uninstall )
@@ -242,6 +244,12 @@ install-shared: installdirs install-headers shared install-doc
 	
 uninstall-shared: maybe-uninstall-headers
 	-( cd shlib; ${MAKE} ${MFLAGS} DESTDIR=${DESTDIR} uninstall )
+
+install-examples: installdirs install-headers shared
+	-( cd examples ; ${MAKE} ${MFLAGS} DESTDIR=${DESTDIR} install )
+	
+uninstall-examples: maybe-uninstall-headers
+	-( cd examples; ${MAKE} ${MFLAGS} DESTDIR=${DESTDIR} uninstall )
 
 install-doc:	installdirs
 	-( if test -d doc ; then \

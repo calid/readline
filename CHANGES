@@ -1,3 +1,106 @@
+This document details the changes between this version, readline-6.0,
+and the previous version, readline-5.2.
+
+1.  Changes to Readline
+
+a.  Fixed a number of redisplay errors in environments supporting multibyte 
+    characters.
+
+b.  Fixed bugs in vi command mode that caused motion commands to inappropriately
+    set the mark.
+
+c.  When using the arrow keys in vi insertion mode, readline allows movement
+    beyond the current end of the line (unlike command mode).
+
+d.  Fixed bugs that caused readline to loop when the terminal has been taken
+    away and reads return -1/EIO.
+
+e.  Fixed bugs in redisplay occurring when displaying prompts containing
+    invisible characters.
+
+f.  Fixed a bug that caused the completion append character to not be reset to
+    the default after an application-specified completion function changed it.
+
+g.  Fixed a problem that caused incorrect positioning of the cursor while in
+    emacs editing mode when moving forward at the end of a line while using
+    a locale supporting multibyte characters.
+
+h.  Fixed an off-by-one error that caused readline to drop every 511th
+    character of buffered input.
+
+i.  Fixed a bug that resulted in SIGTERM not being caught or cleaned up.
+
+j.  Fixed redisplay bugs caused by multiline prompts with invisible characters
+    or no characters following the final newline.
+
+k.  Fixed redisplay bug caused by prompts consisting solely of invisible
+    characters.
+
+l.  Fixed a bug in the code that buffers characters received very quickly in
+    succession which caused characters to be dropped.
+
+m.  Fixed a bug that caused readline to reference uninitialized data structures
+    if it received a SIGWINCH before completing initialzation.
+
+n.  Fixed a bug that caused the vi-mode `last command' to be set incorrectly
+    and therefore unrepeatable.
+
+o.  Fixed a bug that caused readline to disable echoing when it was being used
+    with an output file descriptor that was not a terminal.
+
+p.  Readline now blocks SIGINT while manipulating internal data structures
+    during redisplay.
+
+q.  Fixed a bug in redisplay that caused readline to segfault when pasting a
+    very long line (over 130,000 characters).
+
+r.  Fixed bugs in redisplay when using prompts with no visible printing
+    characters.
+
+s.  Fixed a bug that caused redisplay errors when using prompts with invisible
+    characters and numeric arguments to a command in a multibyte locale.
+
+t.  Fixed a bug that caused redisplay errors when using prompts with invisible
+    characters spanning more than two physical screen lines.
+
+2.  New Features in Readline
+
+a.  A new variable, rl_sort_completion_matches; allows applications to inhibit
+    match list sorting (but beware: some things don't work right if
+    applications do this).
+
+b.  A new variable, rl_completion_invoking_key; allows applications to discover
+    the key that invoked rl_complete or rl_menu_complete.
+
+c.  The functions rl_block_sigint and rl_release_sigint are now public and
+    available to calling applications who want to protect critical sections
+    (like redisplay).
+
+d.  The functions rl_save_state and rl_restore_state are now public and
+    available to calling applications; documented rest of readline's state
+    flag values.
+
+e.  A new user-settable variable, `history-size', allows setting the maximum
+    number of entries in the history list.
+
+f.  There is a new implementation of menu completion, with several improvements
+    over the old; the most notable improvement is a better `completions
+    browsing' mode.
+
+g.  The menu completion code now uses the rl_menu_completion_entry_function
+    variable, allowing applications to provide their own menu completion
+    generators.
+
+h.  There is support for replacing a prefix  of a pathname with a `...' when
+    displaying possible completions.  This is controllable by setting the
+    `completion-prefix-display-length' variable.  Matches with a common prefix
+    longer than this value have the common prefix replaced with `...'.
+
+i.  There is a new `revert-all-at-newline' variable.  If enabled, readline will
+    undo all outstanding changes to all history lines when `accept-line' is
+    executed.
+
+-------------------------------------------------------------------------------
 This document details the changes between this version, readline-5.2,
 and the previous version, readline-5.1.
 

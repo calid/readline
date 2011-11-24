@@ -958,3 +958,64 @@ config.h.in
           towlower functions
         - replace define for wctomb with one for wcrtomb
         - add defines for wchar_t, wint_t, wctype_t types
+
+				   10/11
+				   -----
+[readline-5.2 released]
+
+				   11/9
+				   ----
+examples/rlfe/{configure.in,Makefile.in,config.h.in,rlfe.c,pty.c}
+	- portability fixes from Mike Frysinger <vapier@gentoo.org>
+
+				   11/21
+				   -----
+Makefile.in
+	- add `install-examples' and `uninstall-examples' targets
+
+examples/Makefile.in
+	- add correct variables to build examples on Windows
+	- add appropriate rules to install and uninstall example sources in
+	  $(datadir)/readline 
+
+				   11/27
+				   -----
+config.h.in
+	- move #undef of HAVE_STRCOLL out of config.h.in, since autoconf tries
+	  to substitute it based on configure tests
+
+				 4/27/2007
+				 ---------
+examples/autoconf
+	- new directory with example autoconf macros to detect readline and
+	  return information about the installed version
+
+				   6/13
+				   ----
+support/shlib-install
+	- changes to support AIX 5.x shared library installation
+
+				 3/20/2008
+				 ---------
+support/shlib-install
+	- add support for NetBSD and Interix shared library installation
+
+				   4/22
+				   ----
+support/wcwidth.c
+	- updated implementation from 2007-05
+
+				   7/18
+				   ----
+support/shlib-install
+	- support for mingw32, contributed by Carlo Bramix <carlo.bramix@libero.it>
+
+				    8/4
+				    ---
+configure.in
+	- changed to readline-6.0
+
+				   8/18
+				   ----
+support/config.{guess,sub}
+	- updated to newer versions from autoconf-2.62 distribution

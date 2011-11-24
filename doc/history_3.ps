@@ -1,16 +1,21 @@
 %!PS-Adobe-3.0
-%%Creator: groff version 1.18.1
-%%CreationDate: Mon Sep 22 09:15:44 2003
+%%Creator: groff version 1.19.2
+%%CreationDate: Tue Aug 26 17:38:07 2008
 %%DocumentNeededResources: font Times-Roman
 %%+ font Times-Bold
 %%+ font Times-Italic
-%%DocumentSuppliedResources: procset grops 1.18 1
+%%DocumentSuppliedResources: procset grops 1.19 2
 %%Pages: 7
 %%PageOrder: Ascend
+%%DocumentMedia: Default 595 842 0 () ()
 %%Orientation: Portrait
 %%EndComments
+%%BeginDefaults
+%%PageMedia: Default
+%%EndDefaults
 %%BeginProlog
-%%BeginResource: procset grops 1.18 1
+%%BeginResource: procset grops 1.19 2
+%!PS-Adobe-3.0 Resource-ProcSet
 /setpacking where{
 pop
 currentpacking
@@ -78,7 +83,7 @@ LS{
 /EP{
 level0 restore
 showpage
-}bind def
+}def
 /DA{
 newpath arcn stroke
 }bind def
@@ -111,16 +116,22 @@ TM setmatrix
 /Fr{
 setrgbcolor fill
 }bind def
+/setcmykcolor where{
+pop
 /Fk{
 setcmykcolor fill
 }bind def
+}if
 /Fg{
 setgray fill
 }bind def
 /FL/fill load def
 /LW/setlinewidth load def
 /Cr/setrgbcolor load def
+/setcmykcolor where{
+pop
 /Ck/setcmykcolor load def
+}if
 /Cg/setgray load def
 /RE{
 findfont
@@ -163,9 +174,9 @@ newpath
 /CNT countdictstack def
 userdict begin
 /showpage{}def
+/setpagedevice{}def
 }bind def
 /PEND{
-clear
 countdictstack CNT sub{end}repeat
 level1 restore
 }bind def
@@ -175,15 +186,20 @@ pop
 setpacking
 }if
 %%EndResource
+%%EndProlog
+%%BeginSetup
+%%BeginFeature: *PageSize Default
+<< /PageSize [ 595 842 ] /ImagingBBox null >> setpagedevice
+%%EndFeature
 %%IncludeResource: font Times-Roman
 %%IncludeResource: font Times-Bold
 %%IncludeResource: font Times-Italic
 grops begin/DEFS 1 dict def DEFS begin/u{.001 mul}bind def end/RES 72
-def/PL 792 def/LS false def/ENC0[/asciicircum/asciitilde/Scaron/Zcaron
-/scaron/zcaron/Ydieresis/trademark/quotesingle/Euro/.notdef/.notdef
+def/PL 841.89 def/LS false def/ENC0[/asciicircum/asciitilde/Scaron
+/Zcaron/scaron/zcaron/Ydieresis/trademark/quotesingle/Euro/.notdef
 /.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
 /.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
-/.notdef/.notdef/space/exclam/quotedbl/numbersign/dollar/percent
+/.notdef/.notdef/.notdef/space/exclam/quotedbl/numbersign/dollar/percent
 /ampersand/quoteright/parenleft/parenright/asterisk/plus/comma/hyphen
 /period/slash/zero/one/two/three/four/five/six/seven/eight/nine/colon
 /semicolon/less/equal/greater/question/at/A/B/C/D/E/F/G/H/I/J/K/L/M/N/O
@@ -208,7 +224,7 @@ def/PL 792 def/LS false def/ENC0[/asciicircum/asciitilde/Scaron/Zcaron
 /ugrave/uacute/ucircumflex/udieresis/yacute/thorn/ydieresis]def
 /Times-Italic@0 ENC0/Times-Italic RE/Times-Bold@0 ENC0/Times-Bold RE
 /Times-Roman@0 ENC0/Times-Roman RE
-%%EndProlog
+%%EndSetup
 %%Page: 1 1
 %%BeginPageSetup
 BP
@@ -305,7 +321,7 @@ F2 2.5(0\()108 636 S(zer)-2.5 E(o\))-.18 E F0(The zeroth w)144 648 Q 2.5
 696 Q F0(The w)26 E(ord matched by the most recent `?)-.1 E F3(string)A
 F0(?' search.)A F3(x)108.77 708 Q F2<ad>A F3(y)A F0 2.5(Ar)20.65 G
 (ange of w)-2.5 E(ords; `\255)-.1 E F3(y)A F0 2.5('a)C(bbre)-2.5 E
-(viates `0\255)-.25 E F3(y)A F0('.)A(GNU History 5.0)72 768 Q
+(viates `0\255)-.25 E F3(y)A F0('.)A(GNU History 6.0)72 768 Q
 (2003 July 31)139.005 E(1)203.165 E 0 Cg EP
 %%Page: 2 2
 %%BeginPageSetup
@@ -412,7 +428,7 @@ G .067(le that uses the History library')-2.567 F 2.567(sf)-.55 G
 F0(The history list is an array of history entries.)108 679.2 Q 2.5(Ah)5
 G(istory entry is declared as follo)-2.5 E(ws:)-.25 E F2(typedef void *)
 108 696 Q F1(histdata_t;)2.5 E F0(typedef struct _hist_entry {)108 712.8
-Q(char *line;)113 724.8 Q(GNU History 5.0)72 768 Q(2003 July 31)139.005
+Q(char *line;)113 724.8 Q(GNU History 6.0)72 768 Q(2003 July 31)139.005
 E(2)203.165 E 0 Cg EP
 %%Page: 3 3
 %%BeginPageSetup
@@ -484,7 +500,7 @@ E F1(HIST_ENTR)A 2.5(Y*)-.18 G(histent)-2.5 E F0(\))1.666 E .933
 (Mak)108 722.4 Q 4.014(et)-.1 G 1.514(he history entry at of)-4.014 F
 (fset)-.25 E F1(whic)4.013 E(h)-.15 E F0(ha)4.013 E -.15(ve)-.2 G F1
 (line)4.163 E F0(and)4.013 E F1(data)4.013 E F0 6.513(.T)C 1.513
-(his returns the old entry so the caller can)-6.513 F(GNU History 5.0)72
+(his returns the old entry so the caller can)-6.513 F(GNU History 6.0)72
 768 Q(2003 July 31)139.005 E(3)203.165 E 0 Cg EP
 %%Page: 4 4
 %%BeginPageSetup
@@ -565,7 +581,7 @@ F F1(pos)3.29 E F0 .79(is less)3.29 F
 -.1 F .746(xt history entry)-.15 F 3.246(,a)-.65 G .746
 (nd return the a pointer to that entry)-3.246 F 5.746(.I)-.65 G(f)-5.746
 E(there is no ne)108 729.6 Q(xt entry)-.15 E 2.5(,r)-.65 G(eturn a)-2.5
-E F2(NULL)2.5 E F0(pointer)2.5 E(.)-.55 E(GNU History 5.0)72 768 Q
+E F2(NULL)2.5 E F0(pointer)2.5 E(.)-.55 E(GNU History 6.0)72 768 Q
 (2003 July 31)139.005 E(4)203.165 E 0 Cg EP
 %%Page: 5 5
 %%BeginPageSetup
@@ -672,7 +688,7 @@ F1(NULL)2.881 E F0 2.881(,t)C(hen)-2.881 E F2(~/.history)2.881 E F0(is)
 (\()4.166 E F2 -.15(ch)C(ar *string).15 E 1.666(,c)-.1 G(har **output)
 -1.816 E F0(\))1.666 E(Expand)108 717.6 Q F2(string)2.5 E F0 2.5(,p)C
 (lacing the result into)-2.5 E F2(output)2.5 E F0 2.5(,ap)C
-(ointer to a string.)-2.5 E(Returns:)5 E(GNU History 5.0)72 768 Q
+(ointer to a string.)-2.5 E(Returns:)5 E(GNU History 6.0)72 768 Q
 (2003 July 31)139.005 E(5)203.165 E 0 Cg EP
 %%Page: 6 6
 %%BeginPageSetup
@@ -761,7 +777,7 @@ F1(history_w)2.5 E(ord_delimiters)-.1 E F0
 (xpansion if found immediately follo)-.15 F(wing)-.25 E F1
 (history_expan-)4.555 E(sion_char)108 724.8 Q F0 5(.T)C(he def)-5 E
 (ault is space, tab, ne)-.1 E(wline,)-.25 E F1(\\r)2.5 E F0 2.5(,a)C(nd)
--2.5 E F1(=)2.5 E F0(.)A(GNU History 5.0)72 768 Q(2003 July 31)139.005 E
+-2.5 E F1(=)2.5 E F0(.)A(GNU History 6.0)72 768 Q(2003 July 31)139.005 E
 (6)203.165 E 0 Cg EP
 %%Page: 7 7
 %%BeginPageSetup
@@ -823,7 +839,7 @@ F1(gnu.or)A(g)-.37 E F0 5.704(.I)C 3.204(fy)-5.704 G(ou)-3.204 E(ha)108
 (gnu.bash.b)2.5 E(ug)-.2 E F0(.)A(Comments and b)108 501.6 Q
 (ug reports concerning this manual page should be directed to)-.2 E F1
 -.15(ch)2.5 G(et@ins.CWR).15 E -.25(U.)-.4 G(Edu).25 E F0(.).25 E
-(GNU History 5.0)72 768 Q(2003 July 31)139.005 E(7)203.165 E 0 Cg EP
+(GNU History 6.0)72 768 Q(2003 July 31)139.005 E(7)203.165 E 0 Cg EP
 %%Trailer
 end
 %%EOF

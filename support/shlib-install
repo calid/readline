@@ -73,7 +73,7 @@ hpux*|darwin*|macosx*|linux*)
 	if [ -z "$uninstall" ]; then
 		chmod 555 ${INSTALLDIR}/${LIBNAME}
 	fi ;;
-cygwin*)
+cygwin*|mingw*)
 	IMPLIBNAME=`echo ${LIBNAME} \
 		| sed -e 's,^cyg,lib,' -e 's,[0-9]*.dll$,.dll.a,'`
 	if [ -z "$uninstall" ]; then
@@ -130,7 +130,7 @@ case "$host_os" in
 	fi
 	;;
 
-bsdi4*|*gnu*|darwin*|macosx*|k*bsd*-gnu)
+bsdi4*|*gnu*|darwin*|macosx*|k*bsd*-gnu|netbsd*)
 	# libname.so.M -> libname.so.M.N
 	${echo} ${RM} ${INSTALLDIR}/$LINK2
 	if [ -z "$uninstall" ]; then
@@ -144,7 +144,7 @@ bsdi4*|*gnu*|darwin*|macosx*|k*bsd*-gnu)
 	fi
 	;;
 
-solaris2*|aix4.[2-9]*|osf*|irix[56]*|sysv[45]*|dgux*)
+solaris2*|aix4.[2-9]*|aix[5-9]*|osf*|irix[56]*|sysv[45]*|dgux*|interix*)
 	# libname.so -> libname.so.M
 	${echo} ${RM} ${INSTALLDIR}/$LINK1
 	if [ -z "$uninstall" ]; then
@@ -184,7 +184,7 @@ hpux1*)
 	fi
 	;;
 
-cygwin*)
+cygwin*|mingw*)
 	# Links to .dlls don't work.  Hence shobj-conf used DLLVERSION.dll
 	# instead of so.SHLIB_MAJOR.SHLIB_MINOR.  The postinstall above
 	# took care of everything else.

@@ -5,26 +5,24 @@ dnl report bugs to chet@po.cwru.edu
 dnl
 dnl Process this file with autoconf to produce a configure script.
 
-# Copyright (C) 1987-2005 Free Software Foundation, Inc.
+# Copyright (C) 1987-2009 Free Software Foundation, Inc.
 
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2, or (at your option)
-# any later version.
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
 
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
 
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-# 02111-1307, USA.
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-AC_REVISION([for Readline 5.2, version 2.61])
+AC_REVISION([for Readline 6.0, version 2.64])
 
-AC_INIT(readline, 5.2, bug-readline@gnu.org)
+AC_INIT(readline, 6.0, bug-readline@gnu.org)
 
 dnl make sure we are using a recent autoconf version
 AC_PREREQ(2.50)
@@ -34,7 +32,7 @@ AC_CONFIG_AUX_DIR(./support)
 AC_CONFIG_HEADERS(config.h)
 
 dnl update the value of RL_READLINE_VERSION in readline.h when this changes
-LIBVERSION=5.2
+LIBVERSION=6.0
 
 AC_CANONICAL_HOST
 
@@ -128,6 +126,7 @@ AC_SUBST(MAKE_SHELL)
 AC_C_CONST
 AC_C_PROTOTYPES
 AC_C_CHAR_UNSIGNED
+AC_C_VOLATILE
 
 AC_TYPE_SIGNAL
 
@@ -170,7 +169,9 @@ BASH_CHECK_GETPW_FUNCS
 
 AC_HEADER_TIOCGWINSZ
 
+BASH_TYPE_SIG_ATOMIC_T
 BASH_TYPE_SIGHANDLER
+
 BASH_HAVE_TIOCSTAT
 BASH_HAVE_FIONREAD
 BASH_CHECK_SPEED_T

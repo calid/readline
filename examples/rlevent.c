@@ -58,6 +58,14 @@ static char *progname;
 static char *deftext;
 
 static int
+event_hook ()
+{
+  fprintf (stderr, "ding!\n");
+  sleep (1);
+  return 0;
+}
+
+static int
 set_deftext ()
 {
   if (deftext)
@@ -146,6 +154,7 @@ main (argc, argv)
   if (nch > 0)
     rl_num_chars_to_read = nch;
 
+  rl_event_hook = event_hook;
   temp = readline (prompt);
 
   /* Test for EOF. */

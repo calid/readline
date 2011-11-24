@@ -408,8 +408,8 @@ HHiissttoorryy FFuunnccttiioonnss
 
        _i_n_t hhiissttoorryy__wwrriittee__ttiimmeessttaammppss
        If non-zero, timestamps are written to the history file, so they can be
-       preserved  between  sessions.   The  default  value  is 0, meaning that
-       timestamps are not saved.
+       preserved between sessions.  The default value is 0, meaning that time-
+       stamps are not saved.
 
        _c_h_a_r hhiissttoorryy__eexxppaannssiioonn__cchhaarr
        The character that introduces a history event.  The default is !!.  Set-
@@ -485,4 +485,4 @@ BBUUGG RREEPPOORRTTSS
 
 
 
-GNU History 5.0                  2003 July 31                       HISTORY(3)
+GNU History 6.0                  2003 July 31                       HISTORY(3)
