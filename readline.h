@@ -39,9 +39,9 @@ extern "C" {
 #endif
 
 /* Hex-encoded Readline version number. */
-#define RL_READLINE_VERSION	0x0600		/* Readline 6.0 */
+#define RL_READLINE_VERSION	0x0601		/* Readline 6.1 */
 #define RL_VERSION_MAJOR	6
-#define RL_VERSION_MINOR	0
+#define RL_VERSION_MINOR	1
 
 /* Readline data structures. */
 
