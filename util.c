@@ -476,6 +476,7 @@ _rl_savestring (s)
   return (strcpy ((char *)xmalloc (1 + (int)strlen (s)), (s)));
 }
 
+#if defined (DEBUG)
 #if defined (USE_VARARGS)
 static FILE *_rl_tracefp;
 
@@ -538,6 +539,7 @@ _rl_settracefp (fp)
   _rl_tracefp = fp;
 }
 #endif
+#endif /* DEBUG */
 
 
 #if HAVE_DECL_AUDIT_USER_TTY && defined (ENABLE_TTY_AUDIT_SUPPORT)
