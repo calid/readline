@@ -1062,6 +1062,10 @@ rl_redisplay ()
 	      update_line (VIS_LINE(linenum), INV_LINE(linenum), linenum,
 			   VIS_LLEN(linenum), INV_LLEN(linenum), inv_botlin);
 
+	      /* The following logic did not work correctly and was not
+		 necessary after changes made to add the mode strings
+		 feature, and so has been commented out for now */
+
 	      /* update_line potentially changes _rl_last_c_pos, but doesn't
 		 take invisible characters into account, since _rl_last_c_pos
 		 is an absolute cursor position in a multibyte locale.  See
@@ -1074,14 +1078,14 @@ rl_redisplay ()
 		 time update_line is called, then we can assume in our
 		 calculations that o_cpos does not need to be adjusted by
 		 wrap_offset. */
-	      if (linenum == 0 && (MB_CUR_MAX > 1 && rl_byte_oriented == 0) && OLD_CPOS_IN_PROMPT())
-		_rl_last_c_pos -= prompt_invis_chars_first_line;	/* XXX - was wrap_offset */
-	      else if (linenum == prompt_last_screen_line && prompt_physical_chars > _rl_screenwidth &&
+	      /* if (linenum == 0 && (MB_CUR_MAX > 1 && rl_byte_oriented == 0) && OLD_CPOS_IN_PROMPT())
+		_rl_last_c_pos -= prompt_invis_chars_first_line;	*//* XXX - was wrap_offset */
+	      /*else if (linenum == prompt_last_screen_line && prompt_physical_chars > _rl_screenwidth &&
 			(MB_CUR_MAX > 1 && rl_byte_oriented == 0) &&
 			cpos_adjusted == 0 &&
 			_rl_last_c_pos != o_cpos &&
 			_rl_last_c_pos > (prompt_last_invisible - _rl_screenwidth - prompt_invis_chars_first_line))
-		_rl_last_c_pos -= (wrap_offset-prompt_invis_chars_first_line);
+		_rl_last_c_pos -= (wrap_offset-prompt_invis_chars_first_line); */
 		  
 	      /* If this is the line with the prompt, we might need to
 		 compensate for invisible characters in the new line. Do
@@ -1616,6 +1620,22 @@ update_line (old, new, current_line, omax, nmax, inv_botlin)
       if ((MB_CUR_MAX == 1 || rl_byte_oriented) && current_line == 0 && visible_wrap_offset)
 	_rl_last_c_pos += visible_wrap_offset;
     }
+
+  /* The relative movement logic currently has trouble when using mode strings
+     and the prompt has invisible characters. Take the easy way out and just do
+     a full reprint of the line if the prompt has invis chars */
+  if (current_line == 0 && prompt_last_invisible)
+    {
+#if defined (__MSDOS__)
+      putc ('\r', rl_outstream);
+#else
+      tputs (_rl_term_cr, 1, _rl_output_character_function);
+#endif
+      _rl_output_some_chars (new, nd);
+      _rl_last_c_pos = _rl_col_width (new, 0, nd, 1) - wrap_offset;
+      goto clear_rest_of_line;
+    }
+
 
   /* If this is the first line and there are invisible characters in the
      prompt string, and the prompt string has not changed, and the current
