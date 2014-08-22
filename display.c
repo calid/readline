@@ -2454,7 +2454,7 @@ rl_message (va_alist)
       va_start (args);
       format = va_arg (args, char *);
 #endif
-      vsnprintf (msg_buf, msg_bufsiz - 1, format, args);
+      vsnprintf (msg_buf, msg_bufsiz, format, args);
     }
 #else
   vsprintf (msg_buf, format, args);
