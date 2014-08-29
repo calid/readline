@@ -476,7 +476,7 @@ rl_expand_prompt (prompt)
      char *prompt;
 {
   char *p, *t;
-  int c;
+  int c, saved_mode;
 
   /* Clear out any saved values. */
   FREE (local_prompt);
@@ -513,10 +513,15 @@ rl_expand_prompt (prompt)
       c = *t; *t = '\0';
       /* The portion of the prompt string up to and including the
 	 final newline is now null-terminated. */
+
+      /* ensure we don't duplicate print the mode */
+      saved_mode = _rl_show_mode_in_prompt;
+      _rl_show_mode_in_prompt = 0;
       local_prompt_prefix = expand_prompt (prompt, &prompt_prefix_length,
 						   (int *)NULL,
 						   (int *)NULL,
 						   (int *)NULL);
+      _rl_show_mode_in_prompt = saved_mode;
       *t = c;
       local_prompt_len = local_prompt ? strlen (local_prompt) : 0;
       return (prompt_prefix_length);
