@@ -55,6 +55,11 @@
 /* The string inserted by the `insert comment' command. */
 #define RL_COMMENT_BEGIN_DEFAULT "#"
 
+/* Default strings to indicate prompt mode */
+#define RL_EMACS_MODESTR_DEFAULT "(emacs)"
+#define RL_VI_MODESTR1_DEFAULT   "(ins)"
+#define RL_VI_MODESTR2_DEFAULT   "(cmd)"
+
 /* Define this if you want code that allows readline to be used in an
    X `callback' style. */
 #define READLINE_CALLBACKS

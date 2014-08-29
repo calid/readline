@@ -229,6 +229,15 @@ int _rl_bell_preference = AUDIBLE_BELL;
 /* String inserted into the line by rl_insert_comment (). */
 char *_rl_comment_begin;
 
+/* String to indicate prompt is in emacs mode */
+char *_rl_emacs_mode_str;
+
+/* String to indicate prompt is in vi insert mode */
+char *_rl_vi_mode_str1;
+
+/* String to indicate prompt is in vi command mode */
+char *_rl_vi_mode_str2;
+
 /* Keymap holding the function currently being executed. */
 Keymap rl_executing_keymap;
 
