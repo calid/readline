@@ -55,6 +55,7 @@
 /* The string inserted by the `insert comment' command. */
 #define RL_COMMENT_BEGIN_DEFAULT "#"
 
+#define RL_MODE_PLACEHOLDER "\\m"
 /* Default strings to indicate prompt mode */
 #define RL_EMACS_MODESTR_DEFAULT "(emacs)"
 #define RL_VI_MODESTR1_DEFAULT   "(ins)"
