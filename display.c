@@ -240,15 +240,75 @@ static int saved_invis_chars_first_line;
 static int saved_physical_chars;
 
 /* Return a character indicating the editing mode, for use in the prompt. */
-static int
-prompt_modechar ()
+static char*
+prompt_modestr ()
 {
   if (rl_editing_mode == emacs_mode)
-    return '@';
+    {
+      return _rl_emacs_mode_str ? _rl_emacs_mode_str : RL_EMACS_MODESTR_DEFAULT;
+    }
   else if (_rl_keymap == vi_insertion_keymap)
-    return '+';		/* vi insert mode */
+    {
+      return _rl_vi_mode_str1 ? _rl_vi_mode_str1 : RL_VI_MODESTR1_DEFAULT;
+    }
   else
-    return ':';		/* vi command mode */
+    {
+      return _rl_vi_mode_str2 ? _rl_vi_mode_str2 : RL_VI_MODESTR2_DEFAULT;
+    }
+}
+
+static char*
+expand_modestr (pmt)
+     char* pmt;
+{
+  char *mode_str, *ph_start, *p, *r, *ret;
+  int   mode_len, ph_len, pmt_len, n;
+
+  pmt_len  = strlen(pmt);
+  ph_start = strstr(pmt, RL_MODE_PLACEHOLDER);
+
+  if (ph_start)
+    {
+      /* expand mode placeholder */
+      mode_str = prompt_modestr();
+      mode_len = strlen(mode_str);
+      ph_len   = strlen(RL_MODE_PLACEHOLDER);
+
+      /* alloc final prompt len after modestr expansion */
+      r = ret = (char*)xmalloc (pmt_len - ph_len + mode_len + 1);
+
+      /* fill before placeholder with existing prompt */
+      p = pmt;
+      while (p != ph_start)
+        {
+          *r++ = *p++;
+        }
+
+      /* fill expanded mode str */
+      n = 0;
+      while (n < mode_len)
+        {
+          *r++ = mode_str[n++];
+        }
+
+      /* fill after placeholder with existing prompt */
+      p += ph_len;
+      strcpy(r, p);
+    }
+  else
+    {
+      /* no placeholder, so just prefix mode */
+      mode_str = prompt_modestr ();
+      mode_len = strlen (mode_str);
+
+      r = ret = (char *)xmalloc (pmt_len + mode_len + 1);
+      memcpy (r, mode_str, mode_len);
+
+      r += mode_len;
+      strcpy(r, pmt);
+    }
+
+  return ret;
 }
 
 /* Expand the prompt string S and return the number of visible
@@ -274,19 +334,14 @@ expand_prompt (pmt, lp, lip, niflp, vlp)
   char *r, *ret, *p, *igstart;
   int l, rl, last, ignoring, ninvis, invfl, invflset, ind, pind, physchars;
 
+  if (_rl_show_mode_in_prompt)
+    r = ret = pmt = expand_modestr(pmt);
+  else
+    r = ret = savestring (pmt);
+
   /* Short-circuit if we can. */
   if ((MB_CUR_MAX <= 1 || rl_byte_oriented) && strchr (pmt, RL_PROMPT_START_IGNORE) == 0)
     {
-      if (pmt == rl_prompt && _rl_show_mode_in_prompt)
-        {
-          l = strlen (pmt);
-          r = (char *)xmalloc (l + 2);
-          r[0] = prompt_modechar ();
-          strcpy (r + 1, pmt);
-        }
-      else
-	r = savestring (pmt);
-
       if (lp)
 	*lp = strlen (r);
       if (lip)
@@ -298,15 +353,7 @@ expand_prompt (pmt, lp, lip, niflp, vlp)
       return r;
     }
 
-  l = strlen (pmt);
-  r = ret = (char *)xmalloc (l + 2);
-
   rl = physchars = 0;	/* move up here so mode show can set them */
-  if (pmt == rl_prompt && _rl_show_mode_in_prompt)
-    {
-      *r++ = prompt_modechar ();
-      rl = physchars = 1;
-    }
 
   invfl = 0;	/* invisible chars in first line of prompt */
   invflset = 0;	/* we only want to set invfl once */
