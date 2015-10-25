@@ -1,7 +1,6 @@
 /* Standard include files. stdio.h is required. */
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
 
 /* Used for select(2) */
 #include <sys/types.h>
@@ -10,13 +9,8 @@
 #include <stdio.h>
 
 /* Standard readline include files. */
-#if defined (READLINE_LIBRARY)
-#  include "readline.h"
-#  include "history.h"
-#else
-#  include <readline/readline.h>
-#  include <readline/history.h>
-#endif
+#include <readline/readline.h>
+#include <readline/history.h>
 
 static void cb_linehandler (char *);
 
