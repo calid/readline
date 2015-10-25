@@ -1663,9 +1663,9 @@ static const struct {
   { "isearch-terminators", V_STRING,	sv_isrchterm },
   { "keymap",		V_STRING,	sv_keymap },
   { "keyseq-timeout",	V_INT,		sv_seqtimeout },
-  { "emacs-mode-str",	V_STRING,   sv_emacs_modestr },
-  { "vi-mode-str1",	V_STRING,   sv_vi_modestr1 },
-  { "vi-mode-str2",	V_STRING,   sv_vi_modestr2 },
+  { "emacs-mode-string",	V_STRING,   sv_emacs_modestr },
+  { "vi-ins-mode-string",	V_STRING,   sv_vi_modestr1 },
+  { "vi-cmd-mode-string",	V_STRING,   sv_vi_modestr2 },
   { (char *)NULL,	0, (_rl_sv_func_t *)0 }
 };
 
@@ -2580,11 +2580,11 @@ _rl_get_string_variable_value (name)
     }
   else if (_rl_stricmp (name, "comment-begin") == 0)
     return (_rl_comment_begin ? _rl_comment_begin : RL_COMMENT_BEGIN_DEFAULT);
-  else if (_rl_stricmp (name, "emacs-mode-str") == 0)
+  else if (_rl_stricmp (name, "emacs-mode-string") == 0)
     return (_rl_emacs_mode_str ? _rl_emacs_mode_str : RL_EMACS_MODESTR_DEFAULT);
-  else if (_rl_stricmp (name, "vi-mode-str1") == 0)
+  else if (_rl_stricmp (name, "vi-ins-mode-string") == 0)
     return (_rl_vi_mode_str1 ? _rl_vi_mode_str1 : RL_VI_MODESTR1_DEFAULT);
-  else if (_rl_stricmp (name, "vi-mode-str2") == 0)
+  else if (_rl_stricmp (name, "vi-cmd-mode-string") == 0)
     return (_rl_vi_mode_str2 ? _rl_vi_mode_str2 : RL_VI_MODESTR2_DEFAULT);
   else if (_rl_stricmp (name, "completion-display-width") == 0)
     {
