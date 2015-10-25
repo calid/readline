@@ -446,6 +446,13 @@ extern int _rl_last_c_pos;
 extern int _rl_suppress_redisplay;
 extern int _rl_want_redisplay;
 
+extern char *_rl_emacs_mode_str;
+extern int _rl_emacs_modestr_len;
+extern char *_rl_vi_ins_mode_str;
+extern int _rl_vi_ins_modestr_len;
+extern char *_rl_vi_cmd_mode_str;
+extern int _rl_vi_cmd_modestr_len;
+
 /* isearch.c */
 extern char *_rl_isearch_terminators;
 
@@ -476,9 +483,6 @@ extern int _rl_revert_all_at_newline;
 extern int _rl_echo_control_chars;
 extern int _rl_show_mode_in_prompt;
 extern char *_rl_comment_begin;
-extern char *_rl_emacs_mode_str;
-extern char *_rl_vi_mode_str1;
-extern char *_rl_vi_mode_str2;
 extern unsigned char _rl_parsing_conditionalized_out;
 extern Keymap _rl_keymap;
 extern FILE *_rl_in_stream;

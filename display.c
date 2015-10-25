@@ -249,11 +249,11 @@ prompt_modestr ()
     }
   else if (_rl_keymap == vi_insertion_keymap)
     {
-      return _rl_vi_mode_str1 ? _rl_vi_mode_str1 : RL_VI_MODESTR1_DEFAULT;
+      return _rl_vi_ins_mode_str ? _rl_vi_ins_mode_str : RL_VI_INS_MODESTR_DEFAULT;
     }
   else
     {
-      return _rl_vi_mode_str2 ? _rl_vi_mode_str2 : RL_VI_MODESTR2_DEFAULT;
+      return _rl_vi_cmd_mode_str ? _rl_vi_cmd_mode_str : RL_VI_CMD_MODESTR_DEFAULT;
     }
 }
 
