@@ -117,6 +117,9 @@ rl_bind_key (key, function)
      int key;
      rl_command_func_t *function;
 {
+  char keyseq[3];
+  int l;
+
   if (key < 0)
     return (key);
 
@@ -135,8 +138,24 @@ rl_bind_key (key, function)
       return (key);
     }
 
-  _rl_keymap[key].type = ISFUNC;
-  _rl_keymap[key].function = function;
+  /* If it's bound to a function or macro, just overwrite.  Otherwise we have
+     to treat it as a key sequence so rl_generic_bind handles shadow keymaps
+     for us.  If we are binding '\' make sure to escape it so it makes it
+     through the call to rl_translate_keyseq. */
+  if (_rl_keymap[key].type != ISKMAP)
+    {
+      _rl_keymap[key].type = ISFUNC;
+      _rl_keymap[key].function = function;
+    }
+  else
+    {
+      l = 0;
+      if (key == '\\')
+	keyseq[l++] = '\\';
+      keyseq[l++] = key;
+      keyseq[l] = '\0';
+      rl_bind_keyseq (keyseq, function);
+    }
   rl_binding_keymap = _rl_keymap;
   return (0);
 }
@@ -542,7 +561,7 @@ rl_translate_keyseq (seq, array, len)
 	    case '0': case '1': case '2': case '3':
 	    case '4': case '5': case '6': case '7':
 	      i++;
-	      for (temp = 2, c -= '0'; ISOCTAL (seq[i]) && temp--; i++)
+	      for (temp = 2, c -= '0'; ISOCTAL ((unsigned char)seq[i]) && temp--; i++)
 	        c = (c * 8) + OCTVALUE (seq[i]);
 	      i--;	/* auto-increment in for loop */
 	      array[l++] = c & largest_char;
@@ -1569,13 +1588,13 @@ static int sv_dispprefix PARAMS((const char *));
 static int sv_compquery PARAMS((const char *));
 static int sv_compwidth PARAMS((const char *));
 static int sv_editmode PARAMS((const char *));
+static int sv_emacs_modestr PARAMS((const char *));
 static int sv_histsize PARAMS((const char *));
 static int sv_isrchterm PARAMS((const char *));
 static int sv_keymap PARAMS((const char *));
 static int sv_seqtimeout PARAMS((const char *));
-static int sv_emacs_modestr PARAMS((const char *));
-static int sv_vi_modestr1 PARAMS((const char *));
-static int sv_vi_modestr2 PARAMS((const char *));
+static int sv_viins_modestr PARAMS((const char *));
+static int sv_vicmd_modestr PARAMS((const char *));
 
 static const struct {
   const char * const name;
@@ -1588,13 +1607,13 @@ static const struct {
   { "completion-prefix-display-length", V_INT,	sv_dispprefix },
   { "completion-query-items", V_INT,	sv_compquery },
   { "editing-mode",	V_STRING,	sv_editmode },
+  { "emacs-mode-string", V_STRING,	sv_emacs_modestr },  
   { "history-size",	V_INT,		sv_histsize },
   { "isearch-terminators", V_STRING,	sv_isrchterm },
   { "keymap",		V_STRING,	sv_keymap },
   { "keyseq-timeout",	V_INT,		sv_seqtimeout },
-  { "emacs-mode-string",	V_STRING,   sv_emacs_modestr },
-  { "vi-ins-mode-string",	V_STRING,   sv_vi_modestr1 },
-  { "vi-cmd-mode-string",	V_STRING,   sv_vi_modestr2 },
+  { "vi-cmd-mode-string", V_STRING,	sv_vicmd_modestr }, 
+  { "vi-ins-mode-string", V_STRING,	sv_viins_modestr }, 
   { (char *)NULL,	0, (_rl_sv_func_t *)0 }
 };
 
@@ -1611,7 +1630,7 @@ find_string_var (name)
 }
 
 /* A boolean value that can appear in a `set variable' command is true if
-   the value is null or empty, `on' (case-insenstive), or "1".  Any other
+   the value is null or empty, `on' (case-insensitive), or "1".  Any other
    values result in 0 (false). */
 static int
 bool_to_int (value)
@@ -1698,45 +1717,6 @@ sv_combegin (value)
     {
       FREE (_rl_comment_begin);
       _rl_comment_begin = savestring (value);
-      return 0;
-    }
-  return 1;
-}
-
-static int
-sv_emacs_modestr (value)
-     const char *value;
-{
-  if (value && *value)
-    {
-      FREE (_rl_emacs_mode_str);
-      _rl_emacs_mode_str = savestring (value);
-      return 0;
-    }
-  return 1;
-}
-
-static int
-sv_vi_modestr1 (value)
-     const char *value;
-{
-  if (value)
-    {
-      FREE (_rl_vi_mode_str1);
-      _rl_vi_mode_str1 = savestring (value);
-      return 0;
-    }
-  return 1;
-}
-
-static int
-sv_vi_modestr2 (value)
-     const char *value;
-{
-  if (value)
-    {
-      FREE (_rl_vi_mode_str2);
-      _rl_vi_mode_str2 = savestring (value);
       return 0;
     }
   return 1;
@@ -1877,7 +1857,7 @@ sv_isrchterm (value)
     }
   else
     {
-      for (beg = end = 0; whitespace (v[end]) == 0; end++)
+      for (beg = end = 0; v[end] && whitespace (v[end]) == 0; end++)
 	;
     }
 
@@ -1891,7 +1871,96 @@ sv_isrchterm (value)
   xfree (v);
   return 0;
 }
-      
+
+extern char *_rl_emacs_mode_str;
+
+static int
+sv_emacs_modestr (value)
+     const char *value;
+{
+  if (value && *value)
+    {
+      FREE (_rl_emacs_mode_str);
+      _rl_emacs_mode_str = (char *)xmalloc (2 * strlen (value) + 1);
+      rl_translate_keyseq (value, _rl_emacs_mode_str, &_rl_emacs_modestr_len);
+      _rl_emacs_mode_str[_rl_emacs_modestr_len] = '\0';
+      return 0;
+    }
+  else if (value)
+    {
+      FREE (_rl_emacs_mode_str);
+      _rl_emacs_mode_str = (char *)xmalloc (1);
+      _rl_emacs_mode_str[_rl_emacs_modestr_len = 0] = '\0';
+      return 0;
+    }
+  else if (value == 0)
+    {
+      FREE (_rl_emacs_mode_str);
+      _rl_emacs_mode_str = 0;	/* prompt_modestr does the right thing */
+      _rl_emacs_modestr_len = 0;
+      return 0;
+    }
+  return 1;
+}
+
+static int
+sv_viins_modestr (value)
+     const char *value;
+{
+  if (value && *value)
+    {
+      FREE (_rl_vi_ins_mode_str);
+      _rl_vi_ins_mode_str = (char *)xmalloc (2 * strlen (value) + 1);
+      rl_translate_keyseq (value, _rl_vi_ins_mode_str, &_rl_vi_ins_modestr_len);
+      _rl_vi_ins_mode_str[_rl_vi_ins_modestr_len] = '\0';
+      return 0;
+    }
+  else if (value)
+    {
+      FREE (_rl_vi_ins_mode_str);
+      _rl_vi_ins_mode_str = (char *)xmalloc (1);
+      _rl_vi_ins_mode_str[_rl_vi_ins_modestr_len = 0] = '\0';
+      return 0;
+    }
+  else if (value == 0)
+    {
+      FREE (_rl_vi_ins_mode_str);
+      _rl_vi_ins_mode_str = 0;	/* prompt_modestr does the right thing */
+      _rl_vi_ins_modestr_len = 0;
+      return 0;
+    }
+  return 1;
+}
+
+static int
+sv_vicmd_modestr (value)
+     const char *value;
+{
+  if (value && *value)
+    {
+      FREE (_rl_vi_cmd_mode_str);
+      _rl_vi_cmd_mode_str = (char *)xmalloc (2 * strlen (value) + 1);
+      rl_translate_keyseq (value, _rl_vi_cmd_mode_str, &_rl_vi_cmd_modestr_len);
+      _rl_vi_cmd_mode_str[_rl_vi_cmd_modestr_len] = '\0';
+      return 0;
+    }
+  else if (value)
+    {
+      FREE (_rl_vi_cmd_mode_str);
+      _rl_vi_cmd_mode_str = (char *)xmalloc (1);
+      _rl_vi_cmd_mode_str[_rl_vi_cmd_modestr_len = 0] = '\0';
+      return 0;
+    }
+  else if (value == 0)
+    {
+      FREE (_rl_vi_cmd_mode_str);
+      _rl_vi_cmd_mode_str = 0;	/* prompt_modestr does the right thing */
+      _rl_vi_cmd_modestr_len = 0;
+      return 0;
+    }
+  return 1;
+}
+
 /* Return the character which matches NAME.
    For example, `Space' returns ' '. */
 
@@ -2416,12 +2485,6 @@ _rl_get_string_variable_value (name)
     }
   else if (_rl_stricmp (name, "comment-begin") == 0)
     return (_rl_comment_begin ? _rl_comment_begin : RL_COMMENT_BEGIN_DEFAULT);
-  else if (_rl_stricmp (name, "emacs-mode-string") == 0)
-    return (_rl_emacs_mode_str ? _rl_emacs_mode_str : RL_EMACS_MODESTR_DEFAULT);
-  else if (_rl_stricmp (name, "vi-ins-mode-string") == 0)
-    return (_rl_vi_mode_str1 ? _rl_vi_mode_str1 : RL_VI_MODESTR1_DEFAULT);
-  else if (_rl_stricmp (name, "vi-cmd-mode-string") == 0)
-    return (_rl_vi_mode_str2 ? _rl_vi_mode_str2 : RL_VI_MODESTR2_DEFAULT);
   else if (_rl_stricmp (name, "completion-display-width") == 0)
     {
       sprintf (numbuf, "%d", _rl_completion_columns);
@@ -2471,6 +2534,12 @@ _rl_get_string_variable_value (name)
       sprintf (numbuf, "%d", _rl_keyseq_timeout);    
       return (numbuf);
     }
+  else if (_rl_stricmp (name, "emacs-mode-string") == 0)
+    return (_rl_emacs_mode_str ? _rl_emacs_mode_str : RL_EMACS_MODESTR_DEFAULT);
+  else if (_rl_stricmp (name, "vi-cmd-mode-string") == 0)
+    return (_rl_emacs_mode_str ? _rl_emacs_mode_str : RL_VI_CMD_MODESTR_DEFAULT);
+  else if (_rl_stricmp (name, "vi-ins-mode-string") == 0)
+    return (_rl_emacs_mode_str ? _rl_emacs_mode_str : RL_VI_INS_MODESTR_DEFAULT);
   else
     return (0);
 }
