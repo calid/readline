@@ -233,12 +233,15 @@ char *_rl_comment_begin;
 
 /* String to indicate prompt is in emacs mode */
 char *_rl_emacs_mode_str;
+int _rl_emacs_modestr_len;
 
 /* String to indicate prompt is in vi insert mode */
-char *_rl_vi_mode_str1;
+char *_rl_vi_ins_mode_str;
+int _rl_vi_ins_modestr_len;
 
 /* String to indicate prompt is in vi command mode */
-char *_rl_vi_mode_str2;
+char *_rl_vi_cmd_mode_str;
+int _rl_vi_cmd_modestr_len;
 
 /* Keymap holding the function currently being executed. */
 Keymap rl_executing_keymap;
