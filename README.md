@@ -27,7 +27,7 @@ If you don't see libreadline.so in the output, then your bash was built to use t
     $ git clone https://github.com/calid/readline.git -b modestrs --recurse-submodules
     $ cd readline
     $ ./configure
-    $ make
+    $ make SHLIB_LIBS=-lncurses
     $ sudo make install
     $ sudo ldconfig # if appropriate
 
