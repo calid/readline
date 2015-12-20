@@ -8,7 +8,20 @@ For more details on the motivation and usage see the corresponding bash repo at 
 
 This branch is setup to build and install a standalone version of libreadline. If all you care about are snazzy bash prompts, you're probably better off just following the install instructions for the patched version of bash linked above.
 
-The upside of installing readline as a standalone library is _other_ programs besides bash that use readline (gdb, python, rlwrap, etc) will also display custom mode indicators.
+
+## Why? ##
+
+The upside of installing readline as a standalone library is _other_ programs besides bash that use readline (gdb, python, rlwrap, etc) will also display custom mode indicators. For example this is what my python repl looks like in vi mode (note the `!` which indicates command mode):
+
+![python-vi-readline](http://i.imgur.com/Km5qY2x.gif)
+
+I'm not using any indicator for insert mode.  Here is the `~/.inputrc` for the above:
+
+    set keyseq-timeout 0
+    set editing-mode vi
+    set show-mode-in-prompt on
+    set vi-ins-mode-string ""
+    set vi-cmd-mode-string "!"
 
 In the case of bash, just make sure the version you have installed was configured to dynamically link to libreadline. You can check this with:
 
