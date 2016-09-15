@@ -45,8 +45,6 @@ RM = rm -f
 CP = cp
 MV = mv
 
-PURIFY = @PURIFY@
-
 @SET_MAKE@
 SHELL = @MAKE_SHELL@
 
@@ -87,7 +85,7 @@ TERMCAP_LIB = @TERMCAP_LIB@
 # For libraries which include headers from other libraries.
 INCLUDES = -I. -I$(srcdir)
 
-XCCFLAGS = $(DEFS) $(LOCAL_DEFS) $(CPPFLAGS) $(INCLUDES)
+XCCFLAGS = $(DEFS) $(LOCAL_DEFS) $(INCLUDES) $(CPPFLAGS)
 CCFLAGS = $(XCCFLAGS) $(LOCAL_CFLAGS) $(CFLAGS)
 
 # could add -Werror here
@@ -116,7 +114,7 @@ CSOURCES = $(srcdir)/readline.c $(srcdir)/funmap.c $(srcdir)/keymaps.c \
 	   $(srcdir)/histfile.c $(srcdir)/nls.c $(srcdir)/search.c \
 	   $(srcdir)/shell.c $(srcdir)/savestring.c $(srcdir)/tilde.c \
 	   $(srcdir)/text.c $(srcdir)/misc.c $(srcdir)/compat.c \
-	   $(srcdir)/mbutil.c $(srcdir)/xfree.c
+	   $(srcdir)/mbutil.c
 
 # The header files for this library.
 HSOURCES = $(srcdir)/readline.h $(srcdir)/rldefs.h $(srcdir)/chardefs.h \
@@ -145,7 +143,7 @@ DOCUMENTATION = $(DOCSOURCE) $(DOCOBJECT) $(DOCSUPPORT)
 
 CREATED_MAKEFILES = Makefile doc/Makefile examples/Makefile shlib/Makefile
 CREATED_CONFIGURE = config.status config.h config.cache config.log \
-		    stamp-config stamp-h
+		    stamp-config stamp-h readline.pc
 CREATED_TAGS = TAGS tags
 
 INSTALLED_HEADERS = readline.h chardefs.h keymaps.h history.h tilde.h \
@@ -304,6 +302,9 @@ distclean maintainer-clean: clean
 	$(RM) $(CREATED_CONFIGURE)
 	$(RM) $(CREATED_TAGS)
 
+readline.pc:	config.status $(srcdir)/readline.pc.in
+	$(SHELL) config.status
+
 info dvi html pdf ps:
 	-( cd doc && $(MAKE) $(MFLAGS) $@ )
 
@@ -334,7 +335,8 @@ bind.o: history.h
 callback.o: rlconf.h
 callback.o: rldefs.h ${BUILD_DIR}/config.h rlconf.h
 callback.o: readline.h keymaps.h rltypedefs.h chardefs.h tilde.h rlstdc.h
-compat.o: rlstdc.h
+compat.o: ${BUILD_DIR}/config.h
+compat.o: rlstdc.h rltypedefs.h
 complete.o: ansi_stdlib.h posixdir.h posixstat.h
 complete.o: rldefs.h ${BUILD_DIR}/config.h rlconf.h
 complete.o: readline.h keymaps.h rltypedefs.h chardefs.h tilde.h rlstdc.h
@@ -395,6 +397,7 @@ readline.o: posixstat.h ansi_stdlib.h posixjmp.h
 rltty.o: rldefs.h ${BUILD_DIR}/config.h rlconf.h
 rltty.o: rltty.h
 rltty.o: readline.h keymaps.h rltypedefs.h chardefs.h tilde.h rlstdc.h
+savestring.o: ${BUILD_DIR}/config.h
 search.o: rldefs.h ${BUILD_DIR}/config.h rlconf.h
 search.o: readline.h keymaps.h rltypedefs.h chardefs.h tilde.h
 search.o: ansi_stdlib.h history.h rlstdc.h

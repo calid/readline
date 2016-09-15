@@ -5,7 +5,7 @@ dnl report bugs to chet@po.cwru.edu
 dnl
 dnl Process this file with autoconf to produce a configure script.
 
-# Copyright (C) 1987-2014 Free Software Foundation, Inc.
+# Copyright (C) 1987-2016 Free Software Foundation, Inc.
 
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,9 +20,9 @@ dnl Process this file with autoconf to produce a configure script.
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-AC_REVISION([for Readline 6.3, version 2.73])
+AC_REVISION([for Readline 7.0, version 2.81])
 
-AC_INIT(readline, 6.3, bug-readline@gnu.org)
+AC_INIT(readline, 7.0, bug-readline@gnu.org)
 
 dnl make sure we are using a recent autoconf version
 AC_PREREQ(2.50)
@@ -32,27 +32,19 @@ AC_CONFIG_AUX_DIR(./support)
 AC_CONFIG_HEADERS(config.h)
 
 dnl update the value of RL_READLINE_VERSION in readline.h when this changes
-LIBVERSION=6.3
+LIBVERSION=7.0
 
 AC_CANONICAL_HOST
 AC_CANONICAL_BUILD
 
 dnl configure defaults
 opt_curses=no
-opt_purify=no
 
 dnl arguments to configure
 AC_ARG_WITH(curses, AC_HELP_STRING([--with-curses], [use the curses library instead of the termcap library]), opt_curses=$withval)
-AC_ARG_WITH(purify, AC_HELP_STRING([--with-purify], [configure to postprocess with purify]), opt_purify=$withval)
 
 if test "$opt_curses" = "yes"; then
 	prefer_curses=yes
-fi
-
-if test "$opt_purify" = yes; then
-	PURIFY="purify"
-else
-	PURIFY=
 fi
 
 dnl option parsing for optional features
@@ -139,18 +131,19 @@ AC_HEADER_STDC
 AC_HEADER_STAT
 AC_HEADER_DIRENT
 
-AC_CHECK_FUNCS(fcntl kill lstat)
-AC_CHECK_FUNCS(memmove putenv select setenv setlocale \
+AC_CHECK_FUNCS(fcntl kill lstat readlink)
+AC_CHECK_FUNCS(memmove pselect putenv select setenv setlocale \
 		strcasecmp strpbrk tcgetattr vsnprintf)
 AC_CHECK_FUNCS(isascii isxdigit)
 AC_CHECK_FUNCS(getpwent getpwnam getpwuid)
 
+AC_FUNC_CHOWN
 AC_FUNC_STRCOLL
 
 AC_CHECK_HEADERS(fcntl.h unistd.h stdlib.h varargs.h stdarg.h stdbool.h \
 		string.h strings.h \
 		limits.h locale.h pwd.h memory.h termcap.h termios.h termio.h)
-AC_CHECK_HEADERS(sys/pte.h sys/stream.h sys/select.h sys/file.h)
+AC_CHECK_HEADERS(sys/ioctl.h sys/pte.h sys/stream.h sys/select.h sys/file.h)
 
 AC_CHECK_HEADERS(sys/ptem.h,,,
 [[
@@ -183,6 +176,7 @@ BASH_STRUCT_WINSIZE
 BASH_STRUCT_DIRENT_D_INO
 BASH_STRUCT_DIRENT_D_FILENO
 
+AC_CHECK_HEADERS(libaudit.h)
 AC_CHECK_DECLS([AUDIT_USER_TTY],,, [[#include <linux/audit.h>]])
 
 dnl yuck
@@ -196,6 +190,10 @@ if test "$TERMCAP_LIB" = "./lib/termcap/libtermcap.a"; then
 	else
 		TERMCAP_LIB=-ltermcap	#default
 	fi
+fi
+# Windows ncurses installation
+if test "$TERMCAP_LIB" = "-lncurses"; then
+	AC_CHECK_HEADERS(ncurses/termcap.h)
 fi
 
 BASH_CHECK_MULTIBYTE
@@ -278,7 +276,6 @@ case "$BUILD_DIR" in
 *)	;;
 esac
 
-AC_SUBST(PURIFY)
 AC_SUBST(BUILD_DIR)
 
 AC_SUBST(CFLAGS)
@@ -296,7 +293,7 @@ AC_SUBST(LIBVERSION)
 
 AC_SUBST(TERMCAP_LIB)
 
-AC_OUTPUT([Makefile doc/Makefile examples/Makefile shlib/Makefile],
+AC_OUTPUT([Makefile doc/Makefile examples/Makefile shlib/Makefile readline.pc],
 [
 # Makefile uses this timestamp file to record whether config.h is up to date.
 echo > stamp-h
