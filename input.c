@@ -513,6 +513,7 @@ rl_getc (stream)
       result = 0;
 #if defined (HAVE_PSELECT)
       sigemptyset (&empty_set);
+      sigprocmask (SIG_BLOCK, (sigset_t *)NULL, &empty_set);
       FD_ZERO (&readfds);
       FD_SET (fileno (stream), &readfds);
       result = pselect (fileno (stream) + 1, &readfds, NULL, NULL, NULL, &empty_set);
