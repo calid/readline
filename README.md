@@ -1,6 +1,6 @@
 ## Readline with Configurable Mode Strings ##
 
-This is a patched version of readline 6.3 that adds support for custom prompt mode indicators.
+This is a patched version of readline 7.5 that adds support for custom prompt mode indicators.
 
 For more details on the motivation and usage see the corresponding bash repo at https://github.com/calid/bash
 
@@ -37,7 +37,7 @@ If you don't see libreadline.so in the output, then your bash was built to use t
 
 ## Install ##
 
-    $ git clone https://github.com/calid/readline.git -b modestrs --recurse-submodules
+    $ git clone https://github.com/calid/readline.git -b modestrs-7.0 --recurse-submodules
     $ cd readline
     $ ./configure
     $ make SHLIB_LIBS=-lncurses
