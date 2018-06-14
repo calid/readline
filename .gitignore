@@ -30,6 +30,7 @@ parse-colors.o
 readline.o
 readline.pc
 rltty.o
+savestring.o
 search.o
 shell.o
 shlib/Makefile
