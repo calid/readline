@@ -1,6 +1,6 @@
 /* display.c -- readline redisplay facility. */
 
-/* Copyright (C) 1987-2013 Free Software Foundation, Inc.
+/* Copyright (C) 1987-2015 Free Software Foundation, Inc.
 
    This file is part of the GNU Readline Library (Readline), a library    
    for reading lines of text with interactive input and history editing.
@@ -1967,6 +1967,34 @@ rl_on_new_line ()
   return 0;
 }
 
+/* Clear all screen lines occupied by the current readline line buffer
+   (visible line) */
+int
+rl_clear_visible_line ()
+{
+  int curr_line;
+
+  /* Make sure we move to column 0 so we clear the entire line */
+#if defined (__MSDOS__)
+  putc ('\r', rl_outstream);
+#else
+  tputs (_rl_term_cr, 1, _rl_output_character_function);
+#endif
+  _rl_last_c_pos = 0;
+
+  /* Move to the last screen line of the current visible line */
+  _rl_move_vert (_rl_vis_botlin);
+
+  /* And erase screen lines going up to line 0 (first visible line) */
+  for (curr_line = _rl_last_v_pos; curr_line >= 0; curr_line--)
+    {
+      _rl_move_vert (curr_line);
+      _rl_clear_to_eol (0);
+    }
+
+  return 0;
+}
+
 /* Tell the update routines that we have moved onto a new line with the
    prompt already displayed.  Code originally from the version of readline
    distributed with CLISP.  rl_expand_prompt must have already been called
@@ -2044,11 +2072,25 @@ rl_forced_update_display ()
   return 0;
 }
 
+/* Redraw only the last line of a multi-line prompt. */
+void
+rl_redraw_prompt_last_line ()
+{
+  char *t;
+
+  t = strrchr (rl_display_prompt, '\n');
+  if (t)
+    redraw_prompt (++t);
+  else
+    rl_forced_update_display ();
+}
+
 /* Move the cursor from _rl_last_c_pos to NEW, which are buffer indices.
    (Well, when we don't have multibyte characters, _rl_last_c_pos is a
    buffer index.)
    DATA is the contents of the screen line of interest; i.e., where
-   the movement is being done. */
+   the movement is being done.
+   DATA is always the visible line or the invisible line */
 void
 _rl_move_cursor_relative (new, data)
      int new;
