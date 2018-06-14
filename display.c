@@ -69,6 +69,7 @@ static void delete_chars PARAMS((int));
 static void insert_some_chars PARAMS((char *, int, int));
 static void open_some_spaces PARAMS((int));
 static void cr PARAMS((void));
+static void redraw_prompt PARAMS((char *));
 
 /* State of visible and invisible lines. */
 struct line_state
