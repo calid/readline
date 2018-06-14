@@ -28,6 +28,7 @@ nls.o
 parens.o
 parse-colors.o
 readline.o
+readline.pc
 rltty.o
 search.o
 shell.o
@@ -47,8 +48,8 @@ shlib/input.so
 shlib/isearch.so
 shlib/keymaps.so
 shlib/kill.so
-shlib/libhistory.so.6.3
-shlib/libreadline.so.6.3
+shlib/libhistory.so*
+shlib/libreadline.so*
 shlib/macro.so
 shlib/mbutil.so
 shlib/misc.so
